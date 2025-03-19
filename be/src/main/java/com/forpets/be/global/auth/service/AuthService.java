@@ -3,10 +3,17 @@ package com.forpets.be.global.auth.service;
 
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
+import com.forpets.be.global.auth.dto.request.LoginRequestDto;
 import com.forpets.be.global.auth.dto.request.SignupRequestDto;
 import com.forpets.be.global.auth.dto.response.SignupResponseDto;
+import com.forpets.be.global.auth.dto.response.TokenResponseDto;
+import com.forpets.be.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +26,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-//    private final
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public SignupResponseDto signup(SignupRequestDto requestDto) {
@@ -36,5 +44,18 @@ public class AuthService {
         User user = requestDto.toEntity(encodedPassword);
         // user data를 DB에 저장 후 ResponseDto에 매칭되는 데이터 반환
         return SignupResponseDto.from(userRepository.save(user));
+    }
+
+    public TokenResponseDto login(LoginRequestDto requestDto) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                requestDto.getUsername(),
+                requestDto.getPassword()
+            )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenProvider.createToken(authentication);
+
+        return new TokenResponseDto(jwt);
     }
 }
