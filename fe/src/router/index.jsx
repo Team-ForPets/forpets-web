@@ -6,6 +6,9 @@ import Signup from '../pages/Signup';
 import Mypage from '../pages/Mypage';
 import Chat from '../pages/Chat';
 import ServiceStatus from '../pages/ServiceStatus';
+import RegisterAnimal from '../pages/RegisterAnimal';
+import RegisterVolunteer from '../pages/RegisterVolunteer';
+
 
 const router = createBrowserRouter([
   {
@@ -39,6 +42,14 @@ const router = createBrowserRouter([
       {
         path: '/service-status',
         element: <ServiceStatus />,
+      },
+      {
+        path: '/register-animal',
+        element: <RegisterAnimal />,
+      },
+      {
+        path: '/register-volunteer',
+        element: <RegisterVolunteer />,
       },
     ],
   },
