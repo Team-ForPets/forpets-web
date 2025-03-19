@@ -1,8 +1,10 @@
 package com.forpets.be.global.auth.controller;
 
 
+import com.forpets.be.global.auth.dto.request.LoginRequestDto;
 import com.forpets.be.global.auth.dto.request.SignupRequestDto;
 import com.forpets.be.global.auth.dto.response.SignupResponseDto;
+import com.forpets.be.global.auth.dto.response.TokenResponseDto;
 import com.forpets.be.global.auth.service.AuthService;
 import com.forpets.be.global.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -28,5 +30,16 @@ public class AuthController {
                 "회원가입이 완료되었습니다.",
                 "CREATED",
                 authService.signup(RequestDto)));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<TokenResponseDto>> login(
+        @Valid @RequestBody LoginRequestDto requestDto
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+            "로그인이 되었습니다.",
+            "OK",
+            authService.login(requestDto)
+        ));
     }
 }
