@@ -16,12 +16,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/auth/checkusername")
+    @GetMapping("/auth/email-verifications")
     public ResponseEntity<UserCheckResponseDto> checkUsername(@RequestParam String username) {
         return ResponseEntity.ok(userService.checkUsername(username));
     }
 
-    @GetMapping("/auth/checknickname")
+    @GetMapping("/auth/nickname-verifications")
     public ResponseEntity<UserCheckResponseDto> checkNickname(@RequestParam String nickname) {
         return ResponseEntity.ok(userService.checkNickname(nickname));
     }
