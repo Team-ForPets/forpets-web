@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 function Header() {
   return (
-    <header className="w-[60vw] h-[5vh] m-auto  box-border flex  justify-between items-center mt-5">
-      <h1 className=" h-[100%] shrink-0 ">
+    <header className="w-[60vw] h-[100px] m-auto  box-border flex justify-between items-center">
+      <h1 className=" shrink-0 ">
         <Link to="/">
-          <img className=" h-[100%]" src="/public/assets/forpets-logopng.png" alt="로고"></img>
+          <img className=" h-[50px]" src="/assets/forpets-logopng.png" alt="로고"></img>
         </Link>
       </h1>
       <nav className="flex">
