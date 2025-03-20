@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MainAnimalCard from '../components/MainAnimalCard';
-import KakaoMap from '../components/KakaoMap';
+// import KakaoMap from '../components/KakaoMap';
 
 function Home() {
   return (
     <div className="flex h-[90%] justify-between mt-[3%]">
       {/* 지도 섹션 (왼쪽) */}
-      <section className="w-[50%] rounded-md bg-amber-200 ">
-        <KakaoMap></KakaoMap>
-      </section>
+      <section className="w-[50%] rounded-md bg-amber-200 ">{/* <KakaoMap></KakaoMap> */}</section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
       <section className="w-[45%] flex flex-col">

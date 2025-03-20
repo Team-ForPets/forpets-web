@@ -16,6 +16,9 @@ import AnimalDetail from '../pages/AnimalDetail';
 import VolunteerList from '../pages/VolunteerList';
 import VolunteerDetail from '../pages/VolunteerDetail';
 
+// 로그아웃시 뒤로가기로 마이페이지, 나의채팅 페이지 이동 막는 컴포넌트
+import PrivateRoute from '../components/PrivateRoute';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -35,7 +38,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/my',
-        element: <Mypage />,
+
+        element: (
+          <PrivateRoute>
+            <Mypage />
+          </PrivateRoute>
+        ),
         children: [
           {
             // path: '/my/profile',
@@ -58,7 +66,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/chat',
-        element: <Chat />,
+        element: (
+          <PrivateRoute>
+            <Chat />
+          </PrivateRoute>
+        ),
       },
       {
         path: '/service-status',

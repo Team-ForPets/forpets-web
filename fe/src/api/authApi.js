@@ -10,9 +10,8 @@ const authApi = {
 
   // 로그인
   login: async (formData) => {
-    const response = await api.post(`${ENDPOINT}/login`, formData, {
-      credentials: 'include',
-    });
+    const response = await api.post(`${ENDPOINT}/login`, formData);
+    console.log(response);
     return response.data;
   },
 
@@ -32,7 +31,7 @@ const authApi = {
 
   // username 유효성 검사
   checkUsername: async (userName) => {
-    const response = await api.get(`${ENDPOINT}/users?username=${userName}`);
+    const response = await api.get(`${ENDPOINT}/email-verifications?username=${userName}`);
     return response.data;
   },
 
