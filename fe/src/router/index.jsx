@@ -8,7 +8,13 @@ import Chat from '../pages/Chat';
 import ServiceStatus from '../pages/ServiceStatus';
 import RegisterAnimal from '../pages/RegisterAnimal';
 import RegisterVolunteer from '../pages/RegisterVolunteer';
-
+import ProfileCard from '../components/mypage/ProfileCard';
+import AnimalCard from '../components/mypage/AnimalCard';
+import VolunteerCard from '../components/mypage/VolunteerCard';
+import AnimalList from '../pages/AnimalList';
+import AnimalDetail from '../pages/AnimalDetail';
+import VolunteerList from '../pages/VolunteerList';
+import VolunteerDetail from '../pages/VolunteerDetail';
 
 const router = createBrowserRouter([
   {
@@ -28,12 +34,27 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: '/mypage',
+        path: '/my',
         element: <Mypage />,
-      },
-      {
-        path: '/signup',
-        element: <Signup />,
+        children: [
+          {
+            // path: '/my/profile',
+            index: true,
+            element: <ProfileCard />,
+          },
+          {
+            path: '/my/profile',
+            element: <ProfileCard />,
+          },
+          {
+            path: '/my/animals',
+            element: <AnimalCard />,
+          },
+          {
+            path: '/my/volunteer-posts',
+            element: <VolunteerCard />,
+          },
+        ],
       },
       {
         path: '/chat',
@@ -50,6 +71,22 @@ const router = createBrowserRouter([
       {
         path: '/register-volunteer',
         element: <RegisterVolunteer />,
+      },
+      {
+        path: '/animal-list',
+        element: <AnimalList></AnimalList>,
+      },
+      {
+        path: '/animal-detail',
+        element: <AnimalDetail></AnimalDetail>,
+      },
+      {
+        path: '/volunteer-list',
+        element: <VolunteerList></VolunteerList>,
+      },
+      {
+        path: '/volunteer-detail',
+        element: <VolunteerDetail></VolunteerDetail>,
       },
     ],
   },
