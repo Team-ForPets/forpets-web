@@ -7,6 +7,9 @@ import com.forpets.be.global.auth.dto.response.SignupResponseDto;
 import com.forpets.be.global.auth.dto.response.TokenResponseDto;
 import com.forpets.be.global.auth.service.AuthService;
 import com.forpets.be.global.response.ApiResponse;
+import com.forpets.be.global.security.jwt.TokenDto;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +37,24 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponseDto>> login(
-        @Valid @RequestBody LoginRequestDto requestDto
+        @Valid @RequestBody LoginRequestDto requestDto,
+        HttpServletResponse response
     ) {
+        TokenDto tokenDto = authService.login(requestDto);
+
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(tokenDto.getAccessToken());
+
+        String refreshToken = tokenDto.getRefreshToken();
+        Cookie refreshTokenCookie = authService.makeRefreshTokenCookie(refreshToken);
+
+        // HttpServletResponse에 쿠키 추가
+        response.addCookie(refreshTokenCookie);
+
         return ResponseEntity.ok(ApiResponse.ok(
             "로그인이 되었습니다.",
             "OK",
-            authService.login(requestDto)
+            tokenResponseDto
         ));
     }
+    
 }
