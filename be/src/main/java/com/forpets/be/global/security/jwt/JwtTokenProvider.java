@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
     private final long tokenValidityInMilliseconds = 1000L * 60 * 60; // 1시간
+    private final long refreshTokenValidityInMilliseconds = 7 * 24 * 60 * 60 * 1000L; // 7일
     private final UserRepository userRepository;
 
     @Value("${jwt.secret}")
@@ -30,7 +31,8 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(Authentication authentication) {
+    // Access Token 생성
+    public String createAccessToken(Authentication authentication) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -46,6 +48,19 @@ public class JwtTokenProvider {
             .setClaims(claims)
             .setIssuedAt(now)
             .setExpiration(validity)
+            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    // Refresh Token 생성
+    public String createRefreshToken(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+            .setSubject(username)
+            .setIssuedAt(now)
+            .setExpiration(expiryDate)
             .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
             .compact();
     }

@@ -16,7 +16,7 @@ function Login() {
     try {
       const response = await authApi.login(formData);
       const username = formData.username;
-      const accessToken = response.data.token;
+      const accessToken = response.data.accessToken;
       dispatch(login({ accessToken, username }));
       navigate('/');
     } catch (error) {
