@@ -30,43 +30,41 @@ function MyPage() {
   };
 
   return (
-    <>
-      <div className="h-[90%] flex gap-15 pt-10">
-        {/* <div className="w-[25%] bg-gray-300 flex flex-col gap-10"> */}
-        <div className="w-[25%] flex flex-col gap-10 items-center">
-          <button
-            className={`w-[80%] px-4 py-3 bg-amber-300 text-black rounded hover:bg-amber-500 transition-all active:scale-110 ${selectedButton === 'profile' ? 'bg-amber-500' : 'bg-amber-300'}`}
-            onClick={() => {
-              setSelectedButton('profile');
-              handleProfileRead();
-            }}
-          >
-            프로필
-          </button>
-          <button
-            className={`w-[80%] px-4 py-3 bg-amber-300 text-black rounded hover:bg-amber-500 transition-all active:scale-110 ${selectedButton === 'animals' ? 'bg-amber-500' : 'bg-amber-300'}`}
-            onClick={() => {
-              setSelectedButton('animals');
-              handleAnimalRead();
-            }}
-          >
-            나의 아이
-          </button>
-          <button
-            className={`w-[80%] px-4 py-3 bg-amber-300 text-black rounded hover:bg-amber-500 transition-all active:scale-110 ${selectedButton === 'volunteer-posts' ? 'bg-amber-500' : 'bg-amber-300'}`}
-            onClick={() => {
-              setSelectedButton('volunteer-posts');
-              handleVolunteerRead();
-            }}
-          >
-            나의 봉사글
-          </button>
-        </div>
-        <div className="w-[75%] bg-gray-300 rounded">
-          <Outlet></Outlet>
-        </div>
-      </div>
-    </>
+    <div className="h-[85%] flex gap-10 pt-10">
+      {/* <div className="w-[25%] bg-gray-300 flex flex-col gap-10"> */}
+      <aside className="w-[25%] flex flex-col gap-10 items-center pt-5">
+        <button
+          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all ${selectedButton === 'profile' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          onClick={() => {
+            setSelectedButton('profile');
+            handleProfileRead();
+          }}
+        >
+          프로필
+        </button>
+        <button
+          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all ${selectedButton === 'animals' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          onClick={() => {
+            setSelectedButton('animals');
+            handleAnimalRead();
+          }}
+        >
+          나의 아이
+        </button>
+        <button
+          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all ${selectedButton === 'volunteer-posts' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          onClick={() => {
+            setSelectedButton('volunteer-posts');
+            handleVolunteerRead();
+          }}
+        >
+          나의 봉사글
+        </button>
+      </aside>
+      <main className="w-[75%] bg-gray-100 rounded border-2 border-gray-200">
+        <Outlet></Outlet>
+      </main>
+    </div>
   );
 }
 
