@@ -31,7 +31,7 @@ const authApi = {
 
   // username 유효성 검사
   checkUsername: async (userName) => {
-    const response = await api.get(`${ENDPOINT}/users?username=${userName}`);
+    const response = await api.get(`${ENDPOINT}/email-verifications?username=${userName}`);
     return response.data;
   },
 
