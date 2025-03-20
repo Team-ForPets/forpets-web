@@ -10,9 +10,8 @@ const authApi = {
 
   // 로그인
   login: async (formData) => {
-    const response = await api.post(`${ENDPOINT}/login`, formData, {
-      credentials: 'include',
-    });
+    const response = await api.post(`${ENDPOINT}/login`, formData);
+    console.log(response);
     return response.data;
   },
 
