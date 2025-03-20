@@ -53,7 +53,6 @@ function RegisterVolunteer() {
   return (
     <main className="container mx-auto px-4 py-8">
       <div className="bg-white p-6 rounded-lg shadow-md">
-       
         <div className="flex justify-end mb-4">
           <div className="text-gray-600">홈 &gt; 이동봉사자 등록 글</div>
         </div>
@@ -94,7 +93,6 @@ function RegisterVolunteer() {
 
             {/* 날짜 및 지역 입력 섹션 */}
             <div className="grid grid-cols-2 gap-6">
-          
               <div>
                 <label className="block text-sm font-medium mb-1">시작 날짜</label>
                 <input
@@ -109,7 +107,6 @@ function RegisterVolunteer() {
                 />
               </div>
 
-             
               <div>
                 <label className="block text-sm font-medium mb-1">종료 날짜</label>
                 <input
@@ -124,7 +121,6 @@ function RegisterVolunteer() {
                 />
               </div>
 
-            
               <div>
                 <label className="block text-sm font-medium mb-1">출발지역</label>
                 <input
@@ -137,7 +133,6 @@ function RegisterVolunteer() {
                 />
               </div>
 
-           
               <div>
                 <label className="block text-sm font-medium mb-1">도착지역</label>
                 <input
@@ -151,7 +146,6 @@ function RegisterVolunteer() {
               </div>
             </div>
 
-        
             <div>
               <label className="block text-sm font-medium mb-1">요청자에게 전하고 싶은 말</label>
               <textarea
@@ -164,7 +158,6 @@ function RegisterVolunteer() {
             </div>
           </div>
 
-         
           <div className="flex justify-end mt-8">
             <button type="submit" className="bg-orange-500 text-white px-8 py-2 rounded w-32">
               등록
