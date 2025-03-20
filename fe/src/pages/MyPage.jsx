@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import mypageApi from '../api/mypageApi';
 
 function MyPage() {
   const [selectedButton, setSelectedButton] = useState('profile');
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  // 회원정보 get
+  const fetchProfile = async () => {
+    try {
+      const response = await mypageApi.getProfile();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (location.pathname === '/my' || location.pathname === '/my/profile') {
@@ -16,6 +27,8 @@ function MyPage() {
       setSelectedButton('volunteer-posts');
     }
   }, [location.pathname]);
+
+  // fetchProfile();
 
   const handleProfileRead = async () => {
     navigate('/my/profile');
