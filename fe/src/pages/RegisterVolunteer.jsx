@@ -139,7 +139,6 @@ function RegisterVolunteer() {
           ></textarea>
 
           <div className="flex justify-end">
-
             <button type="submit" className="bg-orange-500 text-white px-8 py-2 rounded w-32">
               등록
             </button>
