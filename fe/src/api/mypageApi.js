@@ -1,12 +1,12 @@
-import api from "./axios";
+import api from './axios';
 
 const ENDPOINT = '/my';
-const bucketApi = {
-  // example
-  getTodos: async (bucketId) => {
-    const response = await api.get(`${ENDPOINT}/${bucketId}/todos`);
+const mypageApi = {
+  // 회원정보 조회
+  getProfile: async () => {
+    const response = await api.get(`${ENDPOINT}/profile`);
     return response.data;
   },
 };
 
-export default bucketApi;
+export default mypageApi;
