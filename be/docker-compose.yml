@@ -13,5 +13,17 @@ services:
     volumes:
       - mysql-volume:/var/lib/mysql
 
+  redis-dev:
+    container_name: redis-dev-container
+    image: redis
+    volumes:
+      - redis-dev-volume:/data
+    ports:
+      - ${REDIS_PORT}:6379
+    env_file:
+      - .env
+    restart: always
+
 volumes:
   mysql-volume:
+  redis-dev-volume:
