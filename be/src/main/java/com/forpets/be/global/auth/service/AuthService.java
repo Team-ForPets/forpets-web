@@ -9,8 +9,10 @@ import com.forpets.be.global.auth.dto.response.SignupResponseDto;
 import com.forpets.be.global.security.jwt.JwtTokenProvider;
 import com.forpets.be.global.security.jwt.TokenDto;
 import jakarta.servlet.http.Cookie;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +31,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Transactional
     public SignupResponseDto signup(SignupRequestDto requestDto) {
@@ -48,15 +51,19 @@ public class AuthService {
     }
 
     public TokenDto login(LoginRequestDto requestDto) {
+        String username = requestDto.getUsername();
+
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                requestDto.getUsername(),
+                username,
                 requestDto.getPassword()
             )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
-        String refreshToken = jwtTokenProvider.createRefreshToken(requestDto.getUsername());
+        String refreshToken = jwtTokenProvider.createRefreshToken(username);
+        storeAccessToken(username, accessToken);
+        storeRefreshToken(username, refreshToken);
 
         return new TokenDto(accessToken, refreshToken);
     }
@@ -71,4 +78,36 @@ public class AuthService {
         return refreshTokenCookie;
     }
 
+    // 사용자 ID에 해당하는 토큰을 저장하고, 30분 후 만료되도록 설정합니다.
+    public void storeAccessToken(String userId, String token) {
+        String key = "access_token:" + userId;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue().set(key, token, 30, TimeUnit.MINUTES);
+    }
+
+    public void storeRefreshToken(String userId, String token) {
+        String key = "refresh_token:" + userId;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue().set(key, token, 30, TimeUnit.MINUTES);
+    }
+
+    // 저장된 토큰을 조회하는 메서드
+    public String getAccessToken(String userId) {
+        String key = "access_token:" + userId;
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
+    public String getRefreshToken(String userId) {
+        String key = "refresh_token:" + userId;
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
+    // 토큰을 삭제하고 싶을 때 사용하는 메서드
+    public void deleteAccessToken(String userId) {
+        String key = "access_token:" + userId;
+        stringRedisTemplate.delete(key);
+    }
+
+    public void deleteRefreshToken(String userId) {
+        String key = "refresh_token:" + userId;
+        stringRedisTemplate.delete(key);
+    }
 }
