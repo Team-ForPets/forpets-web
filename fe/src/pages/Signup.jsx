@@ -10,7 +10,7 @@ function Signup() {
     password: '',
     duplicate: '',
   });
-  console.log(formData);
+  // console.log(formData);
   const [error, setError] = useState('');
   /**
    * email
@@ -30,7 +30,7 @@ function Signup() {
 
   const [validation, setValidation] = useState({
     username: { isClicked: false, status: '', message: '' },
-    nickname: { isValid: false, isTouched: false, isClicked: false, status: '', message: '' },
+    nickname: { isValid: false, isTouched: false, status: '', isClicked: false, message: '' },
     password: { isValid: false, isTouched: false, isEqual: false, verifiedValue: '', message: '' },
     passwordCheck: { message: '' },
   });
@@ -45,20 +45,10 @@ function Signup() {
 
   // 위 조건 채웠을 때 버튼 활성화 상태
   const enabledClasses =
-    'border border-blue bg-primary text-white hover:bg-secondary w-full h-10 rounded-lg mt-10';
+    // 'border cursor-pointer border-blue bg-amber-200 text-white hover:bg-secondary w-full h-10 rounded-lg mt-10';
+		'border text-white border-amber-500 w-full h-10 rounded px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2'
   const disabledClasses =
     'border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed';
-
-  // 비밀번호 확인 css
-  const validPassword = 'text-primary px-2 w-100 focus:outline-none';
-  const noValidPassword = 'text-red-600 px-2 w-100 focus:outline-none';
-
-  // const availableEmail = (
-  //   <p className="text-primary text-[15px] mt-1 mb-6 ">사용가능한 이메일입니다.</p>
-  // );
-  // const noAvailableEmail = (
-  //   <p className="text-red-600 text-[15px] mt-1 mb-6">이미 사용 중인 이메일입니다.</p>
-  // );
 
   // 전체 input 입력값
   const handleFormInput = async (e) => {
@@ -68,6 +58,12 @@ function Signup() {
       setValidation((prev) => ({
         ...prev,
         username: { ...prev.username, message: '아이디 중복 검사가 필요합니다.' },
+      }));
+    }
+    if (validation.nickname.status === '') {
+      setValidation((prev) => ({
+        ...prev,
+        nickname: { ...prev.nickname, message: '닉네임 중복 검사가 필요합니다.' },
       }));
     }
     try {
@@ -110,7 +106,9 @@ function Signup() {
           formData.nickname === ''
             ? ''
             : nicknameRegex.test(formData.nickname)
-              ? '사용 가능한 닉네임입니다.'
+              ? prev.nickname.status === true
+                ? '사용 가능한 닉네임입니다.'
+                : '닉네임 형식이 올바릅니다. 중복 검사를 진행해주세요.'
               : '특수문자 제외, 2자 이상 15자 이하여야 합니다.',
       },
     }));
@@ -127,7 +125,7 @@ function Signup() {
             ? ''
             : passwordRegex.test(formData.password)
               ? '사용 가능한 비밀번호입니다.'
-              : '8자 이상, 영문, 숫자, 특수문자(#, ?, !)가<br /> 각각 1자 이상 포함되어야 합니다.',
+              : '8자 이상, 영문, 숫자, 특수문자(#, ?, !)가 각각 1자 이상 포함되어야 합니다.',
         verifiedValue: formData.password, // 비밀번호 확인용 저장
       },
     }));
@@ -150,16 +148,16 @@ function Signup() {
               : '비밀번호가 일치하지 않습니다.',
       },
     }));
-    console.log(
-      '중복 여부',
-      validation.username.status,
-      '닉네임 유효성',
-      validation.nickname.isValid,
-      '비밀번호 확인',
-      validation.password.isEqual,
-      '비밀번호 유효성',
-      validation.password.isValid,
-    );
+    // console.log(
+    //   '중복 여부',
+    //   validation.username.status,
+    //   '닉네임 유효성',
+    //   validation.nickname.isValid,
+    //   '비밀번호 확인',
+    //   validation.password.isEqual,
+    //   '비밀번호 유효성',
+    //   validation.password.isValid,
+    // );
   }, [
     formData.username,
     formData.nickname,
@@ -205,12 +203,49 @@ function Signup() {
     }
   };
 
+  // 닉네임 중복 확인 버튼
+  const handleCheckNickname = async () => {
+    setError('');
+    // const userName = formData.username;
+    if (formData.nickname === '') {
+      setValidation((prev) => ({
+        ...prev,
+        nickname: { ...prev.nickname, message: '닉네임을 입력해주세요.' },
+      }));
+      return;
+    }
+    try {
+      // 서버에 username 검증 요청
+      const response = await authApi.checkNickname(formData.nickname);
+      // 응답 데이터인 available 값을 적용(true(사용 가능) / false(중복))
+      const isPossible = response.data.available;
+
+      // console.log(isPossible);
+      setValidation((prev) => ({
+        ...prev,
+        nickname: {
+          ...prev.nickname,
+          isClicked: true,
+          status: isPossible ? 'true' : '',
+          message: isPossible ? 'db에 없는 닉네임입니다.' : '이미 사용 중인 닉네임입니다.',
+        },
+      }));
+    } catch (err) {
+      setError(err.message);
+      setValidation((prev) => ({
+        ...prev,
+        nickname: { ...prev.nickname, isClicked: true, status: '' },
+      }));
+      console.log(err.message);
+    }
+  };
+
   const toHome = () => {
     navigate('/');
   };
 
   return (
-    <section className="flex flex-col items-center gap-15 mt-30">
+    <section className="flex flex-col items-center gap-15 mt-10">
       {/* <h1 className="text-6xl font-semibold" onClick={toHome}>
         회원가입
       </h1> */}
@@ -221,13 +256,14 @@ function Signup() {
 
       <section className="w-100">
         <form onSubmit={handleFormInput}>
-          <section className="flex justify-between">
+          <section className="flex justify-between border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
             <input
               type="email"
               name="username"
               placeholder="이메일"
               autoComplete="email"
-              className="w-80 px-2 focus:outline-none"
+              // className="w-80 px-2 focus:outline-none"
+              className="w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded "
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               required
@@ -235,54 +271,63 @@ function Signup() {
 
             <button
               type="button"
-              className="border border-gray-500 rounded w-20 px-1 py-0.5 hover:bg-primary hover:text-white"
+              className="border text-white border-amber-500 rounded w-20 px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2"
               onMouseDown={(e) => e.preventDefault()}
               onClick={handleCheckUsername}
             >
               중복확인
             </button>
           </section>
-          <hr className=" mt-0.5" />
-
-          {/* 유효성 검사 메시지 출력 */}
-          {validation.username.message && (
-            <p
-              className={`text-[15px] mt-1 ${
-                validation.username.message.includes('가능')
-                  ? 'text-primary text-[15px] mt-1 mb-6 ' // 사용 가능 메시지는 파란색
-                  : 'text-red-600 text-[15px] mt-1 mb-6' // 에러 메시지는 빨간색
-              }`}
-            >
-              {validation.username.message}
-            </p>
-          )}
+          <section className="max-h-1">
+            {/* 유효성 검사 메시지 출력 */}
+            {validation.username.message && (
+              <p
+                className={`text-[12px] mt-1 ${
+                  validation.username.message.includes('가능')
+                    ? 'text-primary text-[12px] mt-1 mb-0 ' // 사용 가능 메시지는 파란색
+                    : 'text-red-600 text-[12px] mt-1 mb-0' // 에러 메시지는 빨간색
+                }`}
+              >
+                {validation.username.message}
+              </p>
+            )}
+          </section>
           {/* -------------------------------------------------------------- */}
           {/* 닉네임 */}
           {/* -------------------------------------------------------------- */}
+          <section className="flex justify-between border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
+            <input
+              type="text"
+              name="nickname"
+              placeholder="닉네임(2자 이상)"
+              autoComplete="username"
+              value={formData.nickname}
+              onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+              onBlur={() =>
+                setValidation((prev) => ({
+                  ...prev,
+                  nickname: { ...prev.nickname },
+                }))
+              }
+              className="w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded "
+              required
+            />
+            <button
+              type="button"
+              className="border text-white border-amber-500 rounded w-20 px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleCheckNickname}
+            >
+              중복확인
+            </button>
+          </section>
 
-          <input
-            type="text"
-            name="nickname"
-            placeholder="닉네임(2자 이상)"
-            autoComplete="username"
-            value={formData.nickname}
-            onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
-            onBlur={() =>
-              setValidation((prev) => ({
-                ...prev,
-                nickname: { ...prev.nickname },
-              }))
-            }
-            className="px-2 w-100 focus:outline-none"
-            required
-          />
-          <hr className="mt-0.5" />
           {validation.nickname.message && (
             <p
-              className={`text-[15px] mt-1 ${
+              className={`text-[12px] mt-1 ${
                 validation.nickname.message.includes('가능')
-                  ? 'text-primary text-[15px] mt-1 mb-6 ' // 사용 가능 메시지는 파란색
-                  : 'text-red-600 text-[15px] mt-1 mb-6' // 에러 메시지는 빨간색
+                  ? 'text-primary text-[12px] mt-1 mb-0 ' // 사용 가능 메시지는 파란색
+                  : 'text-red-600 text-[12px] mt-1 mb-0' // 에러 메시지는 빨간색
               }`}
             >
               {validation.nickname.message}
@@ -292,33 +337,35 @@ function Signup() {
           {/* -------------------------------------------------------------- */}
           {/* 비밀번호 */}
           {/* -------------------------------------------------------------- */}
+          <section className="flex justify-between border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
+            <input
+              type="password"
+              name="password"
+              placeholder="비밀번호"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onFocus={() =>
+                setValidation((prev) => ({
+                  ...prev,
+                  password: { ...prev.password, isTouched: true },
+                }))
+              }
+              // className="px-2 w-100 focus:outline-none"
+              className="w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded "
+              required
+            />
+          </section>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="비밀번호"
-            autoComplete="current-password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            onFocus={() =>
-              setValidation((prev) => ({
-                ...prev,
-                password: { ...prev.password, isTouched: true },
-              }))
-            }
-            className="px-2 w-100 focus:outline-none"
-            required
-          />
-          <hr className="mt-0.5" />
           {validation.password.message && (
             <p
-              className={`text-[15px] mt-1 ${
+              className={`text-[12px] mt-1 ${
                 validation.password.message.includes('가능')
-                  ? 'text-primary text-[15px] mt-2 text-right mb-6 ' // 사용 가능 메시지는 파란색
-                  : 'text-red-600 text-[15px] mt-2 text-right mb-6' // 에러 메시지는 빨간색
+                  ? 'text-primary text-[12px] mt-2 mb-0 ' // 사용 가능 메시지는 파란색
+                  : 'text-red-600 text-[12px] mt-2 mb-0' // 에러 메시지는 빨간색
               }`}
             >
-              {/* <p className="text-red-600 text-[15px] mb-2 text-right invisible"> */}
+              {/* <p className="text-red-600 text-[12px] mb-2  invisible"> */}
               {validation.password.message}
             </p>
           )}
@@ -326,34 +373,39 @@ function Signup() {
           {/* -------------------------------------------------------------- */}
           {/* 비밀번호 확인 */}
           {/* -------------------------------------------------------------- */}
+          <section className="flex justify-between border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
+            <input
+              type="password"
+              name="verifyPassword"
+              placeholder="비밀번호 확인"
+              autoComplete="new-password"
+              value={formData.duplicate}
+              onChange={(e) => setFormData({ ...formData, duplicate: e.target.value })}
+              // onChange={(e) => setValidation({ ...validation, verifiedValue: e.target.value })}
+              // onBlur={() =>
+              //   setValidation((prev) => ({
+              //     ...prev,
+              //     password: { ...prev.password, isTouched: true },
+              //   }))
+              // }
+              className={
+                validation.password.isEqual
+                  ? 'w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded'
+                  : 'w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded'
+              }
+              required
+            />
+          </section>
 
-          <input
-            type="password"
-            name="verifyPassword"
-            placeholder="비밀번호 확인"
-            autoComplete="new-password"
-            value={formData.duplicate}
-            onChange={(e) => setFormData({ ...formData, duplicate: e.target.value })}
-            // onChange={(e) => setValidation({ ...validation, verifiedValue: e.target.value })}
-            // onBlur={() =>
-            //   setValidation((prev) => ({
-            //     ...prev,
-            //     password: { ...prev.password, isTouched: true },
-            //   }))
-            // }
-            className={validation.password.isEqual ? validPassword : noValidPassword}
-            required
-          />
-          <hr className="mt-0.5" />
           {validation.passwordCheck.message && (
             <p
-              className={`text-[15px] mt-1 ${
+              className={`text-[12px] mt-1 ${
                 validation.passwordCheck.message.includes('일치합')
-                  ? 'text-primary text-[15px] mt-2 text-right mb-6 ' // 사용 가능 메시지는 파란색
-                  : 'text-red-600 text-[15px] mt-2 text-right mb-6' // 에러 메시지는 빨간색
+                  ? 'text-primary text-[12px] mt-2 mb-0 ' // 사용 가능 메시지는 파란색
+                  : 'text-red-600 text-[12px] mt-2 mb-0' // 에러 메시지는 빨간색
               }`}
             >
-              {/* <p className="text-red-600 text-[15px] mb-2 text-right invisible"> */}
+              {/* <p className="text-red-600 text-[12px] mb-2  invisible"> */}
               {validation.passwordCheck.message}
             </p>
           )}
@@ -364,8 +416,8 @@ function Signup() {
 
           {/* <hr className="mb-10 mt-0.5" /> */}
           <button
-            // className={isButtonEnabled ? enabledClasses : disabledClasses}
-            // disabled={!isButtonEnabled}
+            className={isButtonEnabled ? enabledClasses : disabledClasses}
+            disabled={!isButtonEnabled}
           >
             회원가입
           </button>
