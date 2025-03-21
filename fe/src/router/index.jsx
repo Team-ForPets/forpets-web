@@ -15,6 +15,7 @@ import AnimalList from '../pages/AnimalList';
 import AnimalDetail from '../pages/AnimalDetail';
 import VolunteerList from '../pages/VolunteerList';
 import VolunteerDetail from '../pages/VolunteerDetail';
+import ProfileEditCard from '../components/mypage/ProfileEditCard';
 
 // 로그아웃시 뒤로가기로 마이페이지, 나의채팅 페이지 이동 막는 컴포넌트
 import PrivateRoute from '../components/PrivateRoute';
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
           {
             path: '/my/profile',
             element: <ProfileCard />,
+          },
+          {
+            path: '/my/profile/edit',
+            element: <ProfileEditCard />,
           },
           {
             path: '/my/animals',
