@@ -11,6 +11,9 @@ import com.forpets.be.global.security.jwt.TokenDto;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailSender mailSender;
 
     @Transactional
     public SignupResponseDto signup(SignupRequestDto requestDto) {
@@ -70,5 +74,25 @@ public class AuthService {
 
         return refreshTokenCookie;
     }
+
+    public void SendAuthenticationCodeToEmail(String emailAddress) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        // 받는 사람 이메일
+        msg.setTo(emailAddress);
+        // 이메일 제목
+        msg.setSubject("Test Subject");
+        // 이메일 내용
+        msg.setText("this is email test");
+
+        try {
+            // 메일 보내기
+            this.mailSender.send(msg);
+            System.out.println("이메일 전송 성공!");
+        } catch (MailException e) {
+            throw e;
+        }
+    }
+
 
 }
