@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ProfileCard() {
   const [imageUrl, setImageUrl] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const navigate = useNavigate();
 
   // 파일이 선택되었을 때 실행될 핸들러 함수
   const handleImageChange = (e) => {
@@ -37,12 +40,17 @@ function ProfileCard() {
   };
 
   // 모달창에서 확인 버튼 클릭 시 회원정보 수정 카드로 이동
-  const handleConfirm = (e) => {
-    console.log(e.target.value);
+  const handleConfirm = () => {
+    navigate('/my/profile/edit');
+
+    // Todo: 사용자가 입력한 비밀번호를 확인하는 로직 구현 필요
+    setShowModal(false);
   };
 
   // 모달창에서 취소 버튼 클릭 시 현재 카드 그대로 표시
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -123,6 +131,12 @@ function ProfileCard() {
                 className="bg-amber-300 hover:bg-amber-500 text-black px-4 py-2 rounded"
               >
                 확인
+              </button>
+              <button
+                onClick={handleCancel}
+                className="bg-gray-100 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded"
+              >
+                취소
               </button>
             </div>
           </div>
