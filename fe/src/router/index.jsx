@@ -3,7 +3,7 @@ import MainLayout from '../Layout/MainLayout';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
-import Mypage from '../pages/Mypage';
+import Mypage from '../pages/MyPage';
 import Chat from '../pages/Chat';
 import ServiceStatus from '../pages/ServiceStatus';
 import RegisterAnimal from '../pages/RegisterAnimal';
