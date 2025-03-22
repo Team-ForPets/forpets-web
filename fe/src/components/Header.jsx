@@ -2,14 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import api from '../api/authApi';
 
 function Header() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const response = await api.logout();
     dispatch(logout());
   };
+
   return (
     <header className="w-[60vw] h-[100px] m-auto  box-border flex justify-between items-center">
       <h1 className=" shrink-0 ">

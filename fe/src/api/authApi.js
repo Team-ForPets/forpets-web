@@ -10,16 +10,14 @@ const authApi = {
 
   // 로그인
   login: async (formData) => {
-    const response = await api.post(`${ENDPOINT}/login`, formData);
+    const response = await api.post(`${ENDPOINT}/login`, formData, { withCredentials: true });
     console.log(response);
     return response.data;
   },
 
   // 로그아웃
   logout: async () => {
-    const response = await api.post(`${ENDPOINT}/logout`, {
-      credentials: 'include',
-    });
+    const response = await api.post(`${ENDPOINT}/logout`, {}, { withCredentials: true });
     return response;
   },
 
