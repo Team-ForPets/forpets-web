@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/service-volunteer")
 @RequiredArgsConstructor
 public class VolunteerController {
 
     private final VolunteerService volunteerService;
 
-    @PostMapping("/service-volunteer")
+    @PostMapping
     public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> serviceVolunteer(
         // @ 유저정보
         @RequestBody ServiceVolunteerRequestDto requestDto,
