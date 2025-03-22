@@ -1,0 +1,79 @@
+services:
+  redis:
+    container_name: redis-container
+    image: redis
+    volumes:
+      - redis-volume:/data
+    networks:
+      - redis-network
+    env_file:
+      - .env
+    restart: always
+  db:
+    container_name: db-container
+    image: mysql:8.0
+    volumes:
+      - db-volume:/var/lib/mysql
+    networks:
+      - db-network
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+  be:
+    container_name: be-container
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+      cache_from:
+        - type=local,src=/tmp/docker-cache/be
+      cache_to:
+        - type=local,dest=/tmp/docker-cache/be,mode=max
+    image: ${DOCKER_REGISTRY}/be-image:latest
+    networks:
+      - db-network
+      - be-network
+      - redis-network
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+  fe:
+    container_name: fe-container
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+      cache_from:
+        - type=local,src=/tmp/docker-cache/fe
+      cache_to:
+        - type=local,dest=/tmp/docker-cache/fe,mode=max
+    image: ${DOCKER_REGISTRY}/fe-image:latest
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - be-network
+    volumes:
+      - /etc/letsencrypt/live/${DOMAIN}/fullchain.pem:/etc/letsencrypt/live/${DOMAIN}/fullchain.pem
+      - /etc/letsencrypt/live/${DOMAIN}/privkey.pem:/etc/letsencrypt/live/${DOMAIN}/privkey.pem
+    depends_on:
+      - db
+      - be
+
+volumes:
+  db-volume:
+  redis-volume:
+
+networks:
+  db-network:
+  be-network:
+  redis-network:
