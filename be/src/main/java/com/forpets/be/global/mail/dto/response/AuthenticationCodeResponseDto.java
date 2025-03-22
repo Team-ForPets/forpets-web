@@ -1,4 +1,4 @@
-package com.forpets.be.global.auth.dto.response;
+package com.forpets.be.global.mail.dto.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,5 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationCodeResponseDto {
 
-    private final String code;
+    private final String statusMessage;
+    private final Boolean status;
 }

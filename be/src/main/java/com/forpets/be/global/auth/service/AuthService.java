@@ -11,9 +11,7 @@ import com.forpets.be.global.security.jwt.TokenDto;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,7 +40,7 @@ public class AuthService {
         if (userRepository.existsByNickname(requestDto.getNickname())) {
             throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
         }
-        // 비밀번호 암호와
+        // 비밀번호 암호화
         // requestDto를 통해 비밀번호를 가져온 뒤 passwordEncoder의 encode 메서드를 통해 암호화 후 저장
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         // 암호화 한 비밀번호를 repository에 넘겨 DB에 저장해야 하니 toEntity로 바꾸고 user로 저장
@@ -74,25 +72,4 @@ public class AuthService {
 
         return refreshTokenCookie;
     }
-
-    public void SendAuthenticationCodeToEmail(String emailAddress) {
-
-        SimpleMailMessage msg = new SimpleMailMessage();
-        // 받는 사람 이메일
-        msg.setTo(emailAddress);
-        // 이메일 제목
-        msg.setSubject("Test Subject");
-        // 이메일 내용
-        msg.setText("this is email test");
-
-        try {
-            // 메일 보내기
-            this.mailSender.send(msg);
-            System.out.println("이메일 전송 성공!");
-        } catch (MailException e) {
-            throw e;
-        }
-    }
-
-
 }
