@@ -128,9 +128,9 @@ function ProfileCard() {
           </div>
         </div>
       </div>
-      <div className="p-10 flex mt-30">
+      <div className="p-10 flex h-[50%]">
         <button
-          className="ml-auto w-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all"
+          className="self-end ml-auto w-[25%] h-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all"
           onClick={handleUserInfoEdit}
         >
           회원정보 수정
