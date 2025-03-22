@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import mypageApi from '../api/mypageApi';
 
 function MyPage() {
   const [selectedButton, setSelectedButton] = useState('profile');
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  // 회원정보 get
-  const fetchProfile = async () => {
-    try {
-      const response = await mypageApi.getProfile();
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (location.pathname === '/my' || location.pathname === '/my/profile') {
@@ -28,23 +17,23 @@ function MyPage() {
     }
   }, [location.pathname]);
 
-  // fetchProfile();
-
+  // 프로필 버튼 클릭 시 프로필 컴포넌트 표시
   const handleProfileRead = async () => {
     navigate('/my/profile');
   };
 
+  // 나의 아이 버튼 클릭 시 나의 아이 컴포넌트 표시
   const handleAnimalRead = async () => {
     navigate('/my/animals');
   };
 
+  // 나의 봉사글 버튼 클릭 시 나의 봉사글 컴포넌트 표시
   const handleVolunteerRead = async () => {
     navigate('/my/volunteer-posts');
   };
 
   return (
     <div className="h-[85%] flex gap-10 pt-10">
-      {/* <div className="w-[25%] bg-gray-300 flex flex-col gap-10"> */}
       <aside className="w-[25%] flex flex-col gap-10 items-center pt-5">
         <button
           className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all ${selectedButton === 'profile' ? 'bg-amber-500' : 'bg-amber-300'}`}
