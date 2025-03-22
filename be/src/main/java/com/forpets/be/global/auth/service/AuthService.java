@@ -41,7 +41,7 @@ public class AuthService {
         if (userRepository.existsByNickname(requestDto.getNickname())) {
             throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
         }
-        // 비밀번호 암호와
+        // 비밀번호 암호화
         // requestDto를 통해 비밀번호를 가져온 뒤 passwordEncoder의 encode 메서드를 통해 암호화 후 저장
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         // 암호화 한 비밀번호를 repository에 넘겨 DB에 저장해야 하니 toEntity로 바꾸고 user로 저장
