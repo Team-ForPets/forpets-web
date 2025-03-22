@@ -1,5 +1,6 @@
 package com.forpets.be.global.mail.service;
 
+import com.forpets.be.global.mail.dto.request.AuthenticationRequestDto;
 import com.forpets.be.global.mail.dto.response.AuthenticationCodeResponseDto;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +16,17 @@ public class VerificationCodeService {
     private final StringRedisTemplate redisTemplate;
 
     // 랜덤 code를 redis에 저장
-    public void saveVerificationCode(String email, String code) {
-        redisTemplate.opsForValue().set(email, code, CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+    public void saveVerificationCode(String username, String code) {
+        redisTemplate.opsForValue()
+            .set(username, code, CODE_EXPIRE_TIME,
+                TimeUnit.MINUTES);
     }
 
     // 이메일과 코드의 쌍을 검사하는 코드
-    public AuthenticationCodeResponseDto verifyCode(String email, String code) {
-        String storedCode = redisTemplate.opsForValue().get(email);
+    public AuthenticationCodeResponseDto verifyCode(AuthenticationRequestDto requestDto) {
+        String storedCode = redisTemplate.opsForValue().get(requestDto.getUsername());
 
-        if (storedCode != null && storedCode.equals(code)) {
+        if (storedCode != null && storedCode.equals(requestDto.getCode())) {
             return new AuthenticationCodeResponseDto("인증에 성공했습니다.", true);
         } else {
             return new AuthenticationCodeResponseDto("유효하지 않은 인증 코드입니다..", false);
