@@ -1,25 +1,25 @@
-// import axios from 'axios';
-// import store from '../store/store';
+import axios from 'axios';
+import store from '../store/store';
 // import { logout, updateTokens } from '../store/slices/authSlice';
 
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL,
-//   withCredentials: true,
-// });
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
 // // 요청 인터셉터
-// api.interceptors.request.use(
-//   (config) => {
-//     const accessToken = store.getState().auth.accessToken;
-//     if (accessToken) {
-//       config.headers.Authorization = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
+api.interceptors.request.use(
+  (config) => {
+    const accessToken = store.getState().auth.accessToken;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 // // 응답 인터셉터
 // api.interceptors.response.use(
@@ -46,23 +46,5 @@
 //     return Promise.reject(error);
 //   },
 // );
-
-// export default api;
-
-import axios from 'axios';
-import store from '../store/store';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-});
-
-// api.interceptors.request.use((config) => {
-//   const token = store.getState().auth.token;
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-
-//   return config;
-// });
 
 export default api;
