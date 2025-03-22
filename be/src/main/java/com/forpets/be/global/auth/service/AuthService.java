@@ -62,14 +62,27 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken(username);
-        storeAccessToken(username, accessToken);
         storeRefreshToken(username, refreshToken);
 
         return new TokenDto(accessToken, refreshToken);
     }
 
+    public Cookie logout(String accessToken, User user) {
+        String username = user.getUsername();
+        deleteRefreshToken(username);
+        storeBlackListToken(username, accessToken);
+
+        Cookie refreshTokenCookie = new Cookie("refresh_token", null);
+        refreshTokenCookie.setHttpOnly(true);             // 자바스크립트 접근 차단
+//        refreshTokenCookie.setSecure(true);             // HTTPS 전송 시에만 쿠키 전달 (HTTPS 환경일 때)
+        refreshTokenCookie.setPath("/");                  // 애플리케이션 전체에 대해 유효
+        refreshTokenCookie.setMaxAge(7);
+
+        return refreshTokenCookie;
+    }
+
     public Cookie makeRefreshTokenCookie(String refreshToken) {
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
         refreshTokenCookie.setHttpOnly(true);             // 자바스크립트 접근 차단
 //        refreshTokenCookie.setSecure(true);             // HTTPS 전송 시에만 쿠키 전달 (HTTPS 환경일 때)
         refreshTokenCookie.setPath("/");                  // 애플리케이션 전체에 대해 유효
@@ -78,36 +91,37 @@ public class AuthService {
         return refreshTokenCookie;
     }
 
-    // 사용자 ID에 해당하는 토큰을 저장하고, 30분 후 만료되도록 설정합니다.
-    public void storeAccessToken(String userId, String token) {
-        String key = "access_token:" + userId;  // key 예: "token:user123"
-        stringRedisTemplate.opsForValue().set(key, token, 30, TimeUnit.MINUTES);
+    // 사용자 ID에 해당하는 토큰을 저장하고, 10일 후 만료되도록 설정.
+    public void storeBlackListToken(String username, String token) {
+        String key = "black_list:" + username;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue().set(key, token, 10, TimeUnit.DAYS);
     }
 
-    public void storeRefreshToken(String userId, String token) {
-        String key = "refresh_token:" + userId;  // key 예: "token:user123"
-        stringRedisTemplate.opsForValue().set(key, token, 30, TimeUnit.MINUTES);
+    // 사용자 ID에 해당하는 토큰을 저장하고, 7일 후 만료되도록 설정.
+    public void storeRefreshToken(String username, String token) {
+        String key = "refresh_token:" + username;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue().set(key, token, 7, TimeUnit.DAYS);
     }
 
     // 저장된 토큰을 조회하는 메서드
-    public String getAccessToken(String userId) {
-        String key = "access_token:" + userId;
+    public String getBlackListToken(String username) {
+        String key = "black_list:" + username;
         return stringRedisTemplate.opsForValue().get(key);
     }
 
-    public String getRefreshToken(String userId) {
-        String key = "refresh_token:" + userId;
+    public String getRefreshToken(String username) {
+        String key = "refresh_token:" + username;
         return stringRedisTemplate.opsForValue().get(key);
     }
 
-    // 토큰을 삭제하고 싶을 때 사용하는 메서드
-    public void deleteAccessToken(String userId) {
-        String key = "access_token:" + userId;
+    // 토큰을 삭제 메서드
+    public void deleteBlackListToken(String username) {
+        String key = "black_list:" + username;
         stringRedisTemplate.delete(key);
     }
 
-    public void deleteRefreshToken(String userId) {
-        String key = "refresh_token:" + userId;
+    public void deleteRefreshToken(String username) {
+        String key = "refresh_token:" + username;
         stringRedisTemplate.delete(key);
     }
 }
