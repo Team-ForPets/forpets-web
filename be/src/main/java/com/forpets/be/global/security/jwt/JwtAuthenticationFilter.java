@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,12 +18,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,6 +37,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = jwtTokenProvider.getUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+            // 토큰이 블랙리스트에 있는지 확인
+            if (stringRedisTemplate.hasKey("black_list" + username)) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setContentType("application/json; charset=UTF-8"); // 응답 콘텐츠 타입 및 인코딩 설정
+                response.getWriter().write("해당 access token을 더이상 사용할 수 없습니다.");
+                return; // 응답을 종료하고 필터 체인 진행을 멈춤
+            }
+
             Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -39,6 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDetails.getAuthorities()
                 );
 
+            log.info("no? yes?");
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
