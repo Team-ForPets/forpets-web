@@ -1,14 +1,12 @@
-import api from "./axios";
+import api from './axios';
 
-const ENDPOINT = '/volunteer';
+const ENDPOINT = '/service-volunteer';
 const todoApi = {
   // example
-  getTodos: async (bucketId) => {
-    const response = await api.get(`${ENDPOINT}/${bucketId}/todos`);
+  createVolunteer: async (formdata) => {
+    const response = await api.post(`${ENDPOINT}`, formdata);
     return response.data;
   },
-
-
-}
+};
 
 export default todoApi;

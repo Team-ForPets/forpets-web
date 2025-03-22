@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import volunteerApi from '../api/volunteerApi';
 
 function RegisterVolunteer() {
   const [formData, setFormData] = useState({
@@ -8,10 +10,13 @@ function RegisterVolunteer() {
     endDate: '',
     departureArea: '',
     arrivalArea: '',
-    message: '',
+    notice: '',
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [errorMessages, setErrorMessages] = useState({}); // 에러 메시지 상태 추가
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,18 +24,54 @@ function RegisterVolunteer() {
       ...prevState,
       [name]: value,
     }));
+
+    // 에러 메시지 초기화
+    if (errorMessages[name]) {
+      setErrorMessages((prevErrorMessages) => {
+        const newErrorMessages = { ...prevErrorMessages };
+        delete newErrorMessages[name];
+        return newErrorMessages;
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 필수 필드 검사
+    const requiredFields = [
+      'title',
+      'animalType',
+      'startDate',
+      'endDate',
+      'departureArea',
+      'arrivalArea',
+    ];
+    let hasError = false;
+
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        setErrorMessages((prevErrorMessages) => ({
+          ...prevErrorMessages,
+          [field]: '필수 입력 항목입니다.',
+        }));
+        hasError = true;
+      }
+    });
+
+    if (hasError) return; // 에러가 있으면 모달을 표시하지 않음
+
     setShowModal(true);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     // 여기에 실제 등록 로직 구현
-    console.log('등록 데이터:', formData);
+    const response = await volunteerApi.createVolunteer(formData);
+    console.log(response);
+
     setShowModal(false);
-    // 등록 성공 후 처리 (예: 리다이렉트, 성공 메시지 등)
+    // 등록 성공 시 홈 화면으로 이동
+    navigate('/');
   };
 
   const handleCancel = () => {
@@ -68,10 +109,13 @@ function RegisterVolunteer() {
                   type="text"
                   name="title"
                   placeholder="제목을 입력해주세요"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.title ? 'border-red-500' : ''}`}
                   value={formData.title}
                   onChange={handleChange}
                 />
+                {errorMessages.title && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.title}</div>
+                )}
               </div>
 
               {/* 동물유형 선택 */}
@@ -79,15 +123,18 @@ function RegisterVolunteer() {
                 <label className="block text-sm font-medium mb-1">동물유형 선택</label>
                 <select
                   name="animalType"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.animalType ? 'border-red-500' : ''}`}
                   value={formData.animalType}
                   onChange={handleChange}
                 >
                   <option value="">동물유형 선택</option>
-                  <option value="dog">개</option>
-                  <option value="cat">고양이</option>
-                  <option value="other">기타</option>
+                  <option value="DOG">개</option>
+                  <option value="CAT">고양이</option>
+                  <option value="OTHER">기타</option>
                 </select>
+                {errorMessages.animalType && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.animalType}</div>
+                )}
               </div>
             </div>
 
@@ -99,12 +146,15 @@ function RegisterVolunteer() {
                   type="text"
                   name="startDate"
                   placeholder="YYYY-MM-DD"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.startDate ? 'border-red-500' : ''}`}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   onMouseOver={(e) => e.target.focus()} // 마우스 오버시 포커스
                 />
+                {errorMessages.startDate && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.startDate}</div>
+                )}
               </div>
 
               <div>
@@ -113,12 +163,15 @@ function RegisterVolunteer() {
                   type="text"
                   name="endDate"
                   placeholder="YYYY-MM-DD"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.endDate ? 'border-red-500' : ''}`}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   onMouseOver={(e) => e.target.focus()} // 마우스 오버시 포커스
                 />
+                {errorMessages.endDate && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.endDate}</div>
+                )}
               </div>
 
               <div>
@@ -127,10 +180,13 @@ function RegisterVolunteer() {
                   type="text"
                   name="departureArea"
                   placeholder="출발지역을 입력해주세요"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.departureArea ? 'border-red-500' : ''}`}
                   value={formData.departureArea}
                   onChange={handleChange}
                 />
+                {errorMessages.departureArea && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.departureArea}</div>
+                )}
               </div>
 
               <div>
@@ -139,20 +195,23 @@ function RegisterVolunteer() {
                   type="text"
                   name="arrivalArea"
                   placeholder="도착지역을 입력해주세요"
-                  className="w-full p-2 border rounded"
+                  className={`w-full p-2 border rounded ${errorMessages.arrivalArea ? 'border-red-500' : ''}`}
                   value={formData.arrivalArea}
                   onChange={handleChange}
                 />
+                {errorMessages.arrivalArea && (
+                  <div className="text-red-500 text-xs mt-1">{errorMessages.arrivalArea}</div>
+                )}
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-1">요청자에게 전하고 싶은 말</label>
               <textarea
-                name="message"
+                name="notice"
                 placeholder="요청자에게 전하고 싶은 말을 입력해주세요"
                 className="w-full p-2 border rounded h-40" // 높이 조정
-                value={formData.message}
+                value={formData.notice}
                 onChange={handleChange}
               ></textarea>
             </div>
