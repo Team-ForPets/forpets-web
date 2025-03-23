@@ -32,36 +32,7 @@ function AnimalCard() {
             onMouseLeave={() => setHovered(false)}
           >
             <input type="file" onChange={handleImageChange} className="hidden" id="fileInput" />
-            {image ? (
-              <>
-                <img src={image} alt="프로필 이미지" className="w-full h-full rounded-md" />
-                {hovered && (
-                  <div className="absolute top-2 right-2 flex gap-2">
-                    <button
-                      onClick={() => document.getElementById('fileInput').click()}
-                      className="bg-amber-300 hover:bg-amber-500 text-black px-2 py-1 rounded"
-                    >
-                      수정
-                    </button>
-                    <button
-                      onClick={handleImageDelete}
-                      className="bg-red-300 hover:bg-red-500 text-black px-2 py-1 rounded"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center w-full h-full">
-                <button
-                  onClick={() => document.getElementById('fileInput').click()}
-                  className="bg-amber-300 hover:bg-amber-500 text-black px-4 py-2 rounded cursor-pointer"
-                >
-                  추가
-                </button>
-              </div>
-            )}
+            <img src={image} alt="나의 아이 이미지" className="w-full h-full rounded-md" />
           </div>
           <div className="w-[60%] flex flex-col gap-y-3">
             <div className="flex gap-5">
