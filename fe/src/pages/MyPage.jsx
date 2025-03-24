@@ -63,9 +63,9 @@ function MyPage() {
           나의 봉사글
         </button>
       </aside>
-      <main className="w-[75%] bg-gray-100 rounded border-2 border-gray-200">
+      <section className="w-[75%] bg-gray-100 rounded border-2 border-gray-200">
         <Outlet></Outlet>
-      </main>
+      </section>
     </div>
   );
 }
