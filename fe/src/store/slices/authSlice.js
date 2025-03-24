@@ -21,7 +21,6 @@ const authSlice = createSlice({
 
       localStorage.setItem('accessToken', action.payload.accessToken);
       localStorage.setItem('userName', action.payload.username);
-      // Redux Store 확인
     },
     logout: (state, action) => {
       state.accessToken = null;

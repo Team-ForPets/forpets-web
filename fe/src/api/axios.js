@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store/store';
-// import { logout, updateTokens } from '../store/slices/authSlice';
-
+import authApi from './authApi';
+import { logout, updateTokens } from '../store/slices/authSlice';
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
@@ -21,30 +21,37 @@ api.interceptors.request.use(
   },
 );
 
-// // 응답 인터셉터
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     if (error.response.status === 403) {
-//       // 토큰 갱신 요청
-//       try {
-//         const response = await api.post(`${import.meta.env.VITE_API_URL}/auth/reissuance`, {
-//           credentials: 'include',
-//         });
-//         const accessToken = response.data.data.accessToken;
+// 응답 인터셉터
+api.interceptors.response.use(
+  (response) => response, // 응답이 성공적일 경우 그대로 반환
+  async (error) => {
+    const originalRequest = error.config; // 실패한 요청 정보
 
-//         store.dispatch(updateTokens({ accessToken }));
-//         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    if (error.response.status === 401) {
+      // 401: 토큰 만료
+      try {
+        // 1. 토큰 재발급 요청
+        const response = await authApi.reissue();
 
-//         return await api.get(`${import.meta.env.VITE_API_URL}/buckets`);
-//       } catch (refreshError) {
-//         store.dispatch(logout());
-//         return Promise.reject(refreshError);
-//       }
-//     }
+        const accessToken = response.data.data.accessToken;
 
-//     return Promise.reject(error);
-//   },
-// );
+        // 2. 토큰 갱신
+        store.dispatch(updateTokens({ accessToken }));
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`; // 원래 요청에도 반영
+
+        // 3. 갱신된 토큰으로 원래 요청 재시도
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // 4. 재발급 실패 시 로그아웃
+        store.dispatch(logout());
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // 5. 다른 에러는 그대로 반환
+    return Promise.reject(error);
+  },
+);
 
 export default api;
