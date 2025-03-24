@@ -8,11 +8,11 @@ import com.forpets.be.global.auth.dto.request.SignupRequestDto;
 import com.forpets.be.global.auth.dto.response.SignupResponseDto;
 import com.forpets.be.global.security.jwt.JwtTokenProvider;
 import com.forpets.be.global.security.jwt.TokenDto;
-import jakarta.servlet.http.Cookie;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,12 +20,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
+
+    public static final String KEY_REFRESH = "refresh_token:";
+    public static final String KEY_BLACKLIST = "black_list:";
+    public static final int REDIS_BLACKLIST_TOKEN_TIMEOUT = 10;
+    public static final int REDIS_REFRESH_TOKEN_TIMEOUT = 7;
+    public static final int REFRESH_TOKEN_EXPIRY_THRESHOLD = 2;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -60,68 +67,81 @@ public class AuthService {
             )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accessToken = jwtTokenProvider.createAccessToken(authentication);
+        String accessToken = jwtTokenProvider.createAccessToken(authentication.getName());
         String refreshToken = jwtTokenProvider.createRefreshToken(username);
         storeRefreshToken(username, refreshToken);
 
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public Cookie logout(String accessToken, User user) {
+    public void logout(String accessToken, User user) {
         String username = user.getUsername();
         deleteRefreshToken(username);
         storeBlackListToken(username, accessToken);
-
-        Cookie refreshTokenCookie = new Cookie("refresh_token", null);
-        refreshTokenCookie.setHttpOnly(true);             // 자바스크립트 접근 차단
-//        refreshTokenCookie.setSecure(true);             // HTTPS 전송 시에만 쿠키 전달 (HTTPS 환경일 때)
-        refreshTokenCookie.setPath("/");                  // 애플리케이션 전체에 대해 유효
-        refreshTokenCookie.setMaxAge(7);
-
-        return refreshTokenCookie;
     }
 
-    public Cookie makeRefreshTokenCookie(String refreshToken) {
-        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);             // 자바스크립트 접근 차단
-//        refreshTokenCookie.setSecure(true);             // HTTPS 전송 시에만 쿠키 전달 (HTTPS 환경일 때)
-        refreshTokenCookie.setPath("/");                  // 애플리케이션 전체에 대해 유효
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);   // 예: 쿠키 만료시간을 7일로 설정 (초 단위)
+    public TokenDto reissueToken(String refreshToken) {
+        String newAccessToken;
+        String newRefreshToken = null;
+        String username = jwtTokenProvider.getUsername(refreshToken);
+        String storedRefreshToken = getRefreshToken(username);
 
-        return refreshTokenCookie;
+        if (refreshToken.equals(storedRefreshToken)) {
+            long remainingDays = getTTL(username);
+
+            if (remainingDays <= REFRESH_TOKEN_EXPIRY_THRESHOLD) {
+                newRefreshToken = jwtTokenProvider.createRefreshToken(username);
+            }
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 refresh token입니다.");
+        }
+
+        newAccessToken = jwtTokenProvider.createAccessToken(username);
+
+        return new TokenDto(newAccessToken, newRefreshToken);
     }
+
 
     // 사용자 ID에 해당하는 토큰을 저장하고, 10일 후 만료되도록 설정.
     public void storeBlackListToken(String username, String token) {
-        String key = "black_list:" + username;  // key 예: "token:user123"
-        stringRedisTemplate.opsForValue().set(key, token, 10, TimeUnit.DAYS);
+        String key = KEY_BLACKLIST + username;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue()
+            .set(key, token, REDIS_BLACKLIST_TOKEN_TIMEOUT, TimeUnit.DAYS);
     }
 
     // 사용자 ID에 해당하는 토큰을 저장하고, 7일 후 만료되도록 설정.
     public void storeRefreshToken(String username, String token) {
-        String key = "refresh_token:" + username;  // key 예: "token:user123"
-        stringRedisTemplate.opsForValue().set(key, token, 7, TimeUnit.DAYS);
+        String key = KEY_REFRESH + username;  // key 예: "token:user123"
+        stringRedisTemplate.opsForValue()
+            .set(key, token, REDIS_REFRESH_TOKEN_TIMEOUT, TimeUnit.DAYS);
     }
 
     // 저장된 토큰을 조회하는 메서드
     public String getBlackListToken(String username) {
-        String key = "black_list:" + username;
+        String key = KEY_BLACKLIST + username;
         return stringRedisTemplate.opsForValue().get(key);
     }
 
     public String getRefreshToken(String username) {
-        String key = "refresh_token:" + username;
+        String key = KEY_REFRESH + username;
         return stringRedisTemplate.opsForValue().get(key);
     }
 
     // 토큰을 삭제 메서드
     public void deleteBlackListToken(String username) {
-        String key = "black_list:" + username;
+        String key = KEY_BLACKLIST + username;
         stringRedisTemplate.delete(key);
     }
 
     public void deleteRefreshToken(String username) {
-        String key = "refresh_token:" + username;
+        String key = KEY_REFRESH + username;
         stringRedisTemplate.delete(key);
+    }
+
+    // 지정된 키의 TTL을 일 단위로 반환합니다.
+    public long getTTL(String username) {
+        String key = KEY_REFRESH + username;
+        return stringRedisTemplate.getExpire(key, TimeUnit.DAYS);
     }
 }
