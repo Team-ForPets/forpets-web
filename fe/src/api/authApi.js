@@ -50,9 +50,9 @@ const authApi = {
   },
 
   // 토큰 갱신 요청
-  refreshAccessToken: async () => {
-    const response = await api.post(`${ENDPOINT}/reissuance`, {
-      credentials: 'include',
+  reissue: async () => {
+    const response = await api.post(`${ENDPOINT}/reissue`, {
+      withCredentials: true,
     });
     return response;
   },
