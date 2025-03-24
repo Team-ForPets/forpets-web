@@ -29,14 +29,14 @@ function Signup() {
    */
 
   const [validation, setValidation] = useState({
-    username: { isClicked: false, status: '', message: '' },
+    username: { isClicked: false, status: '', message: '', sendCode: false, verifiedCode: '' },
     nickname: { isValid: false, isTouched: false, status: '', isClicked: false, message: '' },
     password: { isValid: false, isTouched: false, isEqual: false, verifiedValue: '', message: '' },
     passwordCheck: { message: '' },
   });
 
-  // 버튼 활성화(모두 적어야 활성화)
-  const isButtonEnabled =
+  // 회원가입 버튼 활성화(모두 적어야 활성화)
+  const isSignupButtonEnabled =
     formData.username.trim() !== '' &&
     validation.nickname.isValid &&
     validation.password.isValid &&
@@ -46,9 +46,13 @@ function Signup() {
   // 위 조건 채웠을 때 버튼 활성화 상태
   const enabledClasses =
     // 'border cursor-pointer border-blue bg-amber-200 text-white hover:bg-secondary w-full h-10 rounded-lg mt-10';
-		'border text-white border-amber-500 w-full h-10 rounded px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2'
+    'border text-white border-amber-500 w-full h-10 rounded px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2';
   const disabledClasses =
     'border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed';
+
+  // 이메일 인증 탭 활성화
+  const isVerificationTapEnabled =
+    formData.username.trim() !== '' && validation.username.status === 'true';
 
   // 전체 input 입력값
   const handleFormInput = async (e) => {
@@ -165,7 +169,90 @@ function Signup() {
     formData.password,
     formData.duplicate,
   ]);
+  
+  // 이메일 인증 코드 전송 요청
+  const handleSendCode = async () => {
+    setError('');
+    if (!validation.username.sendCode === '') {
+      setValidation((prev) => ({
+        ...prev,
+        username: { ...prev.username, message: '이메일 인증을 진행해주세요.' },
+      }));
+      return;
+    } else {
+      try {
+        console.log('인증코드 전송');
+        const response = await authApi.sendAuthCode(formData.username);
+        // 응답 데이터인 available 값을 적용(true(사용 가능) / false(중복))
+        const sendCode = response.data;
+        setValidation((prev) => ({
+          ...prev,
+          username: {
+            ...prev.username,
+            isClicked: true,
+            sendCode: true,
+            message: '이메일 전송에 성공했습니다.',
+          },
+        }));
+      } catch (err) {
+        setError(err.message);
+        setValidation((prev) => ({
+          ...prev,
+          username: {
+            ...prev.username,
+            isClicked: true,
+            sendCode: '',
+            message: '이메일 전송에 실패했습니다.',
+          },
+        }));
+        console.log(err.message);
+      }
+    }
+  };
+  // 이메일 인증 코드 검증
+  const handleCodeVerified = async () => {
+    setError('');
+    if (validation.username.sendCode === '') {
+      setValidation((prev) => ({
+        ...prev,
+        username: { ...prev.username, message: '코드 입력 시간이 지났습니다. 다시 인증해주세요.' },
+      }));
+      return;
+    }
+    try {
+      // 이메일 인증 코드 검증 요청
+      console.log('인증코드 검증');
+      const response = await authApi.verifyCode(
+        formData.username,
+        validation.username.verifiedCode,
+      );
+      // 응답 데이터인 available 값을 적용(true(사용 가능) / false(중복))
+      const isVerified = response.data;
 
+      console.log(isVerified);
+      setValidation((prev) => ({
+        ...prev,
+        username: {
+          ...prev.username,
+          isClicked: true,
+          verifiedCode: isVerified.status,
+          message: isVerified.statusMessage,
+        },
+      }));
+    } catch (err) {
+      setError(err.message);
+      setValidation((prev) => ({
+        ...prev,
+        username: {
+          ...prev.username,
+          isClicked: true,
+          sendCode: '',
+          message: '이메일 인증에 실패했습니다.',
+        },
+      }));
+      console.log(err.message);
+    }
+  };
   // 이메일 중복 확인 버튼
   const handleCheckUsername = async () => {
     setError('');
@@ -293,6 +380,33 @@ function Signup() {
             )}
           </section>
           {/* -------------------------------------------------------------- */}
+          {/* 이메일 검증*/}
+          {/* -------------------------------------------------------------- */}
+
+          <section
+            className={`${isVerificationTapEnabled ? 'block' : 'hidden'} flex justify-between border border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed`}
+          >
+            <input
+              type="text"
+              placeholder="코드"
+              value={validation.username.verifiedCode}
+              onChange={(e) =>
+                setValidation({ ...validation.username.verifiedCode, verifiedCode: e.target.value })
+              }
+              // className={{isVerificationTapEnabled ? 'block' : 'hidden'}
+              className={` w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded`}
+            />
+            {/* 이메일 전송/ 코드 검증(검증 시간 설정) 삼항연산자 써야 함 */}
+            <button
+              type="button"
+              className="border  text-white border-amber-500 rounded w-36 px-1 py-0.5 bg-amber-500 hover:bg-amber-500 hover:border-amber-600 hover:border-2"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={!validation.username.sendCode ? handleSendCode : handleCodeVerified}
+            >
+              {!validation.username.sendCode ? '인증 코드 전송' : '인증 코드 검증'}
+            </button>
+          </section>
+          {/* -------------------------------------------------------------- */}
           {/* 닉네임 */}
           {/* -------------------------------------------------------------- */}
           <section className="flex justify-between border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
@@ -416,8 +530,8 @@ function Signup() {
 
           {/* <hr className="mb-10 mt-0.5" /> */}
           <button
-            className={isButtonEnabled ? enabledClasses : disabledClasses}
-            disabled={!isButtonEnabled}
+            className={isSignupButtonEnabled ? enabledClasses : disabledClasses}
+            disabled={!isSignupButtonEnabled}
           >
             회원가입
           </button>

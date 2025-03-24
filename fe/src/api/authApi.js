@@ -8,6 +8,28 @@ const authApi = {
     return response.data;
   },
 
+  // username 유효성 검사
+  checkUsername: async (username) => {
+    const response = await api.get(`${ENDPOINT}/email-verifications?username=${username}`);
+    return response.data;
+  },
+  // username 유효성 검사
+  checkNickname: async (nickname) => {
+    const response = await api.get(`${ENDPOINT}/nickname-verifications?nickname=${nickname}`);
+    return response.data;
+  },
+  // username 인증 코드 전송
+  sendAuthCode: async (username) => {
+    const response = await api.post(`${ENDPOINT}/send-auth-code`, { username });
+    return response.data;
+  },
+
+  // username 인증 코드 검증
+  verifyCode: async (emailAndCode) => {
+    const response = await api.post(`${ENDPOINT}/verify-code`, { formData });
+    return response.data;
+  },
+
   // 로그인
   login: async (formData) => {
     const response = await api.post(`${ENDPOINT}/login`, formData, { withCredentials: true });
@@ -25,17 +47,6 @@ const authApi = {
   verify: async () => {
     const response = await api.get(`${ENDPOINT}/verify`);
     return response;
-  },
-
-  // username 유효성 검사
-  checkUsername: async (username) => {
-    const response = await api.get(`${ENDPOINT}/email-verifications?username=${username}`);
-    return response.data;
-  },
-  // username 유효성 검사
-  checkNickname: async (nickname) => {
-    const response = await api.get(`${ENDPOINT}/nickname-verifications?nickname=${nickname}`);
-    return response.data;
   },
 
   // 토큰 갱신 요청
