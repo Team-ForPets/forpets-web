@@ -9,6 +9,7 @@ function Signup() {
     nickname: '',
     password: '',
     duplicate: '',
+    authCode: '',
   });
   // console.log(formData);
   const [error, setError] = useState('');
@@ -29,7 +30,7 @@ function Signup() {
    */
 
   const [validation, setValidation] = useState({
-    username: { isClicked: false, status: '', message: '', sendCode: false, verifiedCode: '' },
+    username: { isClicked: false, status: '', message: '', sendCode: false, verifiedCode: false },
     nickname: { isValid: false, isTouched: false, status: '', isClicked: false, message: '' },
     password: { isValid: false, isTouched: false, isEqual: false, verifiedValue: '', message: '' },
     passwordCheck: { message: '' },
@@ -41,7 +42,8 @@ function Signup() {
     validation.nickname.isValid &&
     validation.password.isValid &&
     validation.password.isEqual &&
-    validation.username.status === 'true';
+    validation.username.status === 'true' &&
+    validation.username.verifiedCode === 'true';
 
   // 위 조건 채웠을 때 버튼 활성화 상태
   const enabledClasses =
@@ -169,7 +171,7 @@ function Signup() {
     formData.password,
     formData.duplicate,
   ]);
-  
+
   // 이메일 인증 코드 전송 요청
   const handleSendCode = async () => {
     setError('');
@@ -191,7 +193,8 @@ function Signup() {
             ...prev.username,
             isClicked: true,
             sendCode: true,
-            message: '이메일 전송에 성공했습니다.',
+            verifiedCode: false,
+            message: '인증 코드 전송에 성공했습니다.',
           },
         }));
       } catch (err) {
@@ -202,7 +205,7 @@ function Signup() {
             ...prev.username,
             isClicked: true,
             sendCode: '',
-            message: '이메일 전송에 실패했습니다.',
+            message: '인증 코드 전송에 실패했습니다.',
           },
         }));
         console.log(err.message);
@@ -222,12 +225,10 @@ function Signup() {
     try {
       // 이메일 인증 코드 검증 요청
       console.log('인증코드 검증');
-      const response = await authApi.verifyCode(
-        formData.username,
-        validation.username.verifiedCode,
-      );
+      const response = await authApi.verifyCode(formData.username, formData.authCode);
+      console.log('유저네임과 인증코드 : ', formData.username, formData.authCode);
       // 응답 데이터인 available 값을 적용(true(사용 가능) / false(중복))
-      const isVerified = response.data;
+      const isVerified = response.data.status;
 
       console.log(isVerified);
       setValidation((prev) => ({
@@ -235,8 +236,8 @@ function Signup() {
         username: {
           ...prev.username,
           isClicked: true,
-          verifiedCode: isVerified.status,
-          message: isVerified.statusMessage,
+          verifiedCode: isVerified ? 'true' : (validation.username.sendCode = ''),
+          message: isVerified ? '인증 성공' : '유효하지 않은 인증 코드',
         },
       }));
     } catch (err) {
@@ -326,7 +327,6 @@ function Signup() {
       console.log(err.message);
     }
   };
-
   const toHome = () => {
     navigate('/');
   };
@@ -379,6 +379,7 @@ function Signup() {
               </p>
             )}
           </section>
+
           {/* -------------------------------------------------------------- */}
           {/* 이메일 검증*/}
           {/* -------------------------------------------------------------- */}
@@ -388,11 +389,9 @@ function Signup() {
           >
             <input
               type="text"
-              placeholder="코드"
-              value={validation.username.verifiedCode}
-              onChange={(e) =>
-                setValidation({ ...validation.username.verifiedCode, verifiedCode: e.target.value })
-              }
+              placeholder="인증 코드"
+              value={formData.authCode}
+              onChange={(e) => setFormData({ ...formData, authCode: e.target.value })}
               // className={{isVerificationTapEnabled ? 'block' : 'hidden'}
               className={` w-80 px-2 focus:border-2 focus:border-amber-500 focus:outline focus:outline-amber-500 rounded`}
             />
@@ -406,9 +405,11 @@ function Signup() {
               {!validation.username.sendCode ? '인증 코드 전송' : '인증 코드 검증'}
             </button>
           </section>
+
           {/* -------------------------------------------------------------- */}
           {/* 닉네임 */}
           {/* -------------------------------------------------------------- */}
+
           <section className="flex justify-between border-gray-300 bg-gray-200 text-gray-500 w-full h-10 rounded-lg mt-10 cursor-not-allowed">
             <input
               type="text"

@@ -13,7 +13,7 @@ const authApi = {
     const response = await api.get(`${ENDPOINT}/email-verifications?username=${username}`);
     return response.data;
   },
-  // username 유효성 검사
+  // nickname 유효성 검사
   checkNickname: async (nickname) => {
     const response = await api.get(`${ENDPOINT}/nickname-verifications?nickname=${nickname}`);
     return response.data;
@@ -25,8 +25,8 @@ const authApi = {
   },
 
   // username 인증 코드 검증
-  verifyCode: async (emailAndCode) => {
-    const response = await api.post(`${ENDPOINT}/verify-code`, { formData });
+  verifyCode: async (username, code) => {
+    const response = await api.post(`${ENDPOINT}/verify-code`, { username, code });
     return response.data;
   },
 
