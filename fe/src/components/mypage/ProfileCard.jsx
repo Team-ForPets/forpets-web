@@ -1,22 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import mypageApi from '../../api/mypageApi';
 
 function ProfileCard() {
-  const [imageUrl, setImageUrl] = useState('');
+  const [image, setImage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [profile, setProfile] = useState({});
 
   const navigate = useNavigate();
+
+  // 회원정보 get
+  const fetchProfile = async () => {
+    try {
+      const response = await mypageApi.getProfile();
+      const { imageUrl, username, nickname } = response.data;
+      setProfile({ imageUrl, username, nickname });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   // 파일이 선택되었을 때 실행될 핸들러 함수
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log('선택된 파일 : ', file);
 
     if (file) {
       const reader = new FileReader(); // FileReader를 사용하여 파일을 읽음
       reader.onloadend = () => {
-        setImageUrl(reader.result); // 파일의 데이터 URL을 state에 저장
+        console.log('파일 업로드: ', reader.result);
+
+        // Todo: 업로드한 파일을 AWS S3에 저장하게 하는 로직 구현 필요
+
+        setImage(reader.result); // 파일의 데이터 URL을 state에 저장
       };
       reader.readAsDataURL(file); // 파일을 데이터 URL로 읽음
     } else {
@@ -26,7 +46,7 @@ function ProfileCard() {
 
   // 이미지 삭제 버튼 클릭 시 실행
   const handleImageDelete = () => {
-    setImageUrl(''); // 이미지 URL을 초기화
+    setImage(''); // 이미지 URL을 초기화
   };
 
   // 사용자가 입력한 비밀번호 확인
@@ -62,9 +82,13 @@ function ProfileCard() {
         >
           {/* 파일 업로드 input을 항상 렌더링하고, visibility만 조정 */}
           <input type="file" onChange={handleImageChange} className="hidden" id="fileInput" />
-          {imageUrl ? (
+          {image ? (
             <>
-              <img src={imageUrl} alt="프로필 이미지" className="w-[100%] h-[100%] rounded-md" />
+              <img
+                src={profile.image}
+                alt="프로필 이미지"
+                className="w-[100%] h-[100%] rounded-md"
+              />
               {hovered && (
                 <div className="absolute top-2 right-2 flex gap-2">
                   <button
@@ -96,17 +120,17 @@ function ProfileCard() {
         <div className="w-[60%] flex flex-col gap-y-3 mt-10">
           <div className="flex gap-10">
             <label className="text-gray-400 text-lg">이메일</label>
-            <div className="text-lg">steve0312@naver.com</div>
+            <div className="text-lg">{profile.username}</div>
           </div>
           <div className="flex gap-10">
             <label className="text-gray-400 text-lg">닉네임</label>
-            <div className="text-lg">상쪽이</div>
+            <div className="text-lg">{profile.nickname}</div>
           </div>
         </div>
       </div>
-      <div className="p-10 flex mt-30">
+      <div className="p-10 flex h-[50%]">
         <button
-          className="ml-auto w-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all"
+          className="self-end ml-auto w-[25%] h-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all"
           onClick={handleUserInfoEdit}
         >
           회원정보 수정
