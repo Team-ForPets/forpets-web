@@ -26,7 +26,7 @@ function Header() {
             <Link to="/">홈</Link>
           </li>
           <li>
-            <Link to="/">구조동물</Link>
+            <Link to="/rescue-animals">구조동물</Link>
           </li>
           <li>
             <Link to="/service-status">이동봉사현황</Link>
