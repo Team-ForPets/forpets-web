@@ -1,5 +1,7 @@
 package com.forpets.be.global.config;
 
+import com.forpets.be.global.auth.service.CustomOAuth2UserService;
+import com.forpets.be.global.auth.service.OAuth2AuthenticationSuccessHandler;
 import com.forpets.be.global.security.handler.CustomAccessDeniedHandler;
 import com.forpets.be.global.security.handler.JwtAuthenticationEntryPoint;
 import com.forpets.be.global.security.jwt.JwtAuthenticationFilter;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +33,8 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler successHandler;
     @Value("${cors.allowed-origin}")
     private String allowedOrigin;
 
@@ -37,6 +42,13 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
+        return web -> web.ignoring()
+            // error endpoint를 열어줘야 함, favicon.ico 추가!
+            .requestMatchers("/error", "/favicon.ico");
     }
 
     @Bean
@@ -56,6 +68,10 @@ public class SecurityConfig {
             .exceptionHandling(exception -> exception
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                .successHandler(successHandler)
             );
 
         return http.build();
