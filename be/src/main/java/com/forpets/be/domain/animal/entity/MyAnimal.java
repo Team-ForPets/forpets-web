@@ -1,14 +1,19 @@
 package com.forpets.be.domain.animal.entity;
 
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
+import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +33,15 @@ public class MyAnimal extends BaseTimeEntity {
     @Column(nullable = false)
     private String animalName;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Enum<AnimalType> animaType;
+    private AnimalType animalType;
+
+    @Column(nullable = false)
+    private String departureArea;
+
+    @Column(nullable = false)
+    private String arrivalArea;
 
     @Column(nullable = false)
     private String breed;
@@ -47,8 +59,7 @@ public class MyAnimal extends BaseTimeEntity {
     private String memo;
 
     @Column(nullable = false)
-    private Date selectedDate;
-
+    private LocalDate selectedDate;
 
     // S3 객체의 접근 URL
     // AWS S3 버킷 객체의 URL
@@ -72,23 +83,39 @@ public class MyAnimal extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean isDelete;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Builder
-    public MyAnimal(String animalName, Boolean isDelete, Boolean isOpen, String originalFileName,
-        String s3Key, String imageUrl, Date selectedDate, String memo, String notice,
-        Integer weight,
-        Integer age, String breed, Enum<AnimalType> animaType) {
+    public MyAnimal(String animalName, AnimalType animalType, String departureArea,
+        String arrivalArea,
+        String breed, Integer age, Integer weight, String notice, String memo,
+        LocalDate selectedDate,
+        String imageUrl, String s3Key, String originalFileName, Boolean isOpen, Boolean isDelete,
+        User user) {
+
+        addAnimal(user);
+
         this.animalName = animalName;
-        this.isDelete = isDelete;
-        this.isOpen = isOpen;
-        this.originalFileName = originalFileName;
-        this.s3Key = s3Key;
-        this.imageUrl = imageUrl;
-        this.selectedDate = selectedDate;
-        this.memo = memo;
-        this.notice = notice;
-        this.weight = weight;
-        this.age = age;
+        this.animalType = animalType;
+        this.departureArea = departureArea;
+        this.arrivalArea = arrivalArea;
         this.breed = breed;
-        this.animaType = animaType;
+        this.age = age;
+        this.weight = weight;
+        this.notice = notice;
+        this.memo = memo;
+        this.selectedDate = selectedDate;
+        this.imageUrl = imageUrl;
+        this.s3Key = s3Key;
+        this.originalFileName = originalFileName;
+        this.isOpen = isOpen;
+        this.isDelete = isDelete;
+    }
+
+    public void addAnimal(User user) {
+        this.user = user;
+        user.getMyAnimals().add(this);
     }
 }
