@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
 import com.forpets.be.global.auth.dto.response.OAuth2ResponseDto;
+import com.forpets.be.global.redis.RedisRepository;
 import com.forpets.be.global.security.jwt.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +27,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-//    private final AuthService authService;
+    //    private final AuthService authService;
+    private final RedisRepository redisRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -47,13 +49,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //            Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes()
 //                .get("kakao_account");
 //            email = kakaoAccount != null ? (String) kakaoAccount.get("email") : null;
+//??????????????
         if (kakaoAccountObj instanceof Map) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) kakaoAccountObj;
             email = (String) kakaoAccount.get("email");
         } else {
             email = (String) oAuth2User.getAttributes().get("email");
         }
-
         User user = userRepository.findByUsername(email)
             .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
@@ -67,7 +69,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("Refresh Token: {}", refreshToken);
 
         // RefreshToken 저장 (선택)
-//        authService.storeRefreshToken(user.getUsername(), refreshToken);
+        redisRepository.storeRefreshToken(user.getUsername(), refreshToken);
 
         // ✅ RefreshToken을 HttpOnly 쿠키로 설정
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);

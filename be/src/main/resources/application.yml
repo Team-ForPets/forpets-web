@@ -38,7 +38,7 @@ spring:
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             scope: # https://developers.kakao.com/docs/latest/ko/kakaologin/common#user-info
-              - profile_nickname
+              #              - profile_nickname
               #              - profile_image
               - account_email
             #            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"

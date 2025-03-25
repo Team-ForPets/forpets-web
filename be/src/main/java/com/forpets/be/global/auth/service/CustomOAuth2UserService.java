@@ -4,6 +4,7 @@ package com.forpets.be.global.auth.service;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
 import java.util.Collections;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -19,9 +20,6 @@ import org.springframework.stereotype.Service;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-//    private final JwtTokenProvider jwtTokenProvider;
-//    private final RefreshTokenService refreshTokenService;
-
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest)
@@ -65,11 +63,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     }
 
+    public String generateUniqueNickname(UserRepository userRepository) {
+        String nickname;
+        do {
+            nickname = NicknameGenerator.generateRandomNickname();
+        } while (userRepository.existsByNickname(nickname)); // 중복되면 다시 생성
+
+        return nickname;
+    }
+
     private User saveUser(OAuth2UserInfo userInfo, String provider) {
         // 새로운 유저 저장
+        String nickname = generateUniqueNickname(userRepository);
         User newUser = User.builder()
             .username(userInfo.getUsername())  // username을 소셜 로그인 ID로 설정
-            .password(userInfo.getPassword())  // 실제 사용 X
+            .password(UUID.randomUUID().toString())
+            .nickname(nickname)  // 실제 사용 X
             .provider(provider)
             .build();
         return userRepository.save(newUser);

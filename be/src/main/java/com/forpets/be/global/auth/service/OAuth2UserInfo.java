@@ -64,7 +64,7 @@ public class OAuth2UserInfo {
             .username(id)
             .password(password)
             .provider(provider)
-//            .nickname(nickname)
+            .nickname(nickname)
             .username(username)
             .build();
     }
