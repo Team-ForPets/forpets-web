@@ -16,6 +16,7 @@ import AnimalDetail from '../pages/AnimalDetail';
 import VolunteerList from '../pages/VolunteerList';
 import VolunteerDetail from '../pages/VolunteerDetail';
 import ProfileEditCard from '../components/mypage/ProfileEditCard';
+import RescueAnimals from '../pages/RescueAnimals';
 
 // 로그아웃시 뒤로가기로 마이페이지, 나의채팅 페이지 이동 막는 컴포넌트
 import PrivateRoute from '../components/PrivateRoute';
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/rescue-animals',
+        element: <RescueAnimals />,
       },
       {
         path: '/login',

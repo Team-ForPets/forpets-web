@@ -16,7 +16,8 @@ function Chat() {
   };
 
   return (
-    <main className="h-[90%] flex justify-between">
+    <main className="h-[90vh] pb-[10%] flex justify-between">
+      {/* 요청,봉사자 목록 */}
       <section className="w-[30%] h-full flex flex-col bg-[#F5F5F5] border rounded-md">
         <div className="flex rounded-md">
           <button
@@ -46,6 +47,8 @@ function Chat() {
           <ChatUserCard />
         </ul>
       </section>
+
+      {/* 채팅창 */}
       <section className="w-[69%] h-full relative rounded-md border">
         <div className="h-[10%] flex justify-between items-center rounded-t-md bg-white">
           <div className="w-[80%] flex gap-3 items-center justify-start">
@@ -72,7 +75,7 @@ function Chat() {
           </div>
         </div>
 
-        <div className="h-[80%] bg-[#F5F5F5] flex flex-col-reverse">
+        <div className="h-[80%] bg-[#F5F5F5] flex flex-col-reverse overflow-auto">
           <div className="flex flex-col p-2">
             {messages.map((message, index) => (
               <div
