@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/service-volunteer")
 @RequiredArgsConstructor
 public class VolunteerController {
 
     private final VolunteerService volunteerService;
 
-    @PostMapping("/service-volunteer")
-    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> serviceVolunteer(
+    @PostMapping
+    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> createVolunteer(
         // @ 유저정보
         @RequestBody ServiceVolunteerRequestDto requestDto,
         @AuthenticationPrincipal User authenticatedUser
@@ -30,6 +30,9 @@ public class VolunteerController {
             ApiResponse.ok(
                 "봉사자 등록 글이 완료되었습니다.",
                 "CREATED",
-                volunteerService.serviceVolunteer(requestDto, authenticatedUser)));
+                volunteerService.createVolunteer(requestDto, authenticatedUser)));
     }
+
+//    @GetMapping("/{id}")
+
 }

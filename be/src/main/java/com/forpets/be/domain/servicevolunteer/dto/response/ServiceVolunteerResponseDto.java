@@ -31,11 +31,11 @@ public class ServiceVolunteerResponseDto {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .animalType(entity.getAnimalType())
-                .departureArea(entity.getDepartureArea())
-                .arrivalArea(entity.getArrivalArea())
                 .notice(entity.getNotice() != null ? entity.getNotice() : "")
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
+                .departureArea(entity.getDepartureArea())
+                .arrivalArea(entity.getArrivalArea())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();

@@ -38,19 +38,19 @@ public class ServiceVolunteer extends BaseTimeEntity {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "animaType", nullable = false)
+    @Column(name = "animal_type", nullable = false)
     private AnimalType animalType;
 
-    @Column(name = "startDate", nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "endDate", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "departureArea", nullable = false)
+    @Column(name = "departure_area", nullable = false)
     private String departureArea;
 
-    @Column(name = "arrivalArea", nullable = false)
+    @Column(name = "arrival_area", nullable = false)
     private String arrivalArea;
 
     @Column(name = "notice", nullable = true)
