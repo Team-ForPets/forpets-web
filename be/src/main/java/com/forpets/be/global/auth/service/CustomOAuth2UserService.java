@@ -1,6 +1,7 @@
 package com.forpets.be.global.auth.service;
 
 
+import com.forpets.be.domain.user.entity.Role;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
 import java.util.Collections;
@@ -43,16 +44,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByUsername(oAuth2UserInfo.getUsername())
             .orElseGet(() -> saveUser(oAuth2UserInfo, provider));
 
+//        아직 안 됨.
         String socialName = "";
         log.info("프로바이더: {}", provider);
-
+        
         if (provider == "google") {
             socialName = "sub";
         } else {
             socialName = "id";
         }
 
-//        아직 안 됨.
         log.info("소셜 종류: {}", socialName);
         return new DefaultOAuth2User(
             Collections.emptySet(),
@@ -68,7 +69,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         do {
             nickname = NicknameGenerator.generateRandomNickname();
         } while (userRepository.existsByNickname(nickname)); // 중복되면 다시 생성
-
         return nickname;
     }
 
@@ -80,6 +80,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             .password(UUID.randomUUID().toString())
             .nickname(nickname)  // 실제 사용 X
             .provider(provider)
+            .role(Role.ROLE_USER)
             .build();
         return userRepository.save(newUser);
     }
