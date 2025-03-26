@@ -56,6 +56,7 @@ public class ServiceVolunteer extends BaseTimeEntity {
     @Column(name = "notice", nullable = true)
     private String notice;
 
+
     @Builder
     public ServiceVolunteer(User user, String title, AnimalType animalType, LocalDate startDate,
         LocalDate endDate, String departureArea, String arrivalArea, String notice) {
