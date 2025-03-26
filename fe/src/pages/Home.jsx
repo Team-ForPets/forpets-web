@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainAnimalCard from '../components/MainAnimalCard';
 import KakaoMap from '../components/KakaoMap';
-
+import animalsApi from '../api/animalsApi';
 function Home() {
+  const [animals, setAnimals] = useState([]);
+  useEffect(() => {
+    const fetchAnimals = async () => {
+      try {
+        const response = await animalsApi.getAnimals();
+        const data = response.data.animals;
+        setAnimals(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchAnimals();
+  }, []);
+
   return (
     <main className="flex justify-between my-[10vh] ">
       {/* 지도 섹션 (왼쪽) */}
       <section className="w-[65%] rounded-md">
-        <KakaoMap />
+        <KakaoMap animals={animals} />
       </section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
@@ -27,16 +41,9 @@ function Home() {
         {/* 카드 리스트 (스크롤 가능) */}
         <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md h-[70vh]">
           <ul className="flex flex-col gap-3">
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
-            <MainAnimalCard />
+            {animals.map((animal) => {
+              return <MainAnimalCard key={animal.id} animal={animal} />;
+            })}
           </ul>
         </article>
 

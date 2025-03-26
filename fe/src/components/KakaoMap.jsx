@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DaumPost from './DaumPost';
 
-const KakaoMap = () => {
+const KakaoMap = ({ animals }) => {
   const mapContainer = useRef(null); // 지도 DOM 참조
   const mapRef = useRef(null); // 지도 객체
   const markerRef = useRef(null); // 마커 객체
