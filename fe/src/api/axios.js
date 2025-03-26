@@ -6,6 +6,11 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
+// 모든 api를 사용한다. backend와 연결
+
+// const coordApi = axios.create({
+//   baseURL: 'https://dapi.kakao.com/v2/local', // Kakao Local API의 기본 URL
+// });
 
 // // 요청 인터셉터
 api.interceptors.request.use(
@@ -21,28 +26,13 @@ api.interceptors.request.use(
   },
 );
 
-// // 응답 인터셉터
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     if (error.response.status === 403) {
-//       // 토큰 갱신 요청
-//       try {
-//         const response = await api.post(`${import.meta.env.VITE_API_URL}/auth/reissuance`, {
-//           credentials: 'include',
-//         });
-//         const accessToken = response.data.data.accessToken;
-
-//         store.dispatch(updateTokens({ accessToken }));
-//         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-//         return await api.get(`${import.meta.env.VITE_API_URL}/buckets`);
-//       } catch (refreshError) {
-//         store.dispatch(logout());
-//         return Promise.reject(refreshError);
-//       }
-//     }
-
+// // coordApi에 Kakao API 키를 요청 헤더에 추가
+// coordApi.interceptors.request.use(
+//   (config) => {
+//     config.headers['Authorization'] = `KakaoAK ${import.meta.env.VITE_REST_API_KEY}`; // Kakao API 키 추가
+//     return config;
+//   },
+//   (error) => {
 //     return Promise.reject(error);
 //   },
 // );

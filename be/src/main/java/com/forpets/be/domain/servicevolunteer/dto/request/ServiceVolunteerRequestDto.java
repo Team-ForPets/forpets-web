@@ -4,15 +4,13 @@ package com.forpets.be.domain.servicevolunteer.dto.request;
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class ServiceVolunteerRequestDto {
 
     private String title;
@@ -26,7 +24,6 @@ public class ServiceVolunteerRequestDto {
     // body로 받은 데이터를 엔티티 타입으로
 
     public ServiceVolunteer toEntity() {
-
         return ServiceVolunteer.builder()
             .title(this.title)
             .animalType(this.animalType)

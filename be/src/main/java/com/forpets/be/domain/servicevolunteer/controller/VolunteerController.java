@@ -30,6 +30,9 @@ public class VolunteerController {
             ApiResponse.ok(
                 "봉사자 등록 글이 완료되었습니다.",
                 "CREATED",
-                volunteerService.serviceVolunteer(requestDto, authenticatedUser)));
+                volunteerService.createVolunteer(requestDto, authenticatedUser)));
     }
+
+//    @GetMapping("/{id}")
+    
 }
