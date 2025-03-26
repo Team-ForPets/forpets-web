@@ -21,7 +21,7 @@ public class VolunteerController {
     private final VolunteerService volunteerService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> serviceVolunteer(
+    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> createVolunteer(
         // @ 유저정보
         @RequestBody ServiceVolunteerRequestDto requestDto,
         @AuthenticationPrincipal User authenticatedUser
@@ -34,5 +34,5 @@ public class VolunteerController {
     }
 
 //    @GetMapping("/{id}")
-    
+
 }
