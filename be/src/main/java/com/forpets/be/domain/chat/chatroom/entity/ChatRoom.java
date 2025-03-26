@@ -1,5 +1,6 @@
 package com.forpets.be.domain.chat.chatroom.entity;
 
+import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.entity.BaseTimeEntity;
@@ -27,7 +28,9 @@ public class ChatRoom extends BaseTimeEntity {
     @Column(name = "chat_room_id")
     private Long id;
 
-    // Todo: 나의 아이 필드도 필요
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "my_animal_id", nullable = false)
+    private MyAnimal myAnimal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_volunteer_id")
@@ -46,7 +49,9 @@ public class ChatRoom extends BaseTimeEntity {
     private RoomState state;
 
     @Builder
-    public ChatRoom(ServiceVolunteer serviceVolunteer, User requestor, User volunteer) {
+    public ChatRoom(MyAnimal myAnimal, ServiceVolunteer serviceVolunteer, User requestor,
+        User volunteer) {
+        this.myAnimal = myAnimal;
         this.serviceVolunteer = serviceVolunteer;
         this.requestor = requestor;
         this.volunteer = volunteer;
