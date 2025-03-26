@@ -107,6 +107,7 @@ public class MyAnimal extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         this.s3Key = s3Key;
         this.originalFileName = originalFileName;
+        this.user = user;
         this.isOpen = isOpen;
         this.isDelete = isDelete;
     }

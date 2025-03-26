@@ -3,6 +3,7 @@ package com.forpets.be.domain.animal.service;
 import com.forpets.be.domain.animal.dto.request.MyAnimalCreateRequestDto;
 import com.forpets.be.domain.animal.dto.response.AnimalsResponseDto;
 import com.forpets.be.domain.animal.dto.response.MyAnimalReadResponseDto;
+import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
 import com.forpets.be.domain.user.entity.User;
 import java.util.List;
@@ -22,15 +23,26 @@ public class MyAnimalService {
         myAnimalRepository.save(createRequestDto.toEntity(user));
     }
 
-//    public List<MyAnimalReadResponseDto> getAnimals() {
-//        return myAnimalRepository.findAll().stream().map(MyAnimalReadResponseDto::from).toList();
-//    }
-
     public AnimalsResponseDto getAnimals() {
         List<MyAnimalReadResponseDto> animals = myAnimalRepository.findAll().stream()
             .map(MyAnimalReadResponseDto::from).toList();
         Integer total = animals.size();
 
         return AnimalsResponseDto.from(animals, total);
+    }
+
+    public MyAnimalReadResponseDto getAnimalDetail(Long myAnimalId) {
+        MyAnimal savedAnimal = myAnimalRepository.findById(myAnimalId)
+            .orElseThrow(() -> new IllegalArgumentException("해당하는 등록된 아이가 없습니다."));
+
+        return MyAnimalReadResponseDto.from(savedAnimal);
+    }
+
+    public AnimalsResponseDto getMyAnimals(Long userId) {
+        List<MyAnimalReadResponseDto> myAnimals = myAnimalRepository.findByUserId(userId).stream()
+            .map(MyAnimalReadResponseDto::from).toList();
+        Integer total = myAnimals.size();
+
+        return AnimalsResponseDto.from(myAnimals, total);
     }
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class MyAnimalController {
         ));
     }
 
+    // 등록된 모든 나의 아이 조회
     @GetMapping("/animals")
     public ResponseEntity<ApiResponse<AnimalsResponseDto>> getAnimals() {
 
@@ -44,6 +46,34 @@ public class MyAnimalController {
             "등록된 모든 나의 아이 조회 성공",
             "OK",
             myAnimalService.getAnimals()
+        ));
+    }
+
+    // 개별 나의 아이의 상세 조회
+    @GetMapping("/animals/{myAnimalId}")
+    public ResponseEntity<ApiResponse<MyAnimalReadResponseDto>> getAnimalDetail(
+        @PathVariable Long myAnimalId
+    ) {
+
+        return ResponseEntity.ok(ApiResponse.ok(
+            "해당 아이디의 나의 아이 조회 성공",
+            "OK",
+            myAnimalService.getAnimalDetail(myAnimalId)
+        ));
+    }
+
+    // 사용자별 나의 아이 전체 조회
+    @GetMapping("/my/animals")
+    public ResponseEntity<ApiResponse<AnimalsResponseDto>> getMyAnimals(
+        @AuthenticationPrincipal User user
+    ) {
+
+        Long userId = user.getId();
+
+        return ResponseEntity.ok(ApiResponse.ok(
+            "해당 유저의 나의 아이 전체 조회 성공",
+            "OK",
+            myAnimalService.getMyAnimals(userId)
         ));
     }
 }
