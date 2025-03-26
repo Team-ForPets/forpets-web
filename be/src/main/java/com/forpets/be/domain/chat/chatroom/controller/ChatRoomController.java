@@ -2,7 +2,8 @@ package com.forpets.be.domain.chat.chatroom.controller;
 
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
-import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomsListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsListResponseDto;
 import com.forpets.be.domain.chat.chatroom.service.ChatRoomService;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
@@ -34,10 +35,18 @@ public class ChatRoomController {
     }
 
     // 내가 요청자로 속한 채팅방 전체 조회
-    @GetMapping
-    public ResponseEntity<ApiResponse<ChatRoomsListResponseDto>> getRequestorChatRooms(
+    @GetMapping("/requestor")
+    public ResponseEntity<ApiResponse<RequestorChatRoomsListResponseDto>> getRequestorChatRooms(
         @RequestParam Long requestorId) {
         return ResponseEntity.ok(ApiResponse.ok("요청자로 속한 채팅방 리스트가 조회되었습니다.", "OK",
             chatRoomService.getRequestorChatRooms(requestorId)));
+    }
+
+    // 내가 봉사자로 속한 채팅방 전체 조회
+    @GetMapping("/volunteer")
+    public ResponseEntity<ApiResponse<VolunteerChatRoomsListResponseDto>> getVolunteerChatRooms(
+        @RequestParam Long volunteerId) {
+        return ResponseEntity.ok(ApiResponse.ok("봉사자로 속한 채팅방 리스트가 조회되었습니다.", "OK",
+            chatRoomService.getVolunteerChatRooms(volunteerId)));
     }
 }
