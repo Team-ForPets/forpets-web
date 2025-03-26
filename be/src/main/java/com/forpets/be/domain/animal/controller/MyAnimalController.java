@@ -1,6 +1,7 @@
 package com.forpets.be.domain.animal.controller;
 
 import com.forpets.be.domain.animal.dto.request.MyAnimalCreateRequestDto;
+import com.forpets.be.domain.animal.dto.request.MyAnimalUpdateRequestDto;
 import com.forpets.be.domain.animal.dto.response.AnimalsResponseDto;
 import com.forpets.be.domain.animal.dto.response.MyAnimalReadResponseDto;
 import com.forpets.be.domain.animal.service.MyAnimalService;
@@ -10,9 +11,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,6 +77,31 @@ public class MyAnimalController {
             "해당 유저의 나의 아이 전체 조회 성공",
             "OK",
             myAnimalService.getMyAnimals(userId)
+        ));
+    }
+
+    @PutMapping("/my/animals/{myAnimalId}")
+    public ResponseEntity<ApiResponse<MyAnimalReadResponseDto>> updateMyAnimal(
+        @PathVariable Long myAnimalId,
+        @RequestBody MyAnimalUpdateRequestDto updateRequestDto
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok(
+            "해당 나의 아이가 업데이트 성공",
+            "OK",
+            myAnimalService.updateMyAnimal(myAnimalId, updateRequestDto)
+        ));
+    }
+
+    @DeleteMapping("/my/animals/{myAnimalId}")
+    public ResponseEntity<ApiResponse> deleteMyAnimal(
+        @PathVariable Long myAnimalId
+    ) {
+        myAnimalService.deleteMyAnimal(myAnimalId);
+
+        return ResponseEntity.ok(ApiResponse.ok(
+            "해당 나의 아이 삭제 성공",
+            "OK",
+            null
         ));
     }
 }

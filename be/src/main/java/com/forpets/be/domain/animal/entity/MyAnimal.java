@@ -1,5 +1,6 @@
 package com.forpets.be.domain.animal.entity;
 
+import com.forpets.be.domain.animal.dto.request.MyAnimalUpdateRequestDto;
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.entity.BaseTimeEntity;
@@ -112,4 +113,22 @@ public class MyAnimal extends BaseTimeEntity {
         this.isDelete = isDelete;
     }
 
+    public MyAnimal update(MyAnimalUpdateRequestDto updateRequestDto) {
+        this.animalName = updateRequestDto.getAnimalName();
+        this.animalType = updateRequestDto.getAnimalType();
+        this.departureArea = updateRequestDto.getDepartureArea();
+        this.arrivalArea = updateRequestDto.getArrivalArea();
+        this.breed = updateRequestDto.getBreed();
+        this.age = updateRequestDto.getAge();
+        this.weight = updateRequestDto.getWeight();
+        this.notice = updateRequestDto.getNotice();
+        this.memo = updateRequestDto.getMemo();
+        this.selectedDate = updateRequestDto.getSelectedDate();
+        this.imageUrl = updateRequestDto.getImageUrl();
+        this.s3Key = updateRequestDto.getS3Key();
+        this.originalFileName = updateRequestDto.getOriginalFileName();
+        this.isOpen = updateRequestDto.getIsOpen();
+
+        return this;
+    }
 }

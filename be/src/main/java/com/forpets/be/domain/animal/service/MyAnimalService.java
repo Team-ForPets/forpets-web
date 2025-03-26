@@ -1,6 +1,7 @@
 package com.forpets.be.domain.animal.service;
 
 import com.forpets.be.domain.animal.dto.request.MyAnimalCreateRequestDto;
+import com.forpets.be.domain.animal.dto.request.MyAnimalUpdateRequestDto;
 import com.forpets.be.domain.animal.dto.response.AnimalsResponseDto;
 import com.forpets.be.domain.animal.dto.response.MyAnimalReadResponseDto;
 import com.forpets.be.domain.animal.entity.MyAnimal;
@@ -44,5 +45,21 @@ public class MyAnimalService {
         Integer total = myAnimals.size();
 
         return AnimalsResponseDto.from(myAnimals, total);
+    }
+
+    @Transactional
+    public MyAnimalReadResponseDto updateMyAnimal(Long myAnimalId,
+        MyAnimalUpdateRequestDto updateRequestDto) {
+        MyAnimal myAnimal = myAnimalRepository.findById(myAnimalId).orElseThrow(
+            IllegalArgumentException::new);
+
+        myAnimal.update(updateRequestDto);
+
+        return MyAnimalReadResponseDto.from(myAnimal);
+    }
+
+    @Transactional
+    public void deleteMyAnimal(Long myAnimalId) {
+        myAnimalRepository.deleteById(myAnimalId);
     }
 }
