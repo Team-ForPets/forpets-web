@@ -54,16 +54,16 @@ public class User extends BaseTimeEntity implements UserDetails {
     // 화면 출력용
     @Column(nullable = true)
     private String originalFileName;
-    
+
     // Role을 통해 사용자의 권한을 정의
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String provider; // 어떤 OAuth인지(google, kakao, naver)
+    private String snsProvider; // 어떤 OAuth인지(google, kakao, naver)
 
     @Builder
     public User(String username, String password, String nickname, String originalFileName,
-        Role role, String imageUrl, String s3Key, String provider) {
+        Role role, String imageUrl, String s3Key, String snsProvider) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -71,7 +71,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.originalFileName = originalFileName;
         this.imageUrl = imageUrl;
         this.s3Key = s3Key;
-        this.provider = provider;
+        this.snsProvider = snsProvider;
     }
 
     @Override

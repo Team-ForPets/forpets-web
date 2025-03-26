@@ -63,7 +63,7 @@ public class OAuth2UserInfo {
         return User.builder()
             .username(id)
             .password(password)
-            .provider(provider)
+            .snsProvider(provider)
             .nickname(nickname)
             .username(username)
             .build();

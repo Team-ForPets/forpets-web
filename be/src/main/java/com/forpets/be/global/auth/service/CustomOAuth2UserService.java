@@ -47,7 +47,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //        아직 안 됨.
         String socialName = "";
         log.info("프로바이더: {}", provider);
-        
+
         if (provider == "google") {
             socialName = "sub";
         } else {
@@ -79,7 +79,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             .username(userInfo.getUsername())  // username을 소셜 로그인 ID로 설정
             .password(UUID.randomUUID().toString())
             .nickname(nickname)  // 실제 사용 X
-            .provider(provider)
+            .snsProvider(provider)
             .role(Role.ROLE_USER)
             .build();
         return userRepository.save(newUser);
