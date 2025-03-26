@@ -4,6 +4,7 @@ import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomsListResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomListResponseDto;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
@@ -93,14 +94,13 @@ public class ChatRoomService {
     }
 
     // 내가 요청자로 속한 채팅방 전체 조회
-    public List<VolunteerChatRoomListResponseDto> getChatRooms(Long requestorId) {
-        List<ChatRoom> chatRoom = chatRoomRepository.findAllByRequestorId(requestorId);
+    public ChatRoomsListResponseDto getRequestorChatRooms(Long requestorId) {
+        List<VolunteerChatRoomListResponseDto> chatRooms = chatRoomRepository.findAllByRequestorId(
+            requestorId).stream().map(VolunteerChatRoomListResponseDto::from).toList();
 
-        if (chatRoom.isEmpty()) {
-            throw new IllegalArgumentException("요청자로 속한 채팅방이 존재하지 않습니다.");
-        }
+        Integer total = chatRooms.size();
 
-        return chatRoom.stream().map(VolunteerChatRoomListResponseDto::from).toList();
+        return ChatRoomsListResponseDto.from(chatRooms, total);
     }
 }
 
