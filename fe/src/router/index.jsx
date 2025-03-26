@@ -17,7 +17,7 @@ import VolunteerList from '../pages/VolunteerList';
 import VolunteerDetail from '../pages/VolunteerDetail';
 import ProfileEditCard from '../components/mypage/ProfileEditCard';
 import RescueAnimalList from '../pages/RescueAnimalList';
-
+import SocialLogin from '../pages/SocialLogin';
 // 로그아웃시 뒤로가기로 마이페이지, 나의채팅 페이지 이동 막는 컴포넌트
 import PrivateRoute from '../components/PrivateRoute';
 import RescueAnimalDetail from '../pages/RescueAnimalDetail';
@@ -42,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/social-login',
+        element: <SocialLogin />,
       },
       {
         path: '/signup',

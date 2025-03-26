@@ -25,6 +25,10 @@ function Login() {
       alert('사용자 정보가 맞지 않습니다.');
     }
   };
+  const handleKakaoLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+  };
+
   return (
     <>
       <form
@@ -52,7 +56,7 @@ function Login() {
         >
           로그인
         </button>
-        <button className="h-10 text-center  rounded-md cursor-pointer">
+        <button className="h-10 text-center  rounded-md cursor-pointer" onClick={handleKakaoLogin}>
           <img
             className="w-[100%] h-[100%] rounded-md overflow-hidden"
             src="/assets/kakao-login-button.png"
