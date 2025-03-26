@@ -36,7 +36,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String nickname;
 
     // S3 객체의 접근 URL
@@ -59,9 +59,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String provider; // 어떤 OAuth인지(google, kakao, naver)
+
     @Builder
     public User(String username, String password, String nickname, String originalFileName,
-        Role role, String imageUrl, String s3Key) {
+        Role role, String imageUrl, String s3Key, String provider) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -69,6 +71,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.originalFileName = originalFileName;
         this.imageUrl = imageUrl;
         this.s3Key = s3Key;
+        this.provider = provider;
     }
 
     @Override
