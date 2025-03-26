@@ -2,16 +2,20 @@ package com.forpets.be.domain.chat.chatroom.service;
 
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomListResponseDto;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class ChatRoomService {
     private final VolunteerRepository volunteerRepository;
     private final UserRepository userRepository;
 
+    // 채팅방 생성
     @Transactional
     public ChatRoomResponseDto createChatRoom(ChatRoomRequestDto requestDto, User user) {
         User requestor = null;
@@ -60,6 +65,17 @@ public class ChatRoomService {
             .build();
 
         return ChatRoomResponseDto.from(chatRoomRepository.save(chatRoom));
+    }
+
+    // 내가 요청자로 속한 채팅방 전체 조회
+    public List<VolunteerChatRoomListResponseDto> getChatRooms(Long requestorId) {
+        List<ChatRoom> chatRoom = chatRoomRepository.findAllByRequestorId(requestorId);
+
+        if (chatRoom.isEmpty()) {
+            throw new IllegalArgumentException("요청자로 속한 채팅방이 존재하지 않습니다.");
+        }
+
+        return chatRoom.stream().map(VolunteerChatRoomListResponseDto::from).toList();
     }
 }
 
