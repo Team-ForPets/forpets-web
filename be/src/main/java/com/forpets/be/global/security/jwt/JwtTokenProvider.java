@@ -12,7 +12,6 @@ import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,8 +31,7 @@ public class JwtTokenProvider {
     }
 
     // Access Token 생성
-    public String createAccessToken(Authentication authentication) {
-        String username = authentication.getName();
+    public String createAccessToken(String username) {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 

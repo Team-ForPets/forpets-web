@@ -1,6 +1,9 @@
 package com.forpets.be.global.auth.controller;
 
 
+import static com.forpets.be.global.util.CookieMaker.MAX_AGE;
+import static com.forpets.be.global.util.CookieMaker.makeRefreshTokenCookie;
+
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.auth.dto.request.LoginRequestDto;
 import com.forpets.be.global.auth.dto.request.SignupRequestDto;
@@ -13,8 +16,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
 
     private final AuthService authService;
 
@@ -43,9 +49,8 @@ public class AuthController {
         TokenResponseDto tokenResponseDto = new TokenResponseDto(tokenDto.getAccessToken());
 
         String refreshToken = tokenDto.getRefreshToken();
-        Cookie refreshTokenCookie = authService.makeRefreshTokenCookie(refreshToken);
+        Cookie refreshTokenCookie = makeRefreshTokenCookie(refreshToken, MAX_AGE);
 
-        // HttpServletResponse에 쿠키 추가
         response.addCookie(refreshTokenCookie);
 
         return ResponseEntity.ok(ApiResponse.ok("로그인이 되었습니다.", "OK", tokenResponseDto));
@@ -53,19 +58,47 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
-        @RequestHeader("Authorization") String accessToken, @AuthenticationPrincipal User user,
+        @RequestHeader("Authorization") String bearerAccessToken,
+        @AuthenticationPrincipal User user,
         HttpServletResponse response) {
+        String accessToken = bearerAccessToken.substring(7);
+
         authService.logout(accessToken, user);
 
-        Cookie deleteTokenCookie = new Cookie("refresh_token", null);
-        deleteTokenCookie.setHttpOnly(true);             // 자바스크립트 접근 차단
-//        refreshTokenCookie.setSecure(true);             // HTTPS 전송 시에만 쿠키 전달 (HTTPS 환경일 때)
-        deleteTokenCookie.setPath("/");                  // 애플리케이션 전체에 대해 유효
-        deleteTokenCookie.setMaxAge(0);
+        Cookie deleteTokenCookie = makeRefreshTokenCookie(null, 0);
+
         response.addCookie(deleteTokenCookie);
 
         return ResponseEntity.ok(
             ApiResponse.ok("로그아웃이 되었습니다.", "NO_CONTENT", null));
     }
 
+    @PostMapping("/reissue")
+    public ResponseEntity<ApiResponse<TokenResponseDto>> reissueToken(
+        @CookieValue(name = "refresh_token", required = false) String refreshToken,
+        HttpServletResponse response
+    ) {
+
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        TokenDto tokenDto = authService.reissueToken(refreshToken);
+        String newAccessToken = tokenDto.getAccessToken();
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken);
+
+        String reissuedRefreshToken = tokenDto.getRefreshToken();
+
+        if (reissuedRefreshToken != null) {
+            Cookie reissuedRefreshtokenCookie = makeRefreshTokenCookie(reissuedRefreshToken,
+                MAX_AGE);
+            response.addCookie(reissuedRefreshtokenCookie);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok(
+            "accessToken 재발급 완료",
+            "OK",
+            tokenResponseDto
+        ));
+    }
 }

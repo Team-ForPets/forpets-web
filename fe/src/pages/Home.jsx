@@ -5,19 +5,19 @@ import KakaoMap from '../components/KakaoMap';
 
 function Home() {
   return (
-    <div className="flex h-[90%] justify-between mt-[3%]">
+    <main className="flex justify-between my-[10vh] ">
       {/* 지도 섹션 (왼쪽) */}
-      <section className="w-[65%] rounded-md ">
-        <KakaoMap></KakaoMap>
+      <section className="w-[65%] rounded-md">
+        <KakaoMap />
       </section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
-      <section className="w-[30%] flex flex-col">
+      <section className="w-[30%] flex flex-col ">
         {/* 버튼 */}
-        <article className="h-[15%] flex justify-between ">
+        <article className="h-[15%] flex justify-between">
           <div className="w-[50%] flex gap-[3%]">
-            <button className="bg-amber-300 w-[100%]  rounded-t-md">요청자</button>
-            <button className="bg-amber-500 w-[100%]  rounded-t-md">봉사자</button>
+            <button className="bg-amber-300 w-[100%] rounded-t-md">요청자</button>
+            <button className="bg-amber-500 w-[100%] rounded-t-md">봉사자</button>
           </div>
           <button>
             <Link to="/volunteer-List">더보기</Link>
@@ -25,8 +25,9 @@ function Home() {
         </article>
 
         {/* 카드 리스트 (스크롤 가능) */}
-        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md">
-          <ul className="flex flex-col gap-3 ">
+        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md h-[70vh]">
+          <ul className="flex flex-col gap-3">
+            <MainAnimalCard />
             <MainAnimalCard />
             <MainAnimalCard />
             <MainAnimalCard />
@@ -38,7 +39,8 @@ function Home() {
             <MainAnimalCard />
           </ul>
         </article>
-        <article>
+
+        <article className="flex">
           {/* 등록버튼 변경예정 */}
           <button className="bg-amber-300 p-3 w-[50%] h-[100%]">
             <Link className="block" to="/register-animal">
@@ -52,7 +54,7 @@ function Home() {
           </button>
         </article>
       </section>
-    </div>
+    </main>
   );
 }
 
