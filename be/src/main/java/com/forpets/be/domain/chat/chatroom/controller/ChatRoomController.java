@@ -2,11 +2,10 @@ package com.forpets.be.domain.chat.chatroom.controller;
 
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
-import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomsListResponseDto;
 import com.forpets.be.domain.chat.chatroom.service.ChatRoomService;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +35,9 @@ public class ChatRoomController {
 
     // 내가 요청자로 속한 채팅방 전체 조회
     @GetMapping
-    public ResponseEntity<ApiResponse<List<VolunteerChatRoomListResponseDto>>> getChatRooms(
+    public ResponseEntity<ApiResponse<ChatRoomsListResponseDto>> getRequestorChatRooms(
         @RequestParam Long requestorId) {
         return ResponseEntity.ok(ApiResponse.ok("요청자로 속한 채팅방 리스트가 조회되었습니다.", "OK",
-            chatRoomService.getChatRooms(requestorId)));
+            chatRoomService.getRequestorChatRooms(requestorId)));
     }
 }
