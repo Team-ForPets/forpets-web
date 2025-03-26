@@ -2,7 +2,6 @@ package com.forpets.be.domain.animal.dto.request;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
-import com.forpets.be.domain.user.entity.User;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Positive;
@@ -56,7 +55,7 @@ public class MyAnimalUpdateRequestDto {
     private Boolean isOpen;
 
 
-    public MyAnimal toEntity(User user) {
+    public MyAnimal toEntity() {
         return MyAnimal.builder()
             .animalName(this.animalName)
             .animalType(this.animalType)
