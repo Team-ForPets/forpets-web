@@ -2,6 +2,7 @@ package com.forpets.be.domain.animal.dto.request;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
+import com.forpets.be.domain.user.entity.User;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
@@ -71,7 +72,7 @@ public class MyAnimalCreateRequestDto {
     @NotNull(message = "삭제여부는 필수 입력값입니다")
     private Boolean isDelete;
 
-    public MyAnimal toEntity() {
+    public MyAnimal toEntity(User user) {
         return MyAnimal.builder()
             .animalName(this.animalName)
             .animalType(this.animalType)
@@ -88,6 +89,7 @@ public class MyAnimalCreateRequestDto {
             .originalFileName(this.originalFileName)
             .isOpen(this.isOpen)
             .isDelete(this.isDelete)
+            .user(user)
             .build();
     }
 

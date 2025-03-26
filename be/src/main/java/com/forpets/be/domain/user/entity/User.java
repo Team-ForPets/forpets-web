@@ -1,18 +1,14 @@
 package com.forpets.be.domain.user.entity;
 
-import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -58,14 +54,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     // 화면 출력용
     @Column(nullable = true)
     private String originalFileName;
-
-
+    
     // Role을 통해 사용자의 권한을 정의
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<MyAnimal> myAnimals = new ArrayList<>();
 
     @Builder
     public User(String username, String password, String nickname, String originalFileName,

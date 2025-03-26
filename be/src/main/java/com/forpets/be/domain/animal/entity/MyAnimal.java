@@ -94,9 +94,6 @@ public class MyAnimal extends BaseTimeEntity {
         LocalDate selectedDate,
         String imageUrl, String s3Key, String originalFileName, Boolean isOpen, Boolean isDelete,
         User user) {
-
-        addAnimal(user);
-
         this.animalName = animalName;
         this.animalType = animalType;
         this.departureArea = departureArea;
@@ -114,8 +111,4 @@ public class MyAnimal extends BaseTimeEntity {
         this.isDelete = isDelete;
     }
 
-    public void addAnimal(User user) {
-        this.user = user;
-        user.getMyAnimals().add(this);
-    }
 }
