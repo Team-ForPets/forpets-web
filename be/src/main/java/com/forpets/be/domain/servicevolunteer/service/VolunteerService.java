@@ -19,9 +19,8 @@ public class VolunteerService {
     private final VolunteerRepository volunteerRepository;
 
     @Transactional
-    public ServiceVolunteerResponseDto serviceVolunteer(ServiceVolunteerRequestDto requestDto,
+    public ServiceVolunteerResponseDto createVolunteer(ServiceVolunteerRequestDto requestDto,
         User user) {
-
         ServiceVolunteer volunteer = requestDto.toEntity();
         volunteer.addUser(user);
 

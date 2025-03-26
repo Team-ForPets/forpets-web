@@ -45,9 +45,12 @@ dependencies {
 
 //    smtp
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 //Oauth2-client 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    // Web Socket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

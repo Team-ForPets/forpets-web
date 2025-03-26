@@ -54,8 +54,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     // 화면 출력용
     @Column(nullable = true)
     private String originalFileName;
-
-
+    
     // Role을 통해 사용자의 권한을 정의
     @Enumerated(EnumType.STRING)
     private Role role;

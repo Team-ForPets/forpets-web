@@ -6,6 +6,11 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
+// 모든 api를 사용한다. backend와 연결
+
+// const coordApi = axios.create({
+//   baseURL: 'https://dapi.kakao.com/v2/local', // Kakao Local API의 기본 URL
+// });
 
 // // 요청 인터셉터
 api.interceptors.request.use(

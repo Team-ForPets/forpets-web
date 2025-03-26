@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/logout").authenticated()
-                .requestMatchers("/api/auth/**", "/error", "/auth/success").permitAll()
+                .requestMatchers("/api/auth/**", "/ws/**", "/error", "/auth/success").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
