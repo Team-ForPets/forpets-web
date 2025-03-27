@@ -8,7 +8,6 @@ import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/service-volunteer")
 @RequiredArgsConstructor
@@ -39,8 +37,11 @@ public class VolunteerController {
     }
 
     @GetMapping
+
     public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
+
         List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
+
         return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
 
     }
