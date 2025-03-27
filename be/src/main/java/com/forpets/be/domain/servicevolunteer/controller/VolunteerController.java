@@ -37,12 +37,8 @@ public class VolunteerController {
     }
 
     @GetMapping
-
     public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
-
         List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
-
         return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
-
     }
 }

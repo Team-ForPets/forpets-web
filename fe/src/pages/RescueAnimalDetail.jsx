@@ -1,12 +1,21 @@
 import React from 'react';
-function RescueAnimalCard({ animal }) {
+import { useLocation } from 'react-router-dom';
+
+function RescueAnimalDetail() {
+  const location = useLocation();
+  const { animal } = location.state || {}; // 넘어온 state에서 animal 꺼내기
   console.log(animal);
+
+  if (!animal) {
+    return <p>동물 정보가 없습니다.</p>;
+  }
 
   const {
     happenDt,
     happenPlace,
     age,
     kindNm,
+    kindFullNm,
     colorCd,
     weight,
     popfile1,
@@ -25,14 +34,10 @@ function RescueAnimalCard({ animal }) {
   } = animal;
 
   return (
-    <li className="bg-white rounded-2xl shadow-md w-[25%] p-4 m-2 flex flex-col items-center">
-      <img
-        src={popfile1}
-        alt="구조동물 사진"
-        className="rounded-xl w-full h-48 object-cover mb-4"
-      />
+    <div className="bg-white rounded-2xl shadow-md w-[100%] p-4 m-2 flex flex-col ">
+      <img src={popfile1} alt="구조동물 사진" className="rounded-xl w-full max-h-[80vh]  mb-4" />
 
-      <h2 className="text-lg font-bold text-gray-800 mb-2">{kindNm}</h2>
+      <h2 className="text-lg font-bold text-gray-800 mb-2">{kindFullNm}</h2>
       <p className="text-sm text-gray-600 mb-1">
         🐾 <span className="font-semibold">발견날짜:</span> {happenDt}
       </p>
@@ -55,10 +60,10 @@ function RescueAnimalCard({ animal }) {
         🚨 <span className="font-semibold">입양 상태:</span> {processState}
       </p>
       <p className="text-sm text-gray-600 mb-1">
-        ⚤ <span className="font-semibold">성별:</span> {sexCd}
+        ⚤ <span className="font-semibold">성별:</span> {sexCd === 'M' ? '♂️' : '♀️'}
       </p>
       <p className="text-sm text-gray-600 mb-1">
-        ✂️ <span className="font-semibold">중성화:</span> {neuterYn}
+        ✂️ <span className="font-semibold">중성화:</span> {neuterYn === 'Y' ? '✔️' : '✖️'}
       </p>
       <p className="text-sm text-gray-600 mb-1">
         📝 <span className="font-semibold">특징:</span> {specialMark}
@@ -84,8 +89,8 @@ function RescueAnimalCard({ animal }) {
       </div>
 
       <p className="text-xs text-gray-400 mt-2">⏱️ 마지막 업데이트: {updTm}</p>
-    </li>
+    </div>
   );
 }
 
-export default RescueAnimalCard;
+export default RescueAnimalDetail;

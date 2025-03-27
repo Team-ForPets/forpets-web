@@ -1,18 +1,14 @@
 package com.forpets.be.domain.user.entity;
 
-import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -40,7 +36,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String nickname;
 
     // S3 객체의 접근 URL
@@ -59,17 +55,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = true)
     private String originalFileName;
 
-
     // Role을 통해 사용자의 권한을 정의
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<MyAnimal> myAnimals = new ArrayList<>();
+    private String snsProvider; // 어떤 OAuth인지(google, kakao, naver)
 
     @Builder
     public User(String username, String password, String nickname, String originalFileName,
-        Role role, String imageUrl, String s3Key) {
+        Role role, String imageUrl, String s3Key, String snsProvider) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -77,6 +71,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.originalFileName = originalFileName;
         this.imageUrl = imageUrl;
         this.s3Key = s3Key;
+        this.snsProvider = snsProvider;
     }
 
     @Override

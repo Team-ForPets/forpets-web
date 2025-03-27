@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import RescueAnimalCard from '../components/RescueAnimalCard';
 
-function RescueAnimals() {
+function RescueAnimalList() {
   const [animals, setAnimals] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all'); // 탭 상태 관리
   const serviceKey = import.meta.env.VITE_RESCUE_ANIMALS_KEY;
-
+  const animal = ['all', 'dog', 'cat', 'etc'];
   // 카테고리에 맞는 데이터 불러오기
   const fetchData = async (category) => {
     try {
@@ -16,16 +16,17 @@ function RescueAnimals() {
         serviceKey: serviceKey,
         _type: 'json',
         pageNo: 1,
-        numOfRows: 8,
+        numOfRows: 12,
       };
 
       // 선택된 카테고리에 따른 조건 추가
-      if (category === 'dog') {
-        params.upkind = 417000; // 개
-      } else if (category === 'cat') {
-        params.upkind = 422400; // 고양이
-      } else if (category === 'etc') {
-        params.upkind = 429900; // 기타
+      if (category !== 'all') {
+        const categoryMap = {
+          dog: 417000,
+          cat: 422400,
+          etc: 429900,
+        };
+        params.upkind = categoryMap[category];
       }
 
       const response = await axios.get(BaseURL, { params });
@@ -40,38 +41,32 @@ function RescueAnimals() {
     fetchData(activeCategory); // 첫 렌더링 시 activeCategory에 맞는 동물 정보 가져오기
   }, [activeCategory]);
 
+  // 카테고리 변경 핸들러
+  const handleCategoryChange = (category) => setActiveCategory(category);
+
   return (
     <div>
       {/* 카테고리 탭 */}
-      <div className="flex mb-4">
-        <button
-          className={`p-2 ${activeCategory === 'all' ? 'bg-blue-500 text-white' : ''}`}
-          onClick={() => setActiveCategory('all')}
-        >
-          전체
-        </button>
-        <button
-          className={`p-2 ${activeCategory === 'dog' ? 'bg-blue-500 text-white' : ''}`}
-          onClick={() => setActiveCategory('dog')}
-        >
-          개
-        </button>
-        <button
-          className={`p-2 ${activeCategory === 'cat' ? 'bg-blue-500 text-white' : ''}`}
-          onClick={() => setActiveCategory('cat')}
-        >
-          고양이
-        </button>
-        <button
-          className={`p-2 ${activeCategory === 'etc' ? 'bg-blue-500 text-white' : ''}`}
-          onClick={() => setActiveCategory('etc')}
-        >
-          기타
-        </button>
+      <div className="flex mb-4 gap-1">
+        {animal.map((category) => (
+          <button
+            key={category}
+            className={`w-[80px] p-1 cursor-pointer rounded-md ${activeCategory === category ? 'bg-[#FF983F] text-white' : 'bg-gray-200'}`}
+            onClick={() => handleCategoryChange(category)}
+          >
+            {category === 'all'
+              ? '전체'
+              : category === 'dog'
+                ? '개'
+                : category === 'cat'
+                  ? '고양이'
+                  : '기타'}
+          </button>
+        ))}
       </div>
 
       {/* 동물 카드 렌더링 */}
-      <ul className="flex flex-wrap w-[100%]">
+      <ul className="flex flex-wrap w-[100%] justify-start gap-6">
         {animals.length > 0 ? (
           animals.map((animal) => <RescueAnimalCard key={animal.desertionNo} animal={animal} />)
         ) : (
@@ -82,4 +77,4 @@ function RescueAnimals() {
   );
 }
 
-export default RescueAnimals;
+export default RescueAnimalList;

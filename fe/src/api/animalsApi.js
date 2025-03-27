@@ -1,32 +1,31 @@
-import api from "./axios";
+import api from './axios';
 
 const ENDPOINT = '/animals';
-const todoApi = {
-
+const animalsApi = {
   // 예시 템플릿
   // 투두 전체 조회
-  getTodos: async (bucketId) => {
-    const response = await api.get(`${ENDPOINT}/${bucketId}/todos`);
+  getAnimals: async () => {
+    const response = await api.get(`${ENDPOINT}`);
     return response.data;
   },
 
   // 투두 생성
-  createTodo: async (bucketId) => {
-    const response = await api.post(`${ENDPOINT}/${bucketId}/todos`);
+  createAnimal: async (formData) => {
+    const response = await api.post(`${ENDPOINT}`, formData);
     return response.data;
   },
 
   // 투두 수정
-  updateTodo: async (bucketId, todoId, formData) => {
-    const response = await api.patch(`${ENDPOINT}/${bucketId}/todos/${todoId}`, formData);
+  updateAnimal: async (bucketId, AnimalId, formData) => {
+    const response = await api.patch(`${ENDPOINT}/${bucketId}/Animals/${AnimalId}`, formData);
     return response.data;
   },
 
   // 투두 삭제
-  deleteTodo: async (bucketId, todoId) => {
+  deleteAnimal: async (bucketId, AnimalId) => {
     const response = await api.delete(`${ENDPOINT}/${bucketId}/todos/${todoId}`);
     return response;
   },
-}
+};
 
-export default todoApi;
+export default animalsApi;

@@ -11,6 +11,7 @@ import lombok.Getter;
 public class ChatRoomResponseDto {
 
     private final Long id;
+    private final Long myAnimalId;
     private final Long serviceVolunteerId;
     private final String requestorNickname;
     private final String volunteerNickname;
@@ -20,7 +21,9 @@ public class ChatRoomResponseDto {
     public static ChatRoomResponseDto from(ChatRoom entity) {
         return ChatRoomResponseDto.builder()
             .id(entity.getId())
-            .serviceVolunteerId(entity.getServiceVolunteer().getId())
+            .myAnimalId(entity.getMyAnimal().getId())
+            .serviceVolunteerId(
+                entity.getServiceVolunteer() != null ? entity.getServiceVolunteer().getId() : null)
             .requestorNickname(entity.getRequestor().getNickname())
             .volunteerNickname(entity.getVolunteer().getNickname())
             .state(entity.getState())
