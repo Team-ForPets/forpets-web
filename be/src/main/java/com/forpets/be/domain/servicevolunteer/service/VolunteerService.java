@@ -1,6 +1,11 @@
 package com.forpets.be.domain.servicevolunteer.service;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+<<<<<<< Updated upstream
+=======
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
+>>>>>>> Stashed changes
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
@@ -26,4 +31,30 @@ public class VolunteerService {
 
         return ServiceVolunteerResponseDto.from(volunteerRepository.save(volunteer));
     }
+<<<<<<< Updated upstream
+=======
+
+    public List<ServiceVolunteerListResponseDto> getAllVolunteers() {
+
+        return volunteerRepository.findAll().stream()
+
+            .map(volunteer -> {
+
+// Fetch associated User
+
+                User user = volunteer.getUser();
+
+                return ServiceVolunteerListResponseDto.from(volunteer, user);
+
+            })
+
+            .toList();
+    }
+
+    public ServiceVolunteerDetailResponseDto getVolunteerById(Long id) {
+        ServiceVolunteer volunteer = volunteerRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 봉사자가 존재하지 않습니다."));
+        return ServiceVolunteerDetailResponseDto.from(volunteer);
+    }
+>>>>>>> Stashed changes
 }
