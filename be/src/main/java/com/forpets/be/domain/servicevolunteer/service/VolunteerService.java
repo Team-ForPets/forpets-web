@@ -1,15 +1,13 @@
 package com.forpets.be.domain.servicevolunteer.service;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
-<<<<<<< Updated upstream
-=======
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
->>>>>>> Stashed changes
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,8 +29,6 @@ public class VolunteerService {
 
         return ServiceVolunteerResponseDto.from(volunteerRepository.save(volunteer));
     }
-<<<<<<< Updated upstream
-=======
 
     public List<ServiceVolunteerListResponseDto> getAllVolunteers() {
 
@@ -56,5 +52,4 @@ public class VolunteerService {
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 봉사자가 존재하지 않습니다."));
         return ServiceVolunteerDetailResponseDto.from(volunteer);
     }
->>>>>>> Stashed changes
 }
