@@ -19,9 +19,11 @@ public class ServiceVolunteerListResponseDto {
     private final String departureArea;
     private final String arrivalArea;
     private final String imageUrl;
+    private Long id;
 
     public static ServiceVolunteerListResponseDto from(ServiceVolunteer entity, User user) {
         return ServiceVolunteerListResponseDto.builder()
+            .id(entity.getId())
             .imageUrl(user != null ? user.getImageUrl()
                 : "https://via.placeholder.com/150") // Default image handling
             .title(entity.getTitle())
