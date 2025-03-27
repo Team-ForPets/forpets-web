@@ -4,8 +4,10 @@ import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
-import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomsListResponseDto;
-import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsListResponseDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsResponseDto;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
@@ -94,13 +96,23 @@ public class ChatRoomService {
     }
 
     // 내가 요청자로 속한 채팅방 전체 조회
-    public ChatRoomsListResponseDto getRequestorChatRooms(Long requestorId) {
-        List<VolunteerChatRoomListResponseDto> chatRooms = chatRoomRepository.findAllByRequestorId(
-            requestorId).stream().map(VolunteerChatRoomListResponseDto::from).toList();
+    public RequestorChatRoomsListResponseDto getRequestorChatRooms(Long requestorId) {
+        List<RequestorChatRoomsResponseDto> chatRooms = chatRoomRepository.findAllByRequestorId(
+            requestorId).stream().map(RequestorChatRoomsResponseDto::from).toList();
 
         Integer total = chatRooms.size();
 
-        return ChatRoomsListResponseDto.from(chatRooms, total);
+        return RequestorChatRoomsListResponseDto.from(chatRooms, total);
+    }
+
+    // 내가 봉사자로 속한 채팅방 전체 조회
+    public VolunteerChatRoomsListResponseDto getVolunteerChatRooms(Long volunteerId) {
+        List<VolunteerChatRoomsResponseDto> chatRooms = chatRoomRepository.findAllByVolunteerId(
+            volunteerId).stream().map(VolunteerChatRoomsResponseDto::from).toList();
+
+        Integer total = chatRooms.size();
+
+        return VolunteerChatRoomsListResponseDto.from(chatRooms, total);
     }
 }
 

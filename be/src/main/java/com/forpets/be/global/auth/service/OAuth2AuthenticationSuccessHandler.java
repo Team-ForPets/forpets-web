@@ -92,8 +92,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //        accessTokenCookie.setMaxAge(10);
 
         // RefreshToken을 HttpOnly 쿠키로 설정
-        Cookie refreshTokenCookie = new Cookie("refresh-token",refreshToken);
-            // 일반 로그인 refreshToken 저장 시 refresh-token이라 변경
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
+        // 일반 로그인 refreshToken 저장 시 refresh-token이라 변경
         refreshTokenCookie.setHttpOnly(true);  // XSS 공격 방지
         refreshTokenCookie.setSecure(true);  // HTTPS에서만 전송 (개발 환경에서는 false로 변경 가능)
         refreshTokenCookie.setPath("/");  // 모든 경로에서 사용 가능
