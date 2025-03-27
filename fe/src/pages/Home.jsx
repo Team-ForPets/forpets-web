@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainAnimalCard from '../components/MainAnimalCard';
+import MainVolunteerCard from '../components/MainVolunteerCard';
 import KakaoMap from '../components/KakaoMap';
 import animalsApi from '../api/animalsApi';
 import volunteersApi from '../api/volunteerApi';
@@ -9,13 +10,13 @@ function Home() {
   const [animals, setAnimals] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
   const [activeTab, setActiveTab] = useState('animals');
+  const [resetMarker, setResetMarker] = useState('animals');
 
   // 나의아이 리스트 불러오기
   const fetchAnimals = async () => {
     try {
       const response = await animalsApi.getAnimals();
       const data = response.data.animals;
-      console.log(data);
       setAnimals(data);
     } catch (e) {
       console.error(e);
@@ -26,8 +27,9 @@ function Home() {
   const fetchVolunteers = async () => {
     try {
       const response = await volunteersApi.getVolunteers();
-      const data = response.data.volunteers;
+      const data = response.data;
       setVolunteers(data);
+      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -41,12 +43,14 @@ function Home() {
   // 요청자 버튼 클릭 시 animals 데이터 가져오기
   const handleAnimalList = () => {
     setActiveTab('animals');
+    setResetMarker('animals');
     fetchAnimals();
   };
 
   // 봉사자 버튼 클릭 시 volunteer 데이터 가져오기
   const handleVolunteerList = () => {
     setActiveTab('volunteer');
+    setResetMarker('volunteer');
     fetchVolunteers();
   };
 
@@ -54,7 +58,7 @@ function Home() {
     <main className="flex justify-between my-[10vh]">
       {/* 지도 섹션 (왼쪽) */}
       <section className="w-[65%] rounded-md">
-        <KakaoMap animals={animals} />
+        <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
       </section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
@@ -63,14 +67,18 @@ function Home() {
         <article className="h-[5%] flex justify-between">
           <div className="w-[50%] flex gap-[3%]">
             <button
-              onClick={handleAnimalList} // 요청자 버튼 클릭 시 fetchAnimals 호출
-              className="bg-amber-300 w-[100%] rounded-t-md cursor-pointer"
+              onClick={handleAnimalList}
+              className={`w-[100%] rounded-t-md cursor-pointer transition ${
+                activeTab === 'animals' ? 'bg-[#FF771D] text-white' : 'bg-[#CCCBC8]'
+              }`}
             >
               요청자
             </button>
             <button
               onClick={handleVolunteerList}
-              className="bg-amber-500 w-[100%] rounded-t-md cursor-pointer"
+              className={`w-[100%] rounded-t-md cursor-pointer transition ${
+                activeTab === 'volunteer' ? 'bg-[#FF771D] text-white' : 'bg-[#CCCBC8]'
+              }`}
             >
               봉사자
             </button>
@@ -98,11 +106,8 @@ function Home() {
             )}
           </ul>
         </article>
-        <button className="w-[100%] p-3 bg-amber-500 ">
-          <Link
-            className="block"
-            to={activeTab === 'animals' ? 'register-animal' : 'register-volunteer'}
-          >
+        <button className="w-[100%] p-3 bg-[#FF771D] text-white ">
+          <Link to={activeTab === 'animals' ? 'register-animal' : 'register-volunteer'}>
             {activeTab === 'animals' ? '나의 아이 등록' : '봉사자 등록'}
           </Link>
         </button>

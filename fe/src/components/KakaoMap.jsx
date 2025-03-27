@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import DaumPost from './DaumPost';
 
-const KakaoMap = ({ animals }) => {
+const KakaoMap = ({ animals, volunteers, resetMarker }) => {
   const mapContainer = useRef(null); // 지도 DOM 참조
   const mapRef = useRef(null); // 지도 객체
   const markerRef = useRef(null); // 마커 객체
@@ -11,7 +11,7 @@ const KakaoMap = ({ animals }) => {
   const kakaoMapKey = import.meta.env.VITE_KAKAOMAP_KEY;
   const kakaoRestKey = import.meta.env.VITE_KAKAO_REST_KEY;
 
-  console.log(animals);
+  console.log(resetMarker);
 
   useEffect(() => {
     // 카카오맵 스크립트 로드
@@ -31,7 +31,7 @@ const KakaoMap = ({ animals }) => {
       window.kakao.maps.load(() => {
         const mapOption = {
           center: new window.kakao.maps.LatLng(37.566826, 126.9786567), // 서울 중심 좌표
-          level: 13,
+          level: 12,
         };
 
         mapRef.current = new window.kakao.maps.Map(mapContainer.current, mapOption);
@@ -56,30 +56,39 @@ const KakaoMap = ({ animals }) => {
         searchAddrFromCoords(center.getLat(), center.getLng());
 
         // animals 배열을 map을 통해 각 동물 정보를 표시
-        if (animals && animals.length > 0) {
+        if (animals && animals.length > 0 && resetMarker === 'animals') {
           animals.map((animal) => {
-            const { departureArea, arrivalArea, animalName } = animal;
-            geocodeAddresses(departureArea, arrivalArea, animalName);
+            const { departureArea, arrivalArea } = animal;
+            geocodeAddresses(departureArea, arrivalArea);
+          });
+        }
+
+        // volunteers 배열을 map을 통해 각 봉사자 정보를 표시
+        if (volunteers && volunteers.length > 0 && resetMarker === 'volunteer') {
+          volunteers.map((volunteer) => {
+            const { departureArea, arrivalArea } = volunteer;
+            geocodeAddresses(departureArea, arrivalArea);
           });
         }
       });
     };
 
+    // 메모리 누수 방지
     return () => {
       document.head.removeChild(script);
     };
-  }, [animals, kakaoMapKey]);
+  }, [animals, volunteers, kakaoMapKey]);
 
   // ✅ 주소를 위도/경도로 변환 (지오코딩)
-  const geocodeAddresses = async (departureArea, arrivalArea, animalName) => {
+  const geocodeAddresses = async (departureArea, arrivalArea) => {
     try {
       const locations = [
-        { address: departureArea, label: `${animalName} - 출발지`, color: 'blue' },
-        // { address: arrivalArea, label: `${animalName} - 도착지`, color: 'orange' },
+        { address: departureArea, label: `출발지` },
+        // { address: arrivalArea, label: `도착지` },
       ];
 
       for (const location of locations) {
-        const { address, label, color } = location;
+        const { address, label } = location;
         if (!address) continue; // 주소가 없으면 스킵
 
         const response = await axios.get(`https://dapi.kakao.com/v2/local/search/address.json`, {
@@ -107,11 +116,13 @@ const KakaoMap = ({ animals }) => {
           new window.kakao.maps.Size(40, 45),
         );
 
-        // 마커 생성
+        // 위도 경도값 저장
         const position = new window.kakao.maps.LatLng(latitude, longitude);
+
+        // 마커 생성
         const marker = new window.kakao.maps.Marker({
           position,
-          image: markerImage, // 색상 변경된 마커 이미지 적용
+          image: markerImage, // 변경된 마커 이미지 적용
           map: mapRef.current, // 지도에 마커 표시
         });
 
