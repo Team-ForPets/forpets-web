@@ -38,4 +38,8 @@ public class ChatMessage {
         this.senderId = senderId;
         this.content = content;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
