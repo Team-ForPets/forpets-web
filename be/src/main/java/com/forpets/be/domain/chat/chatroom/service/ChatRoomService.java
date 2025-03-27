@@ -81,7 +81,7 @@ public class ChatRoomService {
 
         // 해당 나의 아이 게시글 또는 봉사 등록글에서 생성한 채팅방이 이미 존재하는 경우에 대한 예외 처리 필요
         // 채팅방 중복 생성 방지
-        if (chatRoomRepository.existsByRequestorAndVolunteer(requestor, volunteer)) {
+        if (chatRoomRepository.existsRoomByRequestorAndVolunteer(requestor, volunteer)) {
             throw new IllegalStateException("이미 존재하는 채팅방입니다.");
         }
 
