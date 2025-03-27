@@ -70,7 +70,7 @@ function ServiceStatus() {
       console.log('데이터를 읽어오지 못했습니다.');
     }
   };
-  // 실 사용 로직
+  // 실 사용 로직 -
   // const fetchServices = async (status) => {
   //   let response;
   //   try {
