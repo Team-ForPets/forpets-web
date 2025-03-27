@@ -6,7 +6,6 @@ import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerRespo
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
-import com.forpets.be.domain.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
-    private final UserRepository userRepository;
 
     @Transactional
     public ServiceVolunteerResponseDto createVolunteer(ServiceVolunteerRequestDto requestDto,
@@ -46,6 +44,5 @@ public class VolunteerService {
             })
 
             .toList();
-
     }
 }

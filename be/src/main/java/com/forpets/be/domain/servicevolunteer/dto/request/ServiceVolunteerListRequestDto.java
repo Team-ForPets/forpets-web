@@ -1,44 +1,53 @@
 package com.forpets.be.domain.servicevolunteer.dto.request;
 
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.user.entity.User;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-
+@Builder
+@AllArgsConstructor
 public class ServiceVolunteerListRequestDto {
 
+    private final String title;
 
-    private String title;
+    private final LocalDate startDate;
 
-    private LocalDate startDate;
+    private final LocalDate endDate;
 
-    private LocalDate endDate;
+    private final String departureArea;
 
-    private String departureArea;
+    private final String arrivalArea;
 
-    private String arrivalArea;
+    private final String imageUrl;
+
+    private Long id;
 
 
-    public ServiceVolunteer toEntity(User user) {
+    public static ServiceVolunteerListResponseDto from(ServiceVolunteer entity, User user) {
 
-        return ServiceVolunteer.builder()
+        return ServiceVolunteerListResponseDto.builder()
 
-            .title(this.title)
+            .id(entity.getId())
 
-            .startDate(this.startDate)
+            .imageUrl(user != null ? user.getImageUrl()
 
-            .endDate(this.endDate)
+                : "https://via.placeholder.com/150") // Default image handling
 
-            .departureArea(this.departureArea)
+            .title(entity.getTitle())
 
-            .arrivalArea(this.arrivalArea)
+            .startDate(entity.getStartDate())
+
+            .endDate(entity.getEndDate())
+
+            .departureArea(entity.getDepartureArea())
+
+            .arrivalArea(entity.getArrivalArea())
 
             .build();
-
     }
-
 }

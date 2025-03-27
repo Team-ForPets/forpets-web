@@ -115,8 +115,9 @@ const router = createBrowserRouter([
         path: '/volunteer-list',
         element: <VolunteerList></VolunteerList>,
       },
+
       {
-        path: '/volunteer-detail',
+        path: '/volunteer-detail/{id}',
         element: <VolunteerDetail></VolunteerDetail>,
       },
     ],
