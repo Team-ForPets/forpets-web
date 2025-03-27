@@ -39,4 +39,11 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatRoomId,
             requestDto.getContent());
     }
+
+    // 채팅방 퇴장 메시지 발신
+    @MessageMapping("/chat/rooms/{chatRoomId}/leave")
+    public void leaveMessage(@DestinationVariable Long chatRoomId,
+        @Payload @Valid ChatMessageRequestDto requestDto) {
+        chatMessageService.leaveMessage(chatRoomId, requestDto);
+    }
 }
