@@ -1,13 +1,16 @@
 package com.forpets.be.domain.servicevolunteer.controller;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
 import com.forpets.be.domain.servicevolunteer.service.VolunteerService;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +36,13 @@ public class VolunteerController {
                 volunteerService.createVolunteer(requestDto, authenticatedUser)));
     }
 
-//    @GetMapping("/{id}")
+    @GetMapping
 
+    public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
+
+        List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
+
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
+
+    }
 }
