@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,14 +39,13 @@ public class VolunteerController {
                 volunteerService.createVolunteer(requestDto, authenticatedUser)));
     }
 
-
     @GetMapping
     public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
         List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
         return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
     }
 
-    @GetMapping("/{id}")
+  @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ServiceVolunteerDetailResponseDto>> getVolunteerById(
         @PathVariable Long id) {
         ServiceVolunteerDetailResponseDto volunteer = volunteerService.getVolunteerById(id);
@@ -54,3 +54,4 @@ public class VolunteerController {
 
 
 }
+

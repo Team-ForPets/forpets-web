@@ -2,7 +2,7 @@ import api from './axios';
 
 const ENDPOINT = '/animals';
 const animalsApi = {
-  // 예시 템플릿
+
   // 투두 전체 조회
   getAnimals: async () => {
     const response = await api.get(`${ENDPOINT}`);
