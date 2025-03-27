@@ -52,8 +52,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "docker-compose.yml,.env"
-          target: "~/github-actions-work-directory"
+          source: 'docker-compose.yml,.env'
+          target: '~/github-actions-work-directory'
 
       - name: Pull Image & Up Container
         uses: appleboy/ssh-action@v1.0.3
@@ -64,7 +64,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/github-actions-work-directory
-            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml pull --ignore-pull-failures
             docker compose -f docker-compose.yml down
             docker compose -f docker-compose.yml up -d
-            docker system prune -f
+            docker system prune -af
