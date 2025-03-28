@@ -32,36 +32,57 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 소셜 로그인 서비스 제공자 이름(google, kakao, naver)
         String provider = oAuth2UserRequest.getClientRegistration().getRegistrationId();
 
-        // 어떤 소셜 서비스인지에 따라 정보를 다르게 매핑
+        log.info("유저 서비스에서의 프로바이더 : {}", provider);
+
+        // 어떤 소셜 서비스인지에 따라 정보를 다르게 매핑해서 저장
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(provider, oAuth2User.getAttributes());
 
-        log.info("소셜 로그인 제공자: {}", provider);
-        log.info("소셜 로그인 ID: {}", oAuth2UserInfo.getId());
-        log.info("소셜 로그인 이메일: {}", oAuth2UserInfo.getUsername());
+        log.info("OAuth2UserInfo Attributes: {}", oAuth2User.getAttributes());
+        log.info("OAuth2UserInfo Email: {}", oAuth2UserInfo.getUsername());
+        log.info("OAuth2UserInfo Provider: {}", oAuth2UserInfo.getProvider());
 
         System.out.println(oAuth2UserInfo.getProvider());
         // 가입한 유저인지 확인(
         User user = userRepository.findByUsername(oAuth2UserInfo.getUsername())
             .orElseGet(() -> saveUser(oAuth2UserInfo, provider));
+        log.info("유저 이메일 : {}", user.getUsername());
 
-//        아직 안 됨.
         String socialName = "";
-        log.info("프로바이더: {}", provider);
 
-        if (provider == "google") {
+        if (provider.equals("google")) {
             socialName = "sub";
-        } else {
+        } else if (provider.equals("kakao")) {
             socialName = "id";
+        } else if (provider.equals("naver")) {
+            socialName = "response";
+            // 기본 이메일 (연락처 이메일)
         }
+        log.info(socialName);
 
-        log.info("소셜 종류: {}", socialName);
         return new DefaultOAuth2User(
             Collections.emptySet(),
             oAuth2User.getAttributes(),
-            "id"
-//            socialName
+//            "id"
+            socialName
         );
-
+//        Map<String, Object> attributes = oAuth2User.getAttributes();
+//
+//        String socialName = "";
+//        if (provider.equals("google")) {
+//            socialName = "sub";
+//        } else if (provider.equals("naver")) {
+//            attributes = (Map<String, Object>) attributes.get("response");
+//            socialName = "id";
+//        } else if (provider.equals("kakao")) {
+//            socialName = "id";
+//        }
+//        log.info(socialName);
+//
+//        return new DefaultOAuth2User(
+//            Collections.emptySet(),
+//            attributes,
+//            socialName
+//        );
     }
 
     public String generateUniqueNickname(UserRepository userRepository) {

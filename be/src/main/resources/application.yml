@@ -56,10 +56,11 @@ spring:
             client-secret: ${naver-client-secret} # 발급 받은 Client Secret
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "{baseUrl}/login/oauth2/code/naver"
             scope:
               #              - name
               - email
+            #              - email_address    # 검수 후 사용
             #              - profile_image
             client-name: Naver
 
