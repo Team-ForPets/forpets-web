@@ -17,7 +17,10 @@ function Login() {
       const response = await authApi.login(formData);
       const username = formData.username;
       const accessToken = response.data.accessToken;
-      dispatch(login({ accessToken, username }));
+      const userId = response.data.userId;
+      console.log(userId);
+
+      dispatch(login({ accessToken, username, userId }));
       navigate('/');
     } catch (error) {
       console.log('사용자 정보가 맞지 않습니다.');

@@ -7,6 +7,10 @@ const mypageApi = {
     const response = await api.get(`${ENDPOINT}/profile`);
     return response.data;
   },
+  getMyAnimals: async () => {
+    const response = await api.get(`${ENDPOINT}/animals`);
+    return response.data;
+  },
 };
 
 export default mypageApi;
