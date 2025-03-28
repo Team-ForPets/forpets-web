@@ -1,50 +1,47 @@
-import React from 'react';
-import VolunteerCard from '../components/mypage/VolunteerCard';
+import React, { useEffect, useState } from 'react';
+import VolunteerCard from '../components/VolunteerCard';
+import volunteerApi from '../api/volunteerApi';
+import { useNavigate } from 'react-router-dom';
 
 function VolunteerList() {
-  // 가상의 봉사자 데이터
-  // const volunteers = [
-  //   {
-  //     id: 1,
-  //     title: '제목1',
-  //     startDate: '2025-03-01',
-  //     endDate: '2025-03-05',
-  //     departureArea: '서울',
-  //     ArrivalArea: '구미',
-  //     imageUrl: 'https://via.placeholder.com/100',
-  //   },
+  const [volunteers, setVolunteers] = useState([]);
+  const navigate = useNavigate();
 
-  //   {
-  //     id: 2,
-  //     title: '제목2',
-  //     startDate: '2025-03-02',
-  //     endDate: '2025-03-06',
-  //     departureArea: '부산',
-  //     ArrivalArea: '구미',
-  //     imageUrl: 'https://via.placeholder.com/100',
-  //   },
-  //   {
-  //     id: 3,
-  //     title: '제목3',
-  //     startDate: '2025-03-03',
-  //     endDate: '2025-03-07',
-  //     departureArea: '대구',
-  //     ArrivalArea: '구미',
-  //     imageUrl: 'https://via.placeholder.com/100',
-  //   },
-  // ];
+  useEffect(() => {
+    const getVolunteers = async () => {
+      try {
+        const response = await volunteerApi.getVolunteers(); // API 호출
+        const data = response.data;
+        setVolunteers(data); // API 응답의 data 필드 사용
+      } catch (error) {
+        console.error('Error fetching volunteers:', error);
+      }
+    };
+    getVolunteers();
+  }, []);
+
+  const handleVolunteerDetail = (volunteer) => {
+    navigate(`/volunteer-detail/${volunteer.id}`,{state:{volunteer}});
+  };
 
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">등록된 봉사자 목록</h2>
-      <ul className="space-y-4">
-        {volunteers.map((volunteer) => (
-          <li key={volunteer.id}>
-            <VolunteerCard volunteer={volunteer} />
-            {/* volunteers의  DB에서 저장된 데이터를 가져와야 한다. 어떻게 데이터를 가져와야 할까? */}
-          </li>
-        ))}
-      </ul>
+      {volunteers.length === 0 ? (
+        <p className="text-gray-500">봉사자 목록이 없습니다.</p>
+      ) : (
+        <ul className="grid grid-cols-4 gap-4">
+          {volunteers.map((volunteer) => (
+            <div
+              key={volunteer.id}
+              onClick={() => handleVolunteerDetail(volunteer)}
+              className="cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              <VolunteerCard volunteer={volunteer} />
+            </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
