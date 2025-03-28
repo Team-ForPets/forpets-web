@@ -32,7 +32,7 @@ function VolunteerCard({ volunteer }) {
           </p>
         </div>
       </div>
-    </li>
+    </div>
   );
 }
 
