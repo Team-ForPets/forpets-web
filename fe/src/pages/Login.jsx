@@ -28,6 +28,9 @@ function Login() {
   const handleKakaoLogin = () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
   };
+  const handleNaverLogin = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+  };
 
   return (
     <>
@@ -63,7 +66,7 @@ function Login() {
             alt=""
           />
         </button>
-        <button className="h-10 text-center  rounded-md cursor-pointer">
+        <button className="h-10 text-center  rounded-md cursor-pointer" onClick={handleNaverLogin}>
           <img
             className="w-[100%] h-[100%] rounded-md overflow-hidden"
             src="/assets/naver-login-button.png"
