@@ -8,6 +8,7 @@ import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsListRe
 import com.forpets.be.domain.chat.chatroom.service.ChatRoomService;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping
     public ResponseEntity<ApiResponse<ChatRoomResponseDto>> createChatRoom(
-        @RequestBody ChatRoomRequestDto requestDto, @AuthenticationPrincipal User user) {
+        @RequestBody @Valid ChatRoomRequestDto requestDto, @AuthenticationPrincipal User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiResponse.ok("채팅방이 생성되었습니다.", "CREATED",
                 chatRoomService.createChatRoom(requestDto, user)));
