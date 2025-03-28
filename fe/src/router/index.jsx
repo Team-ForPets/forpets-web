@@ -117,7 +117,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/volunteer-detail/{id}',
+        path: '/volunteer-detail/:id',
         element: <VolunteerDetail></VolunteerDetail>,
       },
     ],

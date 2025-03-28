@@ -1,11 +1,13 @@
 package com.forpets.be.domain.servicevolunteer.service;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
+import java.util.List;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,5 +46,11 @@ public class VolunteerService {
             })
 
             .toList();
+    }
+
+    public ServiceVolunteerDetailResponseDto getVolunteerById(Long id) {
+        ServiceVolunteer volunteer = volunteerRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 봉사자가 존재하지 않습니다."));
+        return ServiceVolunteerDetailResponseDto.from(volunteer);
     }
 }
