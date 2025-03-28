@@ -46,8 +46,9 @@ public class ChatRoomService {
         MyAnimal myAnimal = myAnimalRepository.findById(requestDto.getMyAnimalId())
             .orElseThrow(() -> new IllegalArgumentException("해당 나의 아이 등록글이 존재하지 않습니다."));
 
-        // 나의 아이 등록글에서 채팅이 시작된 경우
         if (requestDto.getServiceVolunteerId() == null) {
+            // 나의 아이 등록글에서 채팅이 시작된 경우
+
             log.info("ChatRoomService- myAnimal: {}", myAnimal.getUser());
 
             // 요청자는 나의 아이 등록글의 user_id를 통해 정보를 가져옴
@@ -57,14 +58,13 @@ public class ChatRoomService {
             // 봉사자는 로그인한 사용자
             volunteer = user;
 
-            // 요청자와 봉사자가 동일한지 확인하고 예외 처리 (필요할 경우)
+            // 요청자와 봉사자가 동일한지 확인하고 예외 처리
             if (volunteer.getId().equals(requestor.getId())) {
                 throw new IllegalArgumentException("요청자와 봉사자는 동일할 수 없습니다.");
             }
-        }
+        } else {
+            // 봉사글에서 채팅이 시작된 경우
 
-        // 봉사글에서 채팅이 시작된 경우
-        if (requestDto.getServiceVolunteerId() != null) {
             serviceVolunteer = volunteerRepository.findById(
                     requestDto.getServiceVolunteerId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 봉사 등록글이 존재하지 않습니다."));
@@ -84,10 +84,10 @@ public class ChatRoomService {
             }
         }
 
-        // 해당 나의 아이 게시글 또는 봉사 등록글에서 생성한 채팅방이 이미 존재하는 경우에 대한 예외 처리 필요
-        // 채팅방 중복 생성 방지
-        if (chatRoomRepository.existsRoomByRequestorAndVolunteer(requestor, volunteer)) {
-            throw new IllegalStateException("이미 존재하는 채팅방입니다.");
+        // 나의 아이 등록글과 봉사 등록글 id를 확인하여 특정 게시글에서 시작된 채팅방이 이미 존재하는지 확인
+        if (chatRoomRepository.existsRoomByRequestorAndVolunteerAndPost(requestor, volunteer,
+            requestDto.getMyAnimalId(), requestDto.getServiceVolunteerId())) {
+            throw new IllegalStateException("이미 해당 게시글로 생성된 채팅방이 존재합니다.");
         }
 
         ChatRoom chatRoom = ChatRoom.builder()
