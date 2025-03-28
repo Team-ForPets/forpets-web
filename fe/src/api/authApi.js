@@ -23,32 +23,27 @@ const authApi = {
     const response = await api.post(`${ENDPOINT}/send-auth-code`, { username });
     return response.data;
   },
-
   // username 인증 코드 검증
   verifyCode: async (username, code) => {
     const response = await api.post(`${ENDPOINT}/verify-code`, { username, code });
     return response.data;
   },
-
   // 로그인
   login: async (formData) => {
     const response = await api.post(`${ENDPOINT}/login`, formData, { withCredentials: true });
     console.log(response);
     return response.data;
   },
-
   // 로그아웃
   logout: async () => {
     const response = await api.post(`${ENDPOINT}/logout`, {}, { withCredentials: true });
     return response;
   },
-
   // 인증
   verify: async () => {
     const response = await api.get(`${ENDPOINT}/verify`);
     return response;
   },
-
   // 토큰 갱신 요청
   reissue: async () => {
     const response = await api.post(`${ENDPOINT}/reissue`, {

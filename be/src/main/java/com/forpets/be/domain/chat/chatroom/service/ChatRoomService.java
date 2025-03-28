@@ -1,8 +1,12 @@
 package com.forpets.be.domain.chat.chatroom.service;
 
+import com.forpets.be.domain.animal.dto.response.MyAnimalReadResponseDto;
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
+import com.forpets.be.domain.chat.chatmessage.dto.response.ChatMessageResponseDto;
+import com.forpets.be.domain.chat.chatmessage.repository.ChatMessageRepository;
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
+import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomDetailResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsListResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsResponseDto;
@@ -30,6 +34,7 @@ public class ChatRoomService {
     private final MyAnimalRepository myAnimalRepository;
     private final VolunteerRepository volunteerRepository;
     private final UserRepository userRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     // 채팅방 생성
     @Transactional
@@ -81,7 +86,7 @@ public class ChatRoomService {
 
         // 해당 나의 아이 게시글 또는 봉사 등록글에서 생성한 채팅방이 이미 존재하는 경우에 대한 예외 처리 필요
         // 채팅방 중복 생성 방지
-        if (chatRoomRepository.existsByRequestorAndVolunteer(requestor, volunteer)) {
+        if (chatRoomRepository.existsRoomByRequestorAndVolunteer(requestor, volunteer)) {
             throw new IllegalStateException("이미 존재하는 채팅방입니다.");
         }
 
@@ -114,5 +119,42 @@ public class ChatRoomService {
 
         return VolunteerChatRoomsListResponseDto.from(chatRooms, total);
     }
-}
 
+    // 채팅방 개별 조회
+    public ChatRoomDetailResponseDto getChatRoomById(Long chatRoomId) {
+        // 채팅방 정보 로드
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomWithDetails(chatRoomId)
+            .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        // 닉네임 결정
+        // 봉사 등록글이 null => 나의 아이 등록글을 통해 시작된 채팅인 경우 => 요청자 : 나의 아이 등록글 작성자(상대방), 봉사자 : 로그인한 사용자(나) 처리
+        // 봉사 등록글이 not null => 봉사 등록글을 통해 시작된 채팅인 경우 => 요청자 : 로그인한 사용자(나), 봉사자 : 봉사 등록글 작성자(상대방) 처리
+        String nickname = (chatRoom.getServiceVolunteer() == null)
+            ? chatRoom.getRequestor().getNickname()
+            : chatRoom.getVolunteer().getNickname();
+
+        // 출발지/도착지 결정
+        // 봉사 등록글이 null => 나의 아이 등록글을 통해 시작된 채팅인 경우 => 출발 요청 지역, 도착 요청 지역 처리
+        // 봉사 등록글이 not null => 봉사 등록글을 통해 시작된 채팅인 경우 => 출발 가능 지역, 도착 가능 지역 처리
+        String departureArea = (chatRoom.getServiceVolunteer() == null)
+            ? chatRoom.getMyAnimal().getDepartureArea()
+            : chatRoom.getServiceVolunteer().getDepartureArea();
+
+        String arrivalArea = (chatRoom.getServiceVolunteer() == null)
+            ? chatRoom.getMyAnimal().getArrivalArea()
+            : chatRoom.getServiceVolunteer().getArrivalArea();
+
+        // 나의 아이 등록글의 정보 조회
+        MyAnimalReadResponseDto responseDto = MyAnimalReadResponseDto.from(chatRoom.getMyAnimal());
+
+        // 해당 채팅방의 채팅 메시지 내역 조회
+        List<ChatMessageResponseDto> chatMessages = chatMessageRepository.findByChatRoomId(
+                chatRoomId).stream()
+            .map(ChatMessageResponseDto::from)
+            .toList();
+
+        return ChatRoomDetailResponseDto.from(chatRoomId, nickname, departureArea, arrivalArea,
+            responseDto,
+            chatRoom.getState(), chatMessages);
+    }
+}

@@ -45,5 +45,4 @@ function VolunteerList() {
     </div>
   );
 }
-
 export default VolunteerList;
