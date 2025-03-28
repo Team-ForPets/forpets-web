@@ -153,8 +153,16 @@ public class ChatRoomService {
             .map(ChatMessageResponseDto::from)
             .toList();
 
-        return ChatRoomDetailResponseDto.from(chatRoomId, nickname, departureArea, arrivalArea,
-            responseDto,
-            chatRoom.getState(), chatMessages);
+        return ChatRoomDetailResponseDto.builder()
+            .id(chatRoomId)
+            .nickname(nickname)
+            .departureArea(departureArea)
+            .arrivalArea(arrivalArea)
+            .myAnimal(responseDto)
+            .state(chatRoom.getState())
+            .createdAt(chatRoom.getCreatedAt())
+            .updatedAt(chatRoom.getUpdatedAt())
+            .chatMessages(chatMessages)
+            .build();
     }
 }
