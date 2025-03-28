@@ -1,6 +1,7 @@
 package com.forpets.be.domain.chat.chatroom.dto.response;
 
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
+import com.forpets.be.domain.chat.chatroom.entity.RoomState;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,9 @@ public class RequestorChatRoomsResponseDto {
     private final String volunteerNickname;
     private final String departureArea;
     private final String arrivalArea;
+    private final RoomState state;
     private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public static RequestorChatRoomsResponseDto from(ChatRoom chatRoom) {
         log.info("VolunteerChatRoomListResponseDto- chatRoom : {}", chatRoom);
@@ -28,7 +31,9 @@ public class RequestorChatRoomsResponseDto {
             .volunteerNickname(chatRoom.getVolunteer().getNickname())
             .departureArea(chatRoom.getServiceVolunteer().getDepartureArea())
             .arrivalArea(chatRoom.getServiceVolunteer().getArrivalArea())
+            .state(chatRoom.getState())
             .createdAt(chatRoom.getCreatedAt())
+            .updatedAt(chatRoom.getUpdatedAt())
             .build();
     }
 }

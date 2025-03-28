@@ -37,11 +37,11 @@ public class ChatRoom extends BaseTimeEntity {
     private ServiceVolunteer serviceVolunteer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requestor_user_id")
+    @JoinColumn(name = "requestor_user_id", nullable = false)
     private User requestor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "volunteer_user_id")
+    @JoinColumn(name = "volunteer_user_id", nullable = false)
     private User volunteer;
 
     @Enumerated(EnumType.STRING)

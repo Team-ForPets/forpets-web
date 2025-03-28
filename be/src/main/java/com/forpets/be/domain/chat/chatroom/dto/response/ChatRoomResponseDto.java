@@ -17,6 +17,7 @@ public class ChatRoomResponseDto {
     private final String volunteerNickname;
     private final RoomState state;
     private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public static ChatRoomResponseDto from(ChatRoom entity) {
         return ChatRoomResponseDto.builder()
@@ -28,6 +29,7 @@ public class ChatRoomResponseDto {
             .volunteerNickname(entity.getVolunteer().getNickname())
             .state(entity.getState())
             .createdAt(entity.getCreatedAt())
+            .updatedAt(entity.getUpdatedAt())
             .build();
     }
 }

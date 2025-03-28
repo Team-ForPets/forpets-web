@@ -19,6 +19,7 @@ public class MyAnimalReadResponseDto {
     private String departureArea;
     private String arrivalArea;
     private String breed;
+    private Integer age;
     private Integer weight;
     private String notice;
     private String memo;
@@ -33,6 +34,7 @@ public class MyAnimalReadResponseDto {
             .departureArea(myAnimal.getDepartureArea())
             .arrivalArea(myAnimal.getArrivalArea())
             .breed(myAnimal.getBreed())
+            .age(myAnimal.getAge())
             .weight(myAnimal.getWeight())
             .notice(myAnimal.getNotice())
             .memo(myAnimal.getMemo())
