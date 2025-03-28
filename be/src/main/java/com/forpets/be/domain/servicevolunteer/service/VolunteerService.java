@@ -1,10 +1,12 @@
 package com.forpets.be.domain.servicevolunteer.service;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
 import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,22 @@ public class VolunteerService {
         volunteer.addUser(user);
 
         return ServiceVolunteerResponseDto.from(volunteerRepository.save(volunteer));
+    }
+
+    public List<ServiceVolunteerListResponseDto> getAllVolunteers() {
+
+        return volunteerRepository.findAll().stream()
+
+            .map(volunteer -> {
+
+// Fetch associated User
+
+                User user = volunteer.getUser();
+
+                return ServiceVolunteerListResponseDto.from(volunteer, user);
+
+            })
+
+            .toList();
     }
 }
