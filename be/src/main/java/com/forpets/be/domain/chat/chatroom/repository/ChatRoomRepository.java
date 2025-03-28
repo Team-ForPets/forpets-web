@@ -3,6 +3,7 @@ package com.forpets.be.domain.chat.chatroom.repository;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.user.entity.User;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +35,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
         + "WHERE c.id = :chatRoomId AND (c.requestor.id = :userId OR c.volunteer.id = :userId)")
     boolean existsUserByRequestorAndVolunteer(@Param("chatRoomId") Long chatRoomId,
         @Param("userId") Long userId);
+
+    // 채팅방에서 필요한 연관 데이터들을 한 번에 조회
+    @Query("SELECT cr FROM ChatRoom cr "
+        + "JOIN FETCH cr.myAnimal ma "
+        + "LEFT JOIN FETCH cr.serviceVolunteer sv "
+        + "WHERE cr.id = :chatRoomId")
+    Optional<ChatRoom> findChatRoomWithDetails(@Param("chatRoomId") Long chatRoomId);
 }
