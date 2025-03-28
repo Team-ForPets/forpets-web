@@ -54,11 +54,17 @@ public class OAuth2UserInfo {
     }
 
     private static OAuth2UserInfo ofNaver(Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        String email = response.containsKey("email_address") ?
+            (String) response.get("email_address") :
+            (String) response.get("email");
+        
         return OAuth2UserInfo.builder()
             .provider("naver")
 //            .id("naver_" + (String) ((Map) attributes.get("response")).get("id"))
+            .username(email)
             // 연락처 이메일 주소라 example@naver.com 이 아닐수도 있음
-            .username((String) ((Map) attributes.get("response")).get("email"))
+//            .username((String) ((Map) attributes.get("response")).get("email"))
             // 검수 완료 후 사용(진짜 네이버 이메일 주소)
 //            .username((String) ((Map) attributes.get("response")).get("email_addressl"))
 //            .password((String) ((Map) attributes.get("response")).get("id"))
