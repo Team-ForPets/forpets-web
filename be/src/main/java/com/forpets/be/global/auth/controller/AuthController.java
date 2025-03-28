@@ -11,7 +11,7 @@ import com.forpets.be.global.auth.dto.response.SignupResponseDto;
 import com.forpets.be.global.auth.dto.response.TokenResponseDto;
 import com.forpets.be.global.auth.service.AuthService;
 import com.forpets.be.global.response.ApiResponse;
-import com.forpets.be.global.security.jwt.TokenDto;
+import com.forpets.be.global.security.jwt.TokenAndIdDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -43,11 +43,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponseDto>> login(
         @Valid @RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
-        TokenDto tokenDto = authService.login(requestDto);
+        TokenAndIdDto tokenAndIdDto = authService.login(requestDto);
 
-        TokenResponseDto tokenResponseDto = new TokenResponseDto(tokenDto.getAccessToken());
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(tokenAndIdDto.getAccessToken(),
+            tokenAndIdDto.getUserId());
 
-        String refreshToken = tokenDto.getRefreshToken();
+        String refreshToken = tokenAndIdDto.getRefreshToken();
         Cookie refreshTokenCookie = makeRefreshTokenCookie(refreshToken, MAX_AGE);
 
         response.addCookie(refreshTokenCookie);
@@ -82,11 +83,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        TokenDto tokenDto = authService.reissueToken(refreshToken);
-        String newAccessToken = tokenDto.getAccessToken();
-        TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken);
+        TokenAndIdDto tokenAndIdDto = authService.reissueToken(refreshToken);
+        String newAccessToken = tokenAndIdDto.getAccessToken();
+        Long userId = tokenAndIdDto.getUserId();
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, userId);
 
-        String reissuedRefreshToken = tokenDto.getRefreshToken();
+        String reissuedRefreshToken = tokenAndIdDto.getRefreshToken();
 
         if (reissuedRefreshToken != null) {
             Cookie reissuedRefreshtokenCookie = makeRefreshTokenCookie(reissuedRefreshToken,
