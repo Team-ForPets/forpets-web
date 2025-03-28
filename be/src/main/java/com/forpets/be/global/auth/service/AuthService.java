@@ -8,7 +8,7 @@ import com.forpets.be.global.auth.dto.request.SignupRequestDto;
 import com.forpets.be.global.auth.dto.response.SignupResponseDto;
 import com.forpets.be.global.redis.RedisRepository;
 import com.forpets.be.global.security.jwt.JwtTokenProvider;
-import com.forpets.be.global.security.jwt.TokenDto;
+import com.forpets.be.global.security.jwt.TokenAndIdDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,8 +53,11 @@ public class AuthService {
         return SignupResponseDto.from(userRepository.save(user));
     }
 
-    public TokenDto login(LoginRequestDto requestDto) {
+    public TokenAndIdDto login(LoginRequestDto requestDto) {
         String username = requestDto.getUsername();
+        Long userId = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("해당 사용자가 없습니다.")
+        ).getId();
 
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -67,7 +70,7 @@ public class AuthService {
         String refreshToken = jwtTokenProvider.createRefreshToken(username);
         redisRepository.storeRefreshToken(username, refreshToken);
 
-        return new TokenDto(accessToken, refreshToken);
+        return new TokenAndIdDto(accessToken, refreshToken, userId);
     }
 
     public void logout(String accessToken, User user) {
@@ -76,11 +79,14 @@ public class AuthService {
         redisRepository.storeBlackListToken(username, accessToken);
     }
 
-    public TokenDto reissueToken(String refreshToken) {
+    public TokenAndIdDto reissueToken(String refreshToken) {
         String newAccessToken;
         String newRefreshToken = null;
         String username = jwtTokenProvider.getUsername(refreshToken);
         String storedRefreshToken = redisRepository.getRefreshToken(username);
+        Long userId = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("해당 사용자가 없습니다.")
+        ).getId();
 
         if (refreshToken.equals(storedRefreshToken)) {
             long remainingDays = redisRepository.getTTL(username);
@@ -95,7 +101,7 @@ public class AuthService {
 
         newAccessToken = jwtTokenProvider.createAccessToken(username);
 
-        return new TokenDto(newAccessToken, newRefreshToken);
+        return new TokenAndIdDto(newAccessToken, newRefreshToken, userId);
     }
 
 
