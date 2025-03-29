@@ -11,9 +11,6 @@ function VolunteerCard({ volunteer }) {
           src={volunteer.imageUrl || '/assets/person.jpeg'}
           alt="회원 이미지"
           className="w-32 h-32 rounded-lg object-cover mb-4"
-          src={volunteer.imageUrl || '/assets/person.jpeg'}
-          alt="회원 이미지"
-          className="w-32 h-32 rounded-lg object-cover mb-4"
         />
         {/* Render volunteer information */}
         <div className="text-left">
@@ -37,4 +34,3 @@ function VolunteerCard({ volunteer }) {
 }
 
 export default VolunteerCard;
-

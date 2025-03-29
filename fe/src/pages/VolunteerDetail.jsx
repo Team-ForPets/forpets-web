@@ -23,8 +23,21 @@ function VolunteerDetail() {
     navigate('/chat/rooms', {
       state: {
         volunteerId: id,
-         },
+      },
     });
+  };
+
+  const translateAnimalType = (animalType) => {
+    switch (animalType) {
+      case 'DOG':
+        return '개';
+      case 'CAT':
+        return '고양이';
+      case 'OTHER':
+        return '기타';
+      default:
+        return animalType;
+    }
   };
 
   if (!volunteer) {
@@ -39,13 +52,13 @@ function VolunteerDetail() {
       />
 
       <div className="space-y-4">
-          <div className="flex items-center">
-            <span className="font-semibold w-24 mr-2">제목</span>
-            <span>{volunteer.title}</span>
-          </div>
-          <div className="flex items-center">
-            <span className="font-semibold w-24 mr-2">닉네임</span>
-            <span>{volunteer.user.nickName}</span>
+        <div className="flex items-center">
+          <span className="font-semibold w-24 mr-2">제목</span>
+          <span>{volunteer.title}</span>
+        </div>
+        <div className="flex items-center">
+          <span className="font-semibold w-24 mr-2">닉네임</span>
+          <span>{volunteer.user.nickName}</span>
         </div>
 
         <div className="flex items-center">
@@ -70,7 +83,7 @@ function VolunteerDetail() {
 
         <div className="flex items-center">
           <span className="font-semibold w-24 mr-2">봉사 가능 동물</span>
-          <span>{volunteer.animalType}</span>
+          <span>{translateAnimalType(volunteer.animalType)}</span>
         </div>
       </div>
 
@@ -82,8 +95,7 @@ function VolunteerDetail() {
       </div>
       <div className="flex justify-end mt-4 space-x-2">
         <button className="bg-orange-500 text-white py-2 px-4 rounded-lg">수정하기</button>
-        <button onClick={handleChatStart}
-          className="bg-orange-500 text-white py-2 px-4 rounded-lg">
+        <button onClick={handleChatStart} className="bg-orange-500 text-white py-2 px-4 rounded-lg">
           채팅하기
         </button>
       </div>
