@@ -1,7 +1,10 @@
 import React from 'react'
 import logo from '../assets/forpetsLogo.png';
+import { useNavigate } from 'react-router-dom';
 
 function AnimalCard({ animal }) {
+  const navigate = useNavigate();
+
   const {
     animalName,
     animalType,
@@ -16,8 +19,14 @@ function AnimalCard({ animal }) {
     weight,
   } = animal;
 
+  const handleOnclick = () => {
+    navigate('/animal-detail', { state: { animal } })
+  }
+
   return (
-    <li className="w-[290px] h-[400px] bg-white shadow-lg shadow-gray-300 rounded-2xl overflow-hidden relative cursor-pointer">
+    <li className="w-[290px] h-[400px] bg-white shadow-lg shadow-gray-300 rounded-2xl overflow-hidden relative cursor-pointer"
+      onClick={handleOnclick}
+    >
       <img
         src={imageUrl === null ? logo : imageUrl}
         alt="이동봉사가 필요한 아이 사진"
