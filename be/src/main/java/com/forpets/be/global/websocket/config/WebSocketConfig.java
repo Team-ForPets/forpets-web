@@ -29,7 +29,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             // 웹소켓 연결 엔드포인트 설정
             .addEndpoint("/ws/connection")
             // 웹소켓 서버에 요청 시 포페츠 도메인과 로컬 접속 요청을 허용하도록 설정 (CORS)
-            .setAllowedOrigins("http://localhost:5173", allowedOrigin);
+            .setAllowedOrigins("http://localhost:5173", allowedOrigin)
+            // 소켓을 지원하지 않는 브라우저일 경우 sock JS를 사용하도록 설정
+            .withSockJS();
     }
 
     // STOMP 메시지 브로커 설정
