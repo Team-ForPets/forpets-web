@@ -1,6 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.service;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerUpdateRequestDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
@@ -20,12 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
-
-    public static ServiceVolunteerDetailResponseDto updateVolunteer(Long id,
-        ServiceVolunteerRequestDto requestDto, User authenticatedUser) {
-
-        return null;
-    }
 
     @Transactional
     public ServiceVolunteerResponseDto createVolunteer(ServiceVolunteerRequestDto requestDto,
@@ -59,13 +54,14 @@ public class VolunteerService {
         return ServiceVolunteerDetailResponseDto.from(volunteer);
     }
 
-
     @Transactional
-    public ServiceVolunteerDetailResponseDto updateVolunteerDetails(Long id,
-        ServiceVolunteerRequestDto requestDto, User authenticatedUser) {
+    public ServiceVolunteerResponseDto updateVolunteer(Long id,
+        ServiceVolunteerUpdateRequestDto requestDto) {
 
         ServiceVolunteer volunteer = volunteerRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 봉사자가 존재하지 않습니다."));
-        return ServiceVolunteerDetailResponseDto.from(volunteer);
+        volunteer.update(requestDto);
+        return ServiceVolunteerResponseDto.from(volunteer);
     }
+
 }

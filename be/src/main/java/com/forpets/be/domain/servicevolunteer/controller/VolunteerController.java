@@ -1,6 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.controller;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerUpdateRequestDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
@@ -43,32 +44,28 @@ public class VolunteerController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
         List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
-        return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 등록글 목록 조회 성공", "OK", volunteers));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ServiceVolunteerDetailResponseDto>> getVolunteerById(
         @PathVariable Long id) {
         ServiceVolunteerDetailResponseDto volunteer = volunteerService.getVolunteerById(id);
-        return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteer));
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 등록글 개별 목록 조회 성공", "OK", volunteer));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ServiceVolunteerDetailResponseDto>> updateVolunteer(
+    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> updateVolunteer(
         @PathVariable Long id,
-        @RequestBody ServiceVolunteerRequestDto requestDto,
-        @AuthenticationPrincipal User authenticatedUser
+        @RequestBody ServiceVolunteerUpdateRequestDto requestDto
+//        @AuthenticationPrincipal User authenticatedUser
     ) {
-        // Service Layer 호출하여 수정된 데이터를 가져옴
-        ServiceVolunteerDetailResponseDto updatedVolunteer = volunteerService.updateVolunteer(id,
-            requestDto, authenticatedUser);
-
         // 성공 응답 반환
         return ResponseEntity.ok(
             ApiResponse.ok(
                 "봉사자 등록글이 수정되었습니다.",
                 "UPDATED",
-                updatedVolunteer
+                volunteerService.updateVolunteer(id, requestDto)
             )
         );
     }
