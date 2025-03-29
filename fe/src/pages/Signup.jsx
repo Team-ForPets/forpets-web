@@ -161,11 +161,11 @@ const Signup = () => {
               message={
                 validation.email
                   ? isClickEmailDuplicate
-                    ? '사용 가능 이메일'
+                    ? '사용 가능한 이메일입니다.'
                     : '이메일 형식이 올바릅니다.'
                   : isClickEmailDuplicate
-                    ? '이미 사용 중인 이메일입니다.'
-                    : '이메일 형식이 올바르지 않습니다.'
+                    ? '이메일 형식이 올바르지 않습니다.'
+                    : '이미 사용 중인 이메일입니다'
               }
               isValid={validation.email}
             />
@@ -197,7 +197,7 @@ const Signup = () => {
                     ? isSendAuthCode // 검증일때
                       ? '인증 코드 검증에 성공했습니다.'
                       : '인증 코드 검증에 실패했습니다.'
-                    : isSendAuthCode // 전송일떼
+                    : isSendAuthCode // 전송일때
                       ? '인증 코드 전송에 성공했습니다.'
                       : '인증 코드 전송에 실패했습니다.'
                 }
@@ -311,7 +311,7 @@ const Input = ({ type, name, value, placeholder, onChange, className }) => {
 
 const ValidationMessage = ({ message, isValid }) => {
   return (
-    <p className={twMerge('text-[12px] mt-1', isValid ? 'text-primary' : 'text-red-600')}>
+    <p className={twMerge('text-[12px] mt-1', isValid ? 'text-cyan-500' : 'text-red-600')}>
       {message}
     </p>
   );
@@ -324,7 +324,7 @@ const Button = ({ text, onClick, disabled }) => {
       disabled={disabled}
       onClick={onClick}
       // TODO : hover:bg-amber-500 hover:border-amber-600 필요여부 확인
-      className="border text-white border-amber-500 rounded px-1 py-0.5 bg-amber-500 hover:border-2 disabled:bg-gray-200 cursor-pointer whitespace-nowrap"
+      className="border text-white border-amber-500 rounded px-1 py-0.5 bg-amber-500 hover:border-2 disabled:bg-amber-500 cursor-pointer whitespace-nowrap"
     >
       {text}
     </button>
