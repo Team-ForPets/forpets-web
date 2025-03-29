@@ -1,6 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.controller;
 
 import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerRequestDto;
+import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerUpdateRequestDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerDetailResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,15 +44,30 @@ public class VolunteerController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<ServiceVolunteerListResponseDto>>> getVolunteer() {
         List<ServiceVolunteerListResponseDto> volunteers = volunteerService.getAllVolunteers();
-        return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteers));
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 등록글 목록 조회 성공", "OK", volunteers));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ServiceVolunteerDetailResponseDto>> getVolunteerById(
         @PathVariable Long id) {
         ServiceVolunteerDetailResponseDto volunteer = volunteerService.getVolunteerById(id);
-        return ResponseEntity.ok(ApiResponse.ok("봉사자 목록 조회 성공", "OK", volunteer));
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 등록글 개별 목록 조회 성공", "OK", volunteer));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ServiceVolunteerResponseDto>> updateVolunteer(
+        @PathVariable Long id,
+        @RequestBody ServiceVolunteerUpdateRequestDto requestDto
+//        @AuthenticationPrincipal User authenticatedUser
+    ) {
+        // 성공 응답 반환
+        return ResponseEntity.ok(
+            ApiResponse.ok(
+                "봉사자 등록글이 수정되었습니다.",
+                "UPDATED",
+                volunteerService.updateVolunteer(id, requestDto)
+            )
+        );
+    }
 
 }
