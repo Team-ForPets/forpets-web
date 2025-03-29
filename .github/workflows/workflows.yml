@@ -22,7 +22,7 @@ jobs:
           restore-keys: docker-cache-
 
       - name: Create .env file
-        run: echo """${{ secrets.ENV_FILE }}""" >> .env
+        run: echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
 
       - name: echo .env
         run: cat .env
@@ -53,8 +53,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: 'docker-compose.yml,.env'
-          target: '~/github-actions-work-directory'
+          source: "docker-compose.yml,.env"
+          target: "~/github-actions-work-directory"
 
       - name: Pull Image & Up Container
         uses: appleboy/ssh-action@v1.0.3
