@@ -40,6 +40,11 @@ public class ChatMessage extends BaseTimeEntity {
         this.content = content;
     }
 
+    // ChatRoom을 설정하는 연관관계 편의 메서드
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
+    }
+
     public void updateContent(String content) {
         this.content = content;
     }

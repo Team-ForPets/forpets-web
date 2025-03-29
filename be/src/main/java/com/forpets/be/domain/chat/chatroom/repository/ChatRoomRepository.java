@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    // 나의 아이 등록글과 봉사 등록글 id를 확인하고 특정 게시글에서 시작된 채팅방이 이미 존재하는지 조회
+    // 나의 아이 등록글과 봉사 등록글 id를 확인하고 특정 게시글에서 시작된 채팅방이 이미 존재하는지 확인
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END "
         + "FROM ChatRoom c "
         + "WHERE c.requestor = :requestor AND c.volunteer = :volunteer "

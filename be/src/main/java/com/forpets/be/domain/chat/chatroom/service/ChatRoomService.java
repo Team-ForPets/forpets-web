@@ -121,7 +121,7 @@ public class ChatRoomService {
         return VolunteerChatRoomsListResponseDto.from(chatRooms, total);
     }
 
-    // 채팅방 개별 조회
+    // 채팅방 상세 조회
     public ChatRoomDetailResponseDto getChatRoomById(Long chatRoomId) {
         // 채팅방 정보 로드
         ChatRoom chatRoom = chatRoomRepository.findChatRoomWithDetails(chatRoomId)
@@ -174,7 +174,7 @@ public class ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방을 찾을 수 없습니다."));
 
-        // 그 채팅방에 존재하는 참여자(요청자 또는 봉사자)만 채팅방 상태를 수정할 수 있도록 검증
+        // 채팅방에 존재하는 참여자(요청자 또는 봉사자)만 채팅방 상태를 수정할 수 있도록 검증
         if (!chatRoomRepository.existsUserByRequestorAndVolunteer(chatRoomId, user.getId())) {
             throw new IllegalArgumentException("해당 채팅방의 참여자만 방 상태 수정이 가능합니다.");
         }
@@ -183,5 +183,27 @@ public class ChatRoomService {
         chatRoom.updateState(requestRecord.state());
 
         return ChatRoomResponseDto.from(chatRoom);
+    }
+
+    // 채팅방 삭제
+    @Transactional
+    public void deleteChatRoom(Long chatRoomId, User user) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 채팅방을 찾을 수 없습니다."));
+
+        if (chatRoom.getRequestor().getId().equals(user.getId())) {
+            // 채팅방을 나가는 참여자가 이동봉사 요청자인경우, 요청자 퇴장 처리
+            chatRoom.setIsRequestorLeft(true);
+        } else if (chatRoom.getVolunteer().getId().equals(user.getId())) {
+            // 채팅방을 나가는 참여자가 봉사자인 경우, 봉사자 퇴장 처리
+            chatRoom.setIsVolunteerLeft(true);
+        } else {
+            throw new IllegalArgumentException("채팅방 참여자가 아닙니다.");
+        }
+
+        // 채팅방에서 참여자가 모두 나갔을 경우 삭제되도록 로직 추가
+        if (chatRoom.getIsRequestorLeft() && chatRoom.getIsVolunteerLeft()) {
+            chatRoomRepository.delete(chatRoom);
+        }
     }
 }
