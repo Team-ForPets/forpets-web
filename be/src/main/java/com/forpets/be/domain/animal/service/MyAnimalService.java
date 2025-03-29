@@ -25,7 +25,8 @@ public class MyAnimalService {
     }
 
     public AnimalsResponseDto getAnimals() {
-        List<MyAnimalReadResponseDto> animals = myAnimalRepository.findAll().stream()
+        List<MyAnimalReadResponseDto> animals = myAnimalRepository.findAllOrderByCreatedAtDesc()
+            .stream()
             .map(MyAnimalReadResponseDto::from).toList();
         Integer total = animals.size();
 
