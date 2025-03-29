@@ -31,6 +31,12 @@ function RegisterAnimal() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
+    // 비로그인 접근 제한
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/login');
+    }
+
     const today = new Date().toISOString().slice(0, 10);
     setFormData((prev) => ({ ...prev, selectedDate: today }));
     setFormData((prev) => ({ ...prev, imageUrl: logo }));
@@ -84,6 +90,7 @@ function RegisterAnimal() {
     }
   };
 
+  console.log(formData);
   return (
     <>
       <nav className="flex justify-end gap-3 text-[#847D7D] mb-3">
@@ -92,7 +99,7 @@ function RegisterAnimal() {
         <nav>이동 봉사요청 글 등록</nav>
       </nav>
       <form>
-        <section className="flex flex-col border-2 rounded-xl border-gray p-10 h-[70vh]">
+        <section className="flex flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
           <section className="flex gap-10">
             <label
               htmlFor="imageInput"
@@ -112,13 +119,14 @@ function RegisterAnimal() {
                 onChange={handleImageChange}
               />
             </label>
-            <section className="flex flex-col w-[50%] h-[35vh] gap-2 text-center">
+            <section className="flex flex-col w-[52%] h-[35vh] gap-2 text-center">
               <section className="flex flex-1 justify-between items-center gap-2">
                 <input
                   type="date"
                   name="selectedDate"
                   value={formData.selectedDate}
                   onChange={handleInput}
+                  onClick={(e) => e.target.showPicker()}
                   className="flex-1 border-1 rounded-xl p-2 border-gray"
                   required
                 ></input>
@@ -157,6 +165,8 @@ function RegisterAnimal() {
                 name="animalName"
                 className="flex flex-1 items-center justify-center border-1 rounded-xl border-gray text-center placeholder-black"
                 placeholder="이름"
+                minLength="1"
+                maxLength="10"
                 value={formData.animalName}
                 onChange={handleInput}
                 required
@@ -166,23 +176,27 @@ function RegisterAnimal() {
                 name="breed"
                 className="flex flex-1 items-center justify-center border-1 rounded-xl border-gray text-center placeholder-black"
                 placeholder="품종"
+                minLength="1"
+                maxLength="10"
                 value={formData.breed}
                 onChange={handleInput}
                 required
               />
               <input
-                type="text"
+                type="number"
                 name="age"
-                className="flex flex-1 items-center justify-center border-1 rounded-xl border-gray text-center placeholder-black"
+                className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
+                [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                 placeholder="나이"
                 value={formData.age}
                 onChange={handleInput}
                 required
               />
               <input
-                type="text"
+                type="number"
                 name="weight"
-                className="flex flex-1 items-center justify-center border-1 rounded-xl border-gray text-center placeholder-black"
+                className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
+                [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                 placeholder="체중"
                 value={formData.weight}
                 onChange={handleInput}
@@ -190,7 +204,7 @@ function RegisterAnimal() {
             </section>
           </section>
 
-          <input
+          <textarea
             type="text"
             name="notice"
             className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
@@ -198,7 +212,7 @@ function RegisterAnimal() {
             value={formData.notice}
             onChange={handleInput}
           />
-          <input
+          <textarea
             type="text"
             name="memo"
             className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
@@ -207,12 +221,17 @@ function RegisterAnimal() {
             onChange={handleInput}
           />
 
-          <section className="flex justify-between mt-auto">
-            <button className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover">
-              공개
+          <section className="flex justify-between mt-5">
+            <button
+              name="isOpen"
+              type="button"
+              className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
+              onClick={() => setFormData((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
+            >
+              {formData.isOpen ? '비공개' : '공개'}
             </button>
             <button
-              // type='button'
+              type="button"
               className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
               onClick={showModal}
             >
