@@ -6,6 +6,7 @@ import com.forpets.be.domain.animal.repository.MyAnimalRepository;
 import com.forpets.be.domain.chat.chatmessage.dto.response.ChatMessageResponseDto;
 import com.forpets.be.domain.chat.chatmessage.repository.ChatMessageRepository;
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
+import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomUpdateRequestRecord;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomDetailResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsListResponseDto;
@@ -164,5 +165,23 @@ public class ChatRoomService {
             .updatedAt(chatRoom.getUpdatedAt())
             .chatMessages(chatMessages)
             .build();
+    }
+
+    // 채팅방 수정
+    @Transactional
+    public ChatRoomResponseDto updateChatRoom(Long chatRoomId,
+        ChatRoomUpdateRequestRecord requestRecord, User user) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 채팅방을 찾을 수 없습니다."));
+
+        // 그 채팅방에 존재하는 참여자(요청자 또는 봉사자)만 채팅방 상태를 수정할 수 있도록 검증
+        if (!chatRoomRepository.existsUserByRequestorAndVolunteer(chatRoomId, user.getId())) {
+            throw new IllegalArgumentException("해당 채팅방의 참여자만 방 상태 수정이 가능합니다.");
+        }
+
+        // 약속 잡기를 통한 매칭 확정, 약속 취소를 통한 매칭 취소, 이동 완료를 통한 매칭 종료 상태를 업데이트
+        chatRoom.updateState(requestRecord.state());
+
+        return ChatRoomResponseDto.from(chatRoom);
     }
 }

@@ -1,6 +1,7 @@
 package com.forpets.be.domain.chat.chatroom.controller;
 
 import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomRequestDto;
+import com.forpets.be.domain.chat.chatroom.dto.request.ChatRoomUpdateRequestRecord;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomDetailResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.ChatRoomResponseDto;
 import com.forpets.be.domain.chat.chatroom.dto.response.RequestorChatRoomsListResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,5 +61,15 @@ public class ChatRoomController {
         @PathVariable Long chatRoomId) {
         return ResponseEntity.ok(ApiResponse.ok(chatRoomId + "번 채팅방이 조회되었습니다.", "OK",
             chatRoomService.getChatRoomById(chatRoomId)));
+    }
+
+    // 채팅방 수정
+    @PatchMapping("/{chatRoomId}")
+    public ResponseEntity<ApiResponse<ChatRoomResponseDto>> updateChatRoom(
+        @PathVariable Long chatRoomId,
+        @RequestBody @Valid ChatRoomUpdateRequestRecord requestRecord,
+        @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.ok(chatRoomId + "번 채팅방이 수정되었습니다.", "OK",
+            chatRoomService.updateChatRoom(chatRoomId, requestRecord, user)));
     }
 }
