@@ -3,6 +3,7 @@ import React from 'react';
 function ChatUserCard({ chatRoom, activeBtn, onClick }) {
   const { id, arrivalArea, departureArea, createdAt, requestorNickname, volunteerNickname } =
     chatRoom;
+  console.log(chatRoom);
 
   return (
     <li

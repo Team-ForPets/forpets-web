@@ -27,7 +27,7 @@ function AnimalInfoModal({ myAnimal, onClose }) {
         <div className="mt-4 p-4 bg-[#F5F5F5] rounded-lg">
           <p className="font-semibold">🚗 이동 경로</p>
           <p className="text-sm text-gray-600">
-            {myAnimal.departureArea} → {myAnimal.arrivalArea}
+            {myAnimal.arrivalArea} → {myAnimal.departureArea}
           </p>
           <p className="font-semibold mt-3">🗒️ 특이사항</p>
           <p className="text-sm text-gray-600">{myAnimal.notice}</p>
