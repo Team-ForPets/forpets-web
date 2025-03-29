@@ -57,4 +57,11 @@ public class ChatRoom extends BaseTimeEntity {
         this.volunteer = volunteer;
         this.state = RoomState.getDefault();
     }
+
+    // 채팅방 상태 업데이트
+    public ChatRoom updateState(RoomState state) {
+        this.state = state;
+
+        return this;
+    }
 }

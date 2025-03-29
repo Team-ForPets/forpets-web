@@ -40,7 +40,7 @@ public class MyAnimalCreateRequestDto {
     @Size(min = 2, max = 10, message = "품종은 2자 이상 10자 이하여야 합니다")
     private String breed;
 
-    @Positive
+    //    @Positive
     @Range(min = 0, max = 25)
     private Integer age;
 
