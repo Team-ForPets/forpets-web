@@ -26,10 +26,21 @@ api.interceptors.request.use(
   },
 );
 
+let lastErrorTime = 0;
+const ERROR_DELAY = 2000; // 2초
+
 // 응답 인터셉터
 api.interceptors.response.use(
   (response) => response, // 응답이 성공적일 경우 그대로 반환
   async (error) => {
+    const now = Date.now();
+
+    if (now - lastErrorTime < ERROR_DELAY) {
+      console.warn("서버 오류 발생 후 재요청 제한 시간 내입니다.");
+      return Promise.reject(new Error("요청이 일시적으로 차단되었습니다."));
+    }
+    lastErrorTime = now;
+
     const originalRequest = error.config; // 실패한 요청 정보
 
     if (error.response.status === 401) {
@@ -37,7 +48,6 @@ api.interceptors.response.use(
       try {
         // 1. 토큰 재발급 요청
         const response = await authApi.reissue();
-
         const accessToken = response.data.data.accessToken;
 
         // 2. 토큰 갱신
@@ -58,5 +68,38 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+// // 응답 인터셉터
+// api.interceptors.response.use(
+//   (response) => response, // 응답이 성공적일 경우 그대로 반환
+//   async (error) => {
+//     const originalRequest = error.config; // 실패한 요청 정보
+
+//     if (error.response.status === 401) {
+//       // 401: 토큰 만료
+//       try {
+//         // 1. 토큰 재발급 요청
+//         const response = await authApi.reissue();
+
+//         const accessToken = response.data.data.accessToken;
+
+//         // 2. 토큰 갱신
+//         store.dispatch(updateTokens({ accessToken }));
+//         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+//         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`; // 원래 요청에도 반영
+
+//         // 3. 갱신된 토큰으로 원래 요청 재시도
+//         return axios(originalRequest);
+//       } catch (refreshError) {
+//         // 4. 재발급 실패 시 로그아웃
+//         store.dispatch(logout());
+//         return Promise.reject(refreshError);
+//       }
+//     }
+
+//     // 5. 다른 에러는 그대로 반환
+//     return Promise.reject(error);
+//   },
+// );
 
 export default api;
