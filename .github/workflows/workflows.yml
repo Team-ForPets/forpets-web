@@ -22,11 +22,7 @@ jobs:
           restore-keys: docker-cache-
 
       - name: Create .env file
-<<<<<<< Updated upstream
-        run: echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
-=======
         run: echo """${{ secrets.ENV_FILE }}""" > .env
->>>>>>> Stashed changes
 
       - name: echo .env
         run: cat .env
