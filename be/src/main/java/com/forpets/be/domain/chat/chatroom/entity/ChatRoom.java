@@ -8,8 +8,6 @@ import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -52,10 +50,6 @@ public class ChatRoom extends BaseTimeEntity {
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RoomState state;
-
     @Column(nullable = false)
     private Boolean isRequestorLeft;
 
@@ -69,7 +63,6 @@ public class ChatRoom extends BaseTimeEntity {
         this.serviceVolunteer = serviceVolunteer;
         this.requestor = requestor;
         this.volunteer = volunteer;
-        this.state = RoomState.getDefault();
         this.isRequestorLeft = false;
         this.isVolunteerLeft = false;
     }
@@ -78,13 +71,6 @@ public class ChatRoom extends BaseTimeEntity {
     public void addChatMessage(ChatMessage chatMessage) {
         chatMessages.add(chatMessage);
         chatMessage.setChatRoom(this);
-    }
-
-    // 채팅방 상태 업데이트
-    public ChatRoom updateState(RoomState state) {
-        this.state = state;
-
-        return this;
     }
 
     // 요청자가 채팅방에서 나갔는지 설정
