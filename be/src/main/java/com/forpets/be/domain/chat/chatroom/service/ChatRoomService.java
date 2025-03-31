@@ -116,8 +116,12 @@ public class ChatRoomService {
 
     // 내가 봉사자로 속한 채팅방 전체 조회
     public VolunteerChatRoomsListResponseDto getVolunteerChatRooms(Long volunteerId) {
+        User user = userRepository.findById(volunteerId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 봉사자(사용자)를 찾을 수 없습니다."));
+
         List<VolunteerChatRoomsResponseDto> chatRooms = chatRoomRepository.findAllByVolunteerId(
-            volunteerId).stream().map(VolunteerChatRoomsResponseDto::from).toList();
+                volunteerId).stream().filter(chatRoom -> !chatRoom.isVolunteerLeft())
+            .map(VolunteerChatRoomsResponseDto::from).toList();
 
         Integer total = chatRooms.size();
 
