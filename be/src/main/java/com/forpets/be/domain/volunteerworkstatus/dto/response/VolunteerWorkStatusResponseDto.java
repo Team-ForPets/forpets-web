@@ -1,0 +1,41 @@
+package com.forpets.be.domain.volunteerworkstatus.dto.response;
+
+import com.forpets.be.domain.animal.entity.MyAnimal;
+import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerWorkStatus;
+import com.forpets.be.domain.volunteerworkstatus.entity.WorkState;
+import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class VolunteerWorkStatusResponseDto {
+
+    private final Long id;
+    private final String imageUrl;
+    private final String animalName;
+    private final String requestorNickname;
+    private final String volunteerNickname;
+    private final String departureArea;
+    private final String arrivalArea;
+    private final WorkState state;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+
+    public static VolunteerWorkStatusResponseDto from(VolunteerWorkStatus volunteerWorkStatus,
+        MyAnimal myAnimal, User requestor, User volunteer) {
+        return VolunteerWorkStatusResponseDto.builder()
+            .id(volunteerWorkStatus.getId())
+            .imageUrl(myAnimal.getImageUrl())
+            .animalName(myAnimal.getAnimalName())
+            .requestorNickname(requestor.getNickname())
+            .volunteerNickname(volunteer.getNickname())
+            .departureArea(myAnimal.getDepartureArea())
+            .arrivalArea(myAnimal.getArrivalArea())
+            .state(volunteerWorkStatus.getState())
+            .createdAt(volunteerWorkStatus.getCreatedAt())
+            .updatedAt(volunteerWorkStatus.getUpdatedAt())
+            .build();
+    }
+}
