@@ -1,7 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.dto.request;
 
 import com.forpets.be.domain.servicevolunteer.dto.response.ServiceVolunteerListResponseDto;
-import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
+import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.entity.User;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public class ServiceVolunteerListRequestDto {
     private Long id;
 
 
-    public static ServiceVolunteerListResponseDto from(ServiceVolunteer entity, User user) {
+    public static ServiceVolunteerListResponseDto from(VolunteerWork entity, User user) {
 
         return ServiceVolunteerListResponseDto.builder()
 

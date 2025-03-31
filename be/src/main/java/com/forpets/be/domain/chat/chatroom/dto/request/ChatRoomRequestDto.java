@@ -13,5 +13,5 @@ public class ChatRoomRequestDto {
     @NotNull
     private Long myAnimalId;
 
-    private Long serviceVolunteerId;
+    private Long volunteerWorkId;
 }

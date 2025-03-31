@@ -14,7 +14,7 @@ import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsListRe
 import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsResponseDto;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
-import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
+import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
@@ -39,14 +39,14 @@ public class ChatRoomService {
     // 채팅방 생성
     @Transactional
     public ChatRoomResponseDto createChatRoom(ChatRoomRequestDto requestDto, User user) {
-        ServiceVolunteer serviceVolunteer = null;
+        VolunteerWork volunteerWork = null;
         User requestor = null;
         User volunteer = null;
 
         MyAnimal myAnimal = myAnimalRepository.findById(requestDto.getMyAnimalId())
             .orElseThrow(() -> new IllegalArgumentException("해당 나의 아이 등록글이 존재하지 않습니다."));
 
-        if (requestDto.getServiceVolunteerId() == null) {
+        if (requestDto.getVolunteerWorkId() == null) {
             // 나의 아이 등록글에서 채팅이 시작된 경우
 
             log.info("ChatRoomService- myAnimal: {}", myAnimal.getUser());
@@ -65,17 +65,17 @@ public class ChatRoomService {
         } else {
             // 봉사글에서 채팅이 시작된 경우
 
-            serviceVolunteer = volunteerRepository.findById(
-                    requestDto.getServiceVolunteerId())
+            volunteerWork = volunteerRepository.findById(
+                    requestDto.getVolunteerWorkId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 봉사 등록글이 존재하지 않습니다."));
 
-            log.info("ChatRoomService- serviceVolunteer: {}", serviceVolunteer.getUser());
+            log.info("ChatRoomService- volunteerWork: {}", volunteerWork.getUser());
 
             // 요청자는 로그인한 사용자
             requestor = user;
 
             // 봉사자는 봉사글의 user_id를 통해 정보를 가져옴
-            volunteer = userRepository.findById(serviceVolunteer.getUser().getId())
+            volunteer = userRepository.findById(volunteerWork.getUser().getId())
                 .orElseThrow(() -> new IllegalArgumentException("봉사자 정보를 찾을 수 없습니다."));
 
             // 요청자와 봉사자가 동일한지 확인하고 예외 처리
@@ -86,13 +86,13 @@ public class ChatRoomService {
 
         // 나의 아이 등록글과 봉사 등록글 id를 확인하여 특정 게시글에서 시작된 채팅방이 이미 존재하는지 확인
         if (chatRoomRepository.existsRoomByRequestorAndVolunteerAndPost(requestor, volunteer,
-            requestDto.getMyAnimalId(), requestDto.getServiceVolunteerId())) {
+            requestDto.getMyAnimalId(), requestDto.getVolunteerWorkId())) {
             throw new IllegalStateException("이미 해당 게시글로 생성된 채팅방이 존재합니다.");
         }
 
         ChatRoom chatRoom = ChatRoom.builder()
             .myAnimal(myAnimal)
-            .serviceVolunteer(serviceVolunteer)
+            .volunteerWork(volunteerWork)
             .requestor(requestor)
             .volunteer(volunteer)
             .build();
@@ -129,20 +129,20 @@ public class ChatRoomService {
         // 닉네임 결정
         // 봉사 등록글이 null => 나의 아이 등록글을 통해 시작된 채팅인 경우 => 요청자 : 나의 아이 등록글 작성자(상대방), 봉사자 : 로그인한 사용자(나) 처리
         // 봉사 등록글이 not null => 봉사 등록글을 통해 시작된 채팅인 경우 => 요청자 : 로그인한 사용자(나), 봉사자 : 봉사 등록글 작성자(상대방) 처리
-        String nickname = (chatRoom.getServiceVolunteer() == null)
+        String nickname = (chatRoom.getVolunteerWork() == null)
             ? chatRoom.getRequestor().getNickname()
             : chatRoom.getVolunteer().getNickname();
 
         // 출발지/도착지 결정
         // 봉사 등록글이 null => 나의 아이 등록글을 통해 시작된 채팅인 경우 => 출발 요청 지역, 도착 요청 지역 처리
         // 봉사 등록글이 not null => 봉사 등록글을 통해 시작된 채팅인 경우 => 출발 가능 지역, 도착 가능 지역 처리
-        String departureArea = (chatRoom.getServiceVolunteer() == null)
+        String departureArea = (chatRoom.getVolunteerWork() == null)
             ? chatRoom.getMyAnimal().getDepartureArea()
-            : chatRoom.getServiceVolunteer().getDepartureArea();
+            : chatRoom.getVolunteerWork().getDepartureArea();
 
-        String arrivalArea = (chatRoom.getServiceVolunteer() == null)
+        String arrivalArea = (chatRoom.getVolunteerWork() == null)
             ? chatRoom.getMyAnimal().getArrivalArea()
-            : chatRoom.getServiceVolunteer().getArrivalArea();
+            : chatRoom.getVolunteerWork().getArrivalArea();
 
         // 나의 아이 등록글의 정보 조회
         MyAnimalReadResponseDto responseDto = MyAnimalReadResponseDto.from(chatRoom.getMyAnimal());

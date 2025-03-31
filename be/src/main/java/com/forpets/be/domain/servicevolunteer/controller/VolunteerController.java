@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +69,12 @@ public class VolunteerController {
                 volunteerService.updateVolunteer(id, requestDto)
             )
         );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteVolunteer(@PathVariable Long id) {
+        volunteerService.deleteVolunteer(id);
+        return ResponseEntity.ok(ApiResponse.ok("봉사자 등록글이 삭제되었습니다.", "DELETED", null));
     }
 
 }

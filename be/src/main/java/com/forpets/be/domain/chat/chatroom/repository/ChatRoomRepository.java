@@ -14,12 +14,12 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END "
         + "FROM ChatRoom c "
         + "WHERE c.requestor = :requestor AND c.volunteer = :volunteer "
-        + "AND (c.myAnimal.id = :myAnimalId OR c.serviceVolunteer.id = :serviceVolunteerId)")
+        + "AND (c.myAnimal.id = :myAnimalId OR c.volunteerWork.id = :volunteerWorkId)")
     boolean existsRoomByRequestorAndVolunteerAndPost(
         @Param("requestor") User requestor,
         @Param("volunteer") User volunteer,
         @Param("myAnimalId") Long myAnimalId,
-        @Param("serviceVolunteerId") Long serviceVolunteerId);
+        @Param("volunteerWorkId") Long volunteerWorkId);
 
     // 내가 요청자로 속한 채팅방 전체 조회
     @Query("SELECT c FROM ChatRoom c "
@@ -43,7 +43,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     // 채팅방에서 필요한 연관 데이터들을 한 번에 조회
     @Query("SELECT cr FROM ChatRoom cr "
         + "JOIN FETCH cr.myAnimal ma "
-        + "LEFT JOIN FETCH cr.serviceVolunteer sv "
+        + "LEFT JOIN FETCH cr.volunteerWork v "
         + "WHERE cr.id = :chatRoomId")
     Optional<ChatRoom> findChatRoomWithDetails(@Param("chatRoomId") Long chatRoomId);
 }
