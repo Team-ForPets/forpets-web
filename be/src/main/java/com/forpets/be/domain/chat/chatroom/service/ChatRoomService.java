@@ -129,10 +129,25 @@ public class ChatRoomService {
     }
 
     // 채팅방 상세 조회
-    public ChatRoomDetailResponseDto getChatRoomById(Long chatRoomId) {
+    public ChatRoomDetailResponseDto getChatRoomById(Long chatRoomId, User user) {
         // 채팅방 정보 로드
         ChatRoom chatRoom = chatRoomRepository.findChatRoomWithDetails(chatRoomId)
             .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
+
+        // 로그인한 사용자가 채팅방의 참여자가 아니라면 상세 조회하지 못하도록 검증 추가
+        if (!chatRoom.getRequestor().getId().equals(user.getId()) && !chatRoom.getVolunteer()
+            .getId().equals(user.getId())) {
+            throw new IllegalArgumentException("해당 사용자는 채팅방 참여자가 아닙니다.");
+        }
+
+        // 퇴장한 사용자가 상세 조회하지 못하도록 검증 로직 추가
+        if (chatRoom.getRequestor().getId().equals(user.getId()) && chatRoom.isRequestorLeft()) {
+            throw new IllegalArgumentException("이미 퇴장한 요청자(사용자)는 채팅방을 조회할 수 없습니다.");
+        }
+
+        if (chatRoom.getVolunteer().getId().equals(user.getId()) && chatRoom.isVolunteerLeft()) {
+            throw new IllegalArgumentException("이미 퇴장한 봉사자(사용자)는 채팅방을 조회할 수 없습니다.");
+        }
 
         // 닉네임 결정
         // 봉사 등록글이 null => 나의 아이 등록글을 통해 시작된 채팅인 경우 => 요청자 : 나의 아이 등록글 작성자(상대방), 봉사자 : 로그인한 사용자(나) 처리
