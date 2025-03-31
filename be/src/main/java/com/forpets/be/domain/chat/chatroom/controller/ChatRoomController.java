@@ -11,9 +11,9 @@ import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +34,8 @@ public class ChatRoomController {
     @PostMapping
     public ResponseEntity<ApiResponse<ChatRoomResponseDto>> createChatRoom(
         @RequestBody @Valid ChatRoomRequestDto requestDto, @AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            ApiResponse.ok("채팅방이 생성되었습니다.", "CREATED",
-                chatRoomService.createChatRoom(requestDto, user)));
+        return ResponseEntity.ok(ApiResponse.ok("채팅방이 생성되었습니다.", "CREATED",
+            chatRoomService.createChatRoom(requestDto, user)));
     }
 
     // 내가 요청자로 속한 채팅방 전체 조회
@@ -55,7 +54,7 @@ public class ChatRoomController {
             chatRoomService.getVolunteerChatRooms(volunteerId)));
     }
 
-    // 채팅방 개별 조회
+    // 채팅방 상세 조회
     @GetMapping("/{chatRoomId}")
     public ResponseEntity<ApiResponse<ChatRoomDetailResponseDto>> getChatRoom(
         @PathVariable Long chatRoomId) {
@@ -69,7 +68,17 @@ public class ChatRoomController {
         @PathVariable Long chatRoomId,
         @RequestBody @Valid ChatRoomUpdateRequestRecord requestRecord,
         @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(ApiResponse.ok(chatRoomId + "번 채팅방이 수정되었습니다.", "OK",
+        return ResponseEntity.ok(ApiResponse.ok(chatRoomId + "번 채팅방이 수정되었습니다.", "UPDATED",
             chatRoomService.updateChatRoom(chatRoomId, requestRecord, user)));
+    }
+
+    // 채팅방 삭제
+    @DeleteMapping("/{chatRoomId}")
+    public ResponseEntity<ApiResponse<Void>> deleteChatRoom(@PathVariable Long chatRoomId,
+        @AuthenticationPrincipal User user) {
+        chatRoomService.deleteChatRoom(chatRoomId, user);
+
+        return ResponseEntity.ok(
+            ApiResponse.ok(chatRoomId + "번 채팅방에서 퇴장했습니다.", "DELETED", null));
     }
 }

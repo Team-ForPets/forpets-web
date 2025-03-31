@@ -13,7 +13,7 @@ function MainAnimalCard({ animal }) {
       <ul className="text-[12px]">
         <li>출발지: {departureArea}</li>
         <li>도착지: {arrivalArea}</li>
-        <li>품종: {animalType === 'DOG' ? '개' : animalType === 'CAT' ? '고양이' : '기타'}</li>
+        <li>동물유형: {animalType === 'DOG' ? '개' : animalType === 'CAT' ? '고양이' : '기타'}</li>
         <li>체중: {weight}kg</li>
       </ul>
     </li>

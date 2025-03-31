@@ -28,6 +28,8 @@ public class ChatMessageService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
 
+        log.info("Sender ID- test1: {}", requestDto.getSenderId());
+
         User user = userRepository.findById(requestDto.getSenderId())
             .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
@@ -37,6 +39,10 @@ public class ChatMessageService {
         if (!chatRoomRepository.existsUserByRequestorAndVolunteer(chatRoomId, user.getId())) {
             // 채팅방 입장 사용자의 닉네임을 표시하도록 내용 업데이트
             editMessage.updateContent(user.getNickname() + "님이 채팅방에 입장하셨습니다.");
+
+            // 연관관계 설정 (chatRoom에 채팅 메시지 추가)
+            chatRoom.addChatMessage(editMessage);
+
             chatMessageRepository.save(editMessage);
         }
 
@@ -54,6 +60,9 @@ public class ChatMessageService {
 
         ChatMessage chatMessage = requestDto.toEntity(chatRoom);
 
+        // 연관관계 설정 (chatRoom에 채팅 메시지 추가)
+        chatRoom.addChatMessage(chatMessage);
+
         return chatMessageRepository.save(chatMessage);
     }
 
@@ -63,7 +72,7 @@ public class ChatMessageService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
             .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
 
-        log.info("Sender ID: {}", requestDto.getSenderId());
+        log.info("Sender ID- test2: {}", requestDto.getSenderId());
 
         User user = userRepository.findById(requestDto.getSenderId())
             .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
@@ -74,6 +83,10 @@ public class ChatMessageService {
         if (chatRoomRepository.existsUserByRequestorAndVolunteer(chatRoomId, user.getId())) {
             // 채팅방 퇴장 사용자의 닉네임을 표시하도록 내용 업데이트
             editMessage.updateContent(user.getNickname() + "님이 채팅방에서 퇴장하셨습니다.");
+
+            // 연관관계 설정 (chatRoom에 채팅 메시지 추가)
+            chatRoom.addChatMessage(editMessage);
+
             chatMessageRepository.save(editMessage);
         }
 

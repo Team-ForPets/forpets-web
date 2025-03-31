@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
+    "@stomp/stompjs": "^7.1.0",
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.4",
     "react": "^19.0.0",
@@ -20,6 +21,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.4.0",
     "tailwind-merge": "^3.0.2",
+    "sockjs-client": "^1.6.1",
     "tailwindcss": "^4.0.14"
   },
   "devDependencies": {

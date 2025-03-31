@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    global: 'window', // ✅ global을 window로 설정
+  },
   // server:{
   //     proxy: {
   //     '/api': {
