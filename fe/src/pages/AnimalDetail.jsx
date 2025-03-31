@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import logo from '../assets/forpetsLogo.png';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import Modal from 'react-modal';
 import animalsApi from '../api/animalsApi';
-
+import chatApi from '../api/chatApi';
 Modal.setAppElement('#root');
 
 function AnimalDetail() {
+  const requestorId = parseInt(useSelector((state) => state.auth.user.id)); // userId 가져오기
   const postcodeScriptUrl = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
   const open = useDaumPostcodePopup(postcodeScriptUrl);
   const location = useLocation();
+  const navigate = useNavigate();
   const { animal } = location.state; // 넘어온 state에서 animal 꺼내기
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [formData, setFormData] = useState({ ...animal, isOpen: false });
@@ -62,7 +65,21 @@ function AnimalDetail() {
       console.log(e);
     }
   };
+  console.log(animal.id);
 
+  // 채팅방 생성
+  const handleCreateChatRoom = async (e) => {
+    e.preventDefault();
+    const requestData = { myAnimalId: animal.id };
+    console.log(requestData);
+    try {
+      const response = await chatApi.createChatRoom(requestData);
+      console.log(response);
+      navigate('/chat');
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <div>
       <nav className="flex justify-end gap-3 text-[#847D7D] mb-3">
@@ -123,7 +140,7 @@ function AnimalDetail() {
           <button
             type="button"
             className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
-            // onClick={showModal}
+            onClick={handleCreateChatRoom}
           >
             채팅하기
           </button>
