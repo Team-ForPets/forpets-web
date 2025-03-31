@@ -60,6 +60,11 @@ public class ChatMessageService {
 
         ChatMessage chatMessage = requestDto.toEntity(chatRoom);
 
+        // 채팅보낼 때 해당 채팅방에 속한 참여자가 맞는지 검증하는 로직 추가
+        if (!chatRoomRepository.existsUserByRequestorAndVolunteer(chatRoomId, user.getId())) {
+            throw new IllegalArgumentException("해당 사용자는 해당 채팅방에 속한 참여자가 아닙니다.");
+        }
+
         // 연관관계 설정 (chatRoom에 채팅 메시지 추가)
         chatRoom.addChatMessage(chatMessage);
 

@@ -42,13 +42,13 @@ public class VolunteerWorkStatus extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorkState state;
+    private VolunteerStatus state;
 
     @Builder
     public VolunteerWorkStatus(MyAnimal myAnimal, User requestor, User volunteer) {
         this.myAnimal = myAnimal;
         this.requestor = requestor;
         this.volunteer = volunteer;
-        this.state = WorkState.IN_PROGRESS;
+        this.state = VolunteerStatus.IN_PROGRESS;
     }
 }

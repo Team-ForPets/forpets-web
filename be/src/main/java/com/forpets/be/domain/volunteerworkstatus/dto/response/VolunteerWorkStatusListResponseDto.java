@@ -8,14 +8,14 @@ import lombok.Getter;
 @Builder
 public class VolunteerWorkStatusListResponseDto {
 
-    private final List<VolunteerWorkStatusResponseDto> volunteerworkStatuses;
+    private final List<VolunteerWorkStatusResponseDto> volunteerWorkStatuses;
     private final Integer total;
 
     public static VolunteerWorkStatusListResponseDto from(
         List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos,
         Integer total) {
         return VolunteerWorkStatusListResponseDto.builder()
-            .volunteerworkStatuses(volunteerWorkStatusResponseDtos)
+            .volunteerWorkStatuses(volunteerWorkStatusResponseDtos)
             .total(total)
             .build();
     }
