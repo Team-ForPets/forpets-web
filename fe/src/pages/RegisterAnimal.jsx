@@ -74,11 +74,6 @@ function RegisterAnimal() {
     open({ onComplete: (addressData) => handleComplete(addressData, key) });
   };
 
-  const showModal = async (e) => {
-    e.preventDefault();
-    openModal();
-  };
-
   const submit = async (e) => {
     try {
       const response = await animalsApi.createAnimal(formData);
@@ -90,7 +85,6 @@ function RegisterAnimal() {
     }
   };
 
-  console.log(formData);
   return (
     <>
       <nav className="flex justify-end gap-3 text-[#847D7D] mb-3">
@@ -233,7 +227,7 @@ function RegisterAnimal() {
             <button
               type="button"
               className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
-              onClick={showModal}
+              onClick={openModal}
             >
               등록
             </button>
