@@ -9,8 +9,8 @@ import lombok.Getter;
 // 내가 봉사자로 속한 채팅방 전체 조회 + 채팅방의 개수 응답
 public class VolunteerChatRoomsListResponseDto {
 
-    private List<VolunteerChatRoomsResponseDto> chatRooms;
-    private Integer total;
+    private final List<VolunteerChatRoomsResponseDto> chatRooms;
+    private final Integer total;
 
     public static VolunteerChatRoomsListResponseDto from(
         List<VolunteerChatRoomsResponseDto> chatRooms,

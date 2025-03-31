@@ -11,13 +11,13 @@ import lombok.Getter;
 @Builder
 public class ChatRoomDetailResponseDto {
 
-    private Long id;
-    private String nickname;
-    private String departureArea;
-    private String arrivalArea;
+    private final Long id;
+    private final String nickname;
+    private final String departureArea;
+    private final String arrivalArea;
 
-    private MyAnimalReadResponseDto myAnimal;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private List<ChatMessageResponseDto> chatMessages;
+    private final MyAnimalReadResponseDto myAnimal;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+    private final List<ChatMessageResponseDto> chatMessages;
 }
