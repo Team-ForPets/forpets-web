@@ -2,8 +2,8 @@ package com.forpets.be.domain.volunteerworkstatus.dto.response;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerStatus;
 import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerWorkStatus;
-import com.forpets.be.domain.volunteerworkstatus.entity.WorkState;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class VolunteerWorkStatusResponseDto {
     private final String volunteerNickname;
     private final String departureArea;
     private final String arrivalArea;
-    private final WorkState state;
+    private final VolunteerStatus state;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 

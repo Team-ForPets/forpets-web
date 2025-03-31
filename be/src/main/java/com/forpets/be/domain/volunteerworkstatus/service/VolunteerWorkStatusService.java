@@ -7,8 +7,8 @@ import com.forpets.be.domain.user.repository.UserRepository;
 import com.forpets.be.domain.volunteerworkstatus.dto.request.VolunteerWorkStatusRequestDto;
 import com.forpets.be.domain.volunteerworkstatus.dto.response.VolunteerWorkStatusListResponseDto;
 import com.forpets.be.domain.volunteerworkstatus.dto.response.VolunteerWorkStatusResponseDto;
+import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerStatus;
 import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerWorkStatus;
-import com.forpets.be.domain.volunteerworkstatus.entity.WorkState;
 import com.forpets.be.domain.volunteerworkstatus.repository.VolunteerWorkStatusRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -62,31 +62,28 @@ public class VolunteerWorkStatusService {
 
     // 이동봉사 현황 전체 조회
     public VolunteerWorkStatusListResponseDto getVolunteerWorkStatuses(String status) {
-        List<VolunteerWorkStatus> volunteerworkStatuses;
+        List<VolunteerWorkStatus> volunteerWorkStatuses;
 
         if (status == null || status.equals("all")) {
             // 전체 이동봉사 현황 조회
-            volunteerworkStatuses = volunteerWorkStatusRepository.findAll();
+            volunteerWorkStatuses = volunteerWorkStatusRepository.findAll();
         } else if (status.equals("in-progress")) {
             // 진행 중인 이동봉사 현황 조회
-            volunteerworkStatuses = volunteerWorkStatusRepository.findAllByState(
-                WorkState.IN_PROGRESS);
+            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByState(
+                VolunteerStatus.IN_PROGRESS);
         } else if (status.equals("completed")) {
             // 완료된 이동봉사 현황 조회
-            volunteerworkStatuses = volunteerWorkStatusRepository.findAllByState(WorkState.DONE);
+            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByState(
+                VolunteerStatus.COMPLETED);
         } else {
             throw new IllegalArgumentException("현황에 대한 상태는 all, in-progress, completed만 입력 가능합니다.");
         }
 
-        List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos = volunteerworkStatuses.stream()
+        List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos = volunteerWorkStatuses.stream()
             .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
                 volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
                 volunteerWorkStatus.getVolunteer()))
             .toList();
-
-        if (volunteerWorkStatusResponseDtos.isEmpty()) {
-
-        }
 
         Integer total = volunteerWorkStatusResponseDtos.size();
 
