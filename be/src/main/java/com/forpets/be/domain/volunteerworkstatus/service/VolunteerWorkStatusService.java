@@ -111,4 +111,14 @@ public class VolunteerWorkStatusService {
 
         return VolunteerWorkStatusListResponseDto.from(volunteerWorkStatusResponseDtos, total);
     }
+
+    // 이동봉사 현황 삭제
+    @Transactional
+    public void deleteVolunteerWorkStatus(Long volunteerWorkStatusId) {
+        VolunteerWorkStatus volunteerWorkStatus = volunteerWorkStatusRepository.findById(
+                volunteerWorkStatusId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 이동봉사 현황을 찾을 수 없습니다."));
+        
+        volunteerWorkStatusRepository.delete(volunteerWorkStatus);
+    }
 }
