@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "service_volunteer")
 @NoArgsConstructor
-public class ServiceVolunteer extends BaseTimeEntity {
+public class VolunteerWork extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +58,7 @@ public class ServiceVolunteer extends BaseTimeEntity {
     private String notice;
 
     @Builder
-    public ServiceVolunteer(User user, String title, AnimalType animalType, LocalDate startDate,
+    public VolunteerWork(User user, String title, AnimalType animalType, LocalDate startDate,
         LocalDate endDate, String departureArea, String arrivalArea, String notice) {
         this.user = user;
         this.title = title;
@@ -74,7 +74,7 @@ public class ServiceVolunteer extends BaseTimeEntity {
         this.user = user;
     }
 
-    public ServiceVolunteer update(ServiceVolunteerUpdateRequestDto requestDto) {
+    public VolunteerWork update(ServiceVolunteerUpdateRequestDto requestDto) {
 
         this.title = requestDto.getTitle();
         this.animalType = requestDto.getAnimalType();

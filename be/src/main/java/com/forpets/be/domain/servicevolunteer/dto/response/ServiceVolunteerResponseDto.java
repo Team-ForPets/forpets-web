@@ -1,7 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.dto.response;
 
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
-import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
+import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class ServiceVolunteerResponseDto {
     private final LocalDateTime updatedAt;
 
     // Static factory method to map from entity to DTO
-    public static ServiceVolunteerResponseDto from(ServiceVolunteer entity) {
+    public static ServiceVolunteerResponseDto from(VolunteerWork entity) {
         return
             ServiceVolunteerResponseDto.builder()
                 .id(entity.getId())

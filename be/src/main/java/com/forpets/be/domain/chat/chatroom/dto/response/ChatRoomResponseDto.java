@@ -12,7 +12,7 @@ public class ChatRoomResponseDto {
 
     private final Long id;
     private final Long myAnimalId;
-    private final Long serviceVolunteerId;
+    private final Long volunteerWorkId;
     private final String requestorNickname;
     private final String volunteerNickname;
     private final RoomState state;
@@ -23,8 +23,8 @@ public class ChatRoomResponseDto {
         return ChatRoomResponseDto.builder()
             .id(entity.getId())
             .myAnimalId(entity.getMyAnimal().getId())
-            .serviceVolunteerId(
-                entity.getServiceVolunteer() != null ? entity.getServiceVolunteer().getId() : null)
+            .volunteerWorkId(
+                entity.getVolunteerWork() != null ? entity.getVolunteerWork().getId() : null)
             .requestorNickname(entity.getRequestor().getNickname())
             .volunteerNickname(entity.getVolunteer().getNickname())
             .state(entity.getState())

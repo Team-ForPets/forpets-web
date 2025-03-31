@@ -1,7 +1,7 @@
 package com.forpets.be.domain.servicevolunteer.dto.response;
 
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
-import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
+import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.dto.response.UserNickNameImageResponseDto;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class ServiceVolunteerDetailResponseDto {
     private final UserNickNameImageResponseDto user;
 //  private final User user;
 
-    public static ServiceVolunteerDetailResponseDto from(ServiceVolunteer entity) {
+    public static ServiceVolunteerDetailResponseDto from(VolunteerWork entity) {
         return ServiceVolunteerDetailResponseDto.builder()
             .id(entity.getId())
             .title(entity.getTitle())

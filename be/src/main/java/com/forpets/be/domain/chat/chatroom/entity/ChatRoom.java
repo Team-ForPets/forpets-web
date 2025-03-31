@@ -2,7 +2,7 @@ package com.forpets.be.domain.chat.chatroom.entity;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.chat.chatmessage.entity.ChatMessage;
-import com.forpets.be.domain.servicevolunteer.entity.ServiceVolunteer;
+import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
@@ -39,7 +39,7 @@ public class ChatRoom extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_volunteer_id")
-    private ServiceVolunteer serviceVolunteer;
+    private VolunteerWork volunteerWork;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requestor_user_id", nullable = false)
@@ -63,10 +63,10 @@ public class ChatRoom extends BaseTimeEntity {
     private Boolean isVolunteerLeft;
 
     @Builder
-    public ChatRoom(MyAnimal myAnimal, ServiceVolunteer serviceVolunteer, User requestor,
+    public ChatRoom(MyAnimal myAnimal, VolunteerWork volunteerWork, User requestor,
         User volunteer) {
         this.myAnimal = myAnimal;
-        this.serviceVolunteer = serviceVolunteer;
+        this.volunteerWork = volunteerWork;
         this.requestor = requestor;
         this.volunteer = volunteer;
         this.state = RoomState.getDefault();
