@@ -4,11 +4,13 @@ import com.forpets.be.global.mail.dto.request.AuthenticationRequestDto;
 import com.forpets.be.global.mail.dto.response.AuthenticationCodeResponseDto;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class VerificationCodeService {
     // redis에 email을 키로, code를 밸류로 저장하는 로직임.
 
@@ -17,9 +19,11 @@ public class VerificationCodeService {
 
     // 랜덤 code를 redis에 저장
     public void saveVerificationCode(String username, String code) {
+        log.info("레디스에 코드 저장");
         redisTemplate.opsForValue()
             .set(username, code, CODE_EXPIRE_TIME,
                 TimeUnit.MINUTES);
+        log.info("레디스에 코드 저장 완료");
     }
 
     // 이메일과 코드의 쌍을 검사하는 코드

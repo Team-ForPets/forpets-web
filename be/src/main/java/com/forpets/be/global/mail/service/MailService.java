@@ -19,6 +19,7 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     public void sendAuthCodeToEmail(String email, String code) {
+        log.info("이메일 전송 시작");
         MimeMessage msg = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(msg, false);
@@ -27,7 +28,10 @@ public class MailService {
             helper.setText("인증 코드" + code, false); // true : html 형식으로 전달 할 수 있다고 함
             mailSender.send(msg);
 
+            log.info("이메일 전송 완료");
+
         } catch (MessagingException e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException("이메일 전송 실패", e);
         }
     }
