@@ -17,22 +17,12 @@ function Chat() {
   const [chatRoomData, setChatRoomData] = useState();
   const [showModal, setShowModal] = useState(false);
   const [myAnimal, setMyAnimal] = useState();
-  const [formData, setFormData] = useState({ myAnimalId: 1, serviceVolunteerId: 1 });
   const [volunteerId, setVolunteerId] = useState(4);
 
   // 요청 봉사자 탭
   const handleButtonClick = (buttonName) => {
     setActiveBtn(buttonName);
     buttonName === '요청' ? getMyAnimalsChatRooms() : getMyVolunteerChatRooms();
-  };
-
-  // 채팅방 만들기
-  const handleCreateChatRoom = async () => {
-    try {
-      const response = await chatApi.createChatRoom(formData);
-    } catch (e) {
-      console.error(e.response);
-    }
   };
 
   // 내가 요청자로 속한 채팅방 전체 조회 API
@@ -80,7 +70,6 @@ function Chat() {
 
   return (
     <main className="h-[90vh] pb-[10%] flex justify-between">
-      <button onClick={handleCreateChatRoom}>채팅방 만들기</button>
       {/* 요청, 봉사자 목록 */}
       <ChatRoomList
         activeBtn={activeBtn}

@@ -3,8 +3,8 @@ import api from './axios';
 const ENDPOINT = '/chat/rooms';
 const todoApi = {
   // 채팅방 생성
-  createChatRoom: async (formData) => {
-    const response = await api.post(`${ENDPOINT}`, formData);
+  createChatRoom: async (requestData) => {
+    const response = await api.post(`${ENDPOINT}`, requestData);
     return response.data;
   },
   // 내가 요청자로 속한 채팅방 전체 조회 API
