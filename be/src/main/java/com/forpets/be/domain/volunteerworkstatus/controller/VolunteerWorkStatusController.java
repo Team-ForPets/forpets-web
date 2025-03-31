@@ -52,7 +52,7 @@ public class VolunteerWorkStatusController {
             volunteerWorkStatusService.getMyVolunteerWorkStatus(user)));
     }
 
-    // 이동봉사 현황 수정
+    // 이동봉사 현황 수정 (이동 완료)
     @PatchMapping("/volunteer-work-status/{volunteerWorkStatusId}")
     public ResponseEntity<ApiResponse<VolunteerWorkStatusResponseDto>> updateVolunteerWorkStatus(
         @PathVariable Long volunteerWorkStatusId,
@@ -61,11 +61,11 @@ public class VolunteerWorkStatusController {
             volunteerWorkStatusService.updateVolunteerWorkStatus(volunteerWorkStatusId, user)));
     }
 
-    // 이동봉사 현황 삭제
+    // 이동봉사 현황 삭제 (약속 취소)
     @DeleteMapping("/volunteer-work-status/{volunteerWorkStatusId}")
     public ResponseEntity<ApiResponse<Void>> deleteVolunteerWorkStatus(
-        @PathVariable Long volunteerWorkStatusId) {
-        volunteerWorkStatusService.deleteVolunteerWorkStatus(volunteerWorkStatusId);
+        @PathVariable Long volunteerWorkStatusId, @AuthenticationPrincipal User user) {
+        volunteerWorkStatusService.deleteVolunteerWorkStatus(volunteerWorkStatusId, user);
 
         return ResponseEntity.ok(ApiResponse.ok("이동봉사 현황이 삭제되었습니다.", "DELETED", null));
     }

@@ -112,7 +112,7 @@ public class VolunteerWorkStatusService {
         return VolunteerWorkStatusListResponseDto.from(volunteerWorkStatusResponseDtos, total);
     }
 
-    // 이동봉사 현황 수정
+    // 이동봉사 현황 수정 (이동 완료)
     @Transactional
     public VolunteerWorkStatusResponseDto updateVolunteerWorkStatus(Long volunteerWorkStatusId,
         User user) {
@@ -120,7 +120,7 @@ public class VolunteerWorkStatusService {
                 volunteerWorkStatusId)
             .orElseThrow(() -> new IllegalArgumentException("해당 이동봉사 현황을 찾을 수 없습니다."));
 
-        // 이동 완료 버튼은 이동봉사 요청자만 상태 변경 가능하도록 검증
+        // 이동 완료 버튼은 이동봉사 요청자만 상태 수정 가능하도록 검증
         if (!user.getId().equals(volunteerWorkStatus.getRequestor().getId())) {
             throw new IllegalArgumentException("요청자만 이동 완료 처리를 할 수 있습니다.");
         }
@@ -137,12 +137,18 @@ public class VolunteerWorkStatusService {
             volunteerWorkStatus.getVolunteer());
     }
 
-    // 이동봉사 현황 삭제
+    // 이동봉사 현황 삭제 (약속 취소)
     @Transactional
-    public void deleteVolunteerWorkStatus(Long volunteerWorkStatusId) {
+    public void deleteVolunteerWorkStatus(Long volunteerWorkStatusId, User user) {
         VolunteerWorkStatus volunteerWorkStatus = volunteerWorkStatusRepository.findById(
                 volunteerWorkStatusId)
             .orElseThrow(() -> new IllegalArgumentException("해당 이동봉사 현황을 찾을 수 없습니다."));
+
+        // 이동봉사 현황은 요청자와 봉사자만 상태 수정 가능하도록 검증
+        if (!user.getId().equals(volunteerWorkStatus.getRequestor().getId()) && !user.getId()
+            .equals(volunteerWorkStatus.getVolunteer().getId())) {
+            throw new IllegalArgumentException("이동봉사 현황을 삭제할 권한이 없습니다.");
+        }
 
         volunteerWorkStatusRepository.delete(volunteerWorkStatus);
     }
