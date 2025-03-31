@@ -3,27 +3,27 @@ import api from './axios';
 const ENDPOINT = '/animals';
 const animalsApi = {
 
-  // 투두 전체 조회
+  // 나의 아이 전체 조회
   getAnimals: async () => {
     const response = await api.get(`${ENDPOINT}`);
     return response.data;
   },
 
-  // 투두 생성
+  // 나의 아이 생성
   createAnimal: async (formData) => {
     const response = await api.post(`${ENDPOINT}`, formData);
     return response.data;
   },
 
-  // 투두 수정
-  updateAnimal: async (bucketId, AnimalId, formData) => {
-    const response = await api.patch(`${ENDPOINT}/${bucketId}/Animals/${AnimalId}`, formData);
+  // 나의 아이 수정
+  updateAnimal: async (myAnimalId, formData) => {
+    const response = await api.put(`/my${ENDPOINT}/${myAnimalId}`, formData);
     return response.data;
   },
 
-  // 투두 삭제
-  deleteAnimal: async (bucketId, AnimalId) => {
-    const response = await api.delete(`${ENDPOINT}/${bucketId}/todos/${todoId}`);
+  // 나의 아이 삭이
+  deleteAnimal: async (myAnimalId, AnimalId) => {
+    const response = await api.delete(`/my${ENDPOINT}/${myAnimalId}`);
     return response;
   },
 };

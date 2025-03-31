@@ -7,6 +7,7 @@ import com.forpets.be.global.mail.service.MailService;
 import com.forpets.be.global.mail.service.VerificationCodeService;
 import com.forpets.be.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Slf4j
 public class MailController {
 
     private final MailService mailService;
@@ -24,6 +26,9 @@ public class MailController {
     @PostMapping("/auth/send-auth-code")
     public ResponseEntity<ApiResponse<String>> sendAuthCode(
         @RequestBody AuthenticationRequestDto requestDto) {
+
+        log.info("이메일 인증 시작");
+
         String code = CodeGenerator.generateCode(6);
         // 이메일과 랜덤 코드 저장
         verificationCodeService.saveVerificationCode(requestDto.getUsername(), code);

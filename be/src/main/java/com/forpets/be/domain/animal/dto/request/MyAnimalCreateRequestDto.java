@@ -48,10 +48,10 @@ public class MyAnimalCreateRequestDto {
     @Range(min = 0, max = 60)
     private Integer weight;
 
-    @Length(min = 1, max = 255)
+    @Length(min = 0, max = 255)
     private String notice;
 
-    @Length(min = 1, max = 255)
+    @Length(min = 0, max = 255)
     private String memo;
 
     @NotNull(message = "날짜는 필수 입력값입니다")

@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 public class MyAnimalUpdateRequestDto {
 
-    @Size(min = 2, max = 10, message = "이름은 2자 이상 10자 이하여야 합니다")
+    @Size(min = 1, max = 10, message = "이름은 1자 이상 10자 이하여야 합니다")
     private String animalName;
 
     @Enumerated(EnumType.STRING)

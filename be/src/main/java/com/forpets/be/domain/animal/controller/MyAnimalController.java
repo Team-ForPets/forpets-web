@@ -36,7 +36,7 @@ public class MyAnimalController {
 
         return ResponseEntity.ok(ApiResponse.ok(
             "나의 아이가 등록 되었습니다",
-            "OK",
+            "CREATED",
             null
         ));
     }
@@ -87,7 +87,7 @@ public class MyAnimalController {
     ) {
         return ResponseEntity.ok(ApiResponse.ok(
             "해당 나의 아이가 업데이트 성공",
-            "OK",
+            "UPDATED",
             myAnimalService.updateMyAnimal(myAnimalId, updateRequestDto)
         ));
     }
@@ -100,7 +100,7 @@ public class MyAnimalController {
 
         return ResponseEntity.ok(ApiResponse.ok(
             "해당 나의 아이 삭제 성공",
-            "OK",
+            "DELETED",
             null
         ));
     }
