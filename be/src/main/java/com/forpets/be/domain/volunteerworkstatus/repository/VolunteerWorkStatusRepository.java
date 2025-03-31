@@ -16,7 +16,7 @@ public interface VolunteerWorkStatusRepository extends JpaRepository<VolunteerWo
         User volunteer);
 
     // 상태에 대한 이동봉사 현황 조회
-    List<VolunteerWorkStatus> findAllByState(VolunteerStatus state);
+    List<VolunteerWorkStatus> findAllByStatus(VolunteerStatus status);
 
     // 로그인한 사용자가 요청자 또는 봉사자로 참여했던 이동봉사 현황 조회
     @Query("SELECT v FROM VolunteerWorkStatus v "

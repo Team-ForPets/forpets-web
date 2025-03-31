@@ -69,11 +69,11 @@ public class VolunteerWorkStatusService {
             volunteerWorkStatuses = volunteerWorkStatusRepository.findAll();
         } else if (status.equals("in-progress")) {
             // 진행 중인 이동봉사 현황 조회
-            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByState(
+            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByStatus(
                 VolunteerStatus.IN_PROGRESS);
         } else if (status.equals("completed")) {
             // 완료된 이동봉사 현황 조회
-            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByState(
+            volunteerWorkStatuses = volunteerWorkStatusRepository.findAllByStatus(
                 VolunteerStatus.COMPLETED);
         } else {
             throw new IllegalArgumentException("현황에 대한 상태는 all, in-progress, completed만 입력 가능합니다.");
@@ -112,13 +112,38 @@ public class VolunteerWorkStatusService {
         return VolunteerWorkStatusListResponseDto.from(volunteerWorkStatusResponseDtos, total);
     }
 
+    // 이동봉사 현황 수정
+    @Transactional
+    public VolunteerWorkStatusResponseDto updateVolunteerWorkStatus(Long volunteerWorkStatusId,
+        User user) {
+        VolunteerWorkStatus volunteerWorkStatus = volunteerWorkStatusRepository.findById(
+                volunteerWorkStatusId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 이동봉사 현황을 찾을 수 없습니다."));
+
+        // 이동 완료 버튼은 이동봉사 요청자만 상태 변경 가능하도록 검증
+        if (!user.getId().equals(volunteerWorkStatus.getRequestor().getId())) {
+            throw new IllegalArgumentException("요청자만 이동 완료 처리를 할 수 있습니다.");
+        }
+
+        // 이미 이동봉사 완료 상태(COMPLETED)인 경우
+        if (volunteerWorkStatus.getStatus() == VolunteerStatus.COMPLETED) {
+            throw new IllegalArgumentException("이미 완료 처리된 이동봉사 현황입니다.");
+        }
+
+        volunteerWorkStatus.updateStatus(VolunteerStatus.COMPLETED);
+
+        return VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
+            volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
+            volunteerWorkStatus.getVolunteer());
+    }
+
     // 이동봉사 현황 삭제
     @Transactional
     public void deleteVolunteerWorkStatus(Long volunteerWorkStatusId) {
         VolunteerWorkStatus volunteerWorkStatus = volunteerWorkStatusRepository.findById(
                 volunteerWorkStatusId)
             .orElseThrow(() -> new IllegalArgumentException("해당 이동봉사 현황을 찾을 수 없습니다."));
-        
+
         volunteerWorkStatusRepository.delete(volunteerWorkStatus);
     }
 }

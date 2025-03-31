@@ -19,7 +19,7 @@ public class VolunteerWorkStatusResponseDto {
     private final String volunteerNickname;
     private final String departureArea;
     private final String arrivalArea;
-    private final VolunteerStatus state;
+    private final VolunteerStatus status;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -33,7 +33,7 @@ public class VolunteerWorkStatusResponseDto {
             .volunteerNickname(volunteer.getNickname())
             .departureArea(myAnimal.getDepartureArea())
             .arrivalArea(myAnimal.getArrivalArea())
-            .state(volunteerWorkStatus.getState())
+            .status(volunteerWorkStatus.getStatus())
             .createdAt(volunteerWorkStatus.getCreatedAt())
             .updatedAt(volunteerWorkStatus.getUpdatedAt())
             .build();
