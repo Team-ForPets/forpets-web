@@ -27,8 +27,8 @@ public class RequestorChatRoomsResponseDto {
             .id(chatRoom.getId())
             .imageUrl(chatRoom.getVolunteer().getImageUrl())
             .volunteerNickname(chatRoom.getVolunteer().getNickname())
-            .departureArea(chatRoom.getServiceVolunteer().getDepartureArea())
-            .arrivalArea(chatRoom.getServiceVolunteer().getArrivalArea())
+            .departureArea(chatRoom.getVolunteerWork().getDepartureArea())
+            .arrivalArea(chatRoom.getVolunteerWork().getArrivalArea())
             .createdAt(chatRoom.getCreatedAt())
             .updatedAt(chatRoom.getUpdatedAt())
             .build();
