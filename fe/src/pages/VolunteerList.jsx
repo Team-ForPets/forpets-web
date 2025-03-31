@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import VolunteerCard from '../components/VolunteerCard';
+import VolunteerCard from '../components/volunteer/VolunteerCard';
 import volunteerApi from '../api/volunteerApi';
 import { useNavigate } from 'react-router-dom';
 

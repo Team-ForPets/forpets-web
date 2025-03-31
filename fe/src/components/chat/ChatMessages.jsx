@@ -22,16 +22,14 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
       disconnect();
     };
   }, [id]);
+
   const connect = () => {
     // WebSocket 서버에 연결
     const socket = new SockJS('http://localhost:8080/ws/connection');
-    // `Stomp.over`로 WebSocket 연결
-    stompClient = Stomp.over(socket, {
-      reconnectDelay: 5000, // 5초마다 재연결 시도
-      debug: (str) => {
-        console.log(str);
-      }, // 디버그 메시지
-    });
+    stompClient = Stomp.over(socket);
+
+    stompClient.reconnectDelay = 5000; // 자동 재연결
+    stompClient.debug = (str) => console.log(str); // 디버깅 로그
 
     // WebSocket 연결 시 처리
     stompClient.connect(
@@ -40,6 +38,7 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
         console.log('웹소켓 연결 완료');
 
         // 채팅방 구독
+        console.log(`채팅방 구독: /sub/chat/rooms/${id}`);
         stompClient.subscribe(`/sub/chat/rooms/${id}`, (message) => {
           try {
             onMessageReceived(message.body); // onMessageReceived는 이미 파싱된 메시지를 받음
@@ -49,7 +48,13 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
         });
       },
       (error) => {
-        console.error('웹소켓 연결 실패:', error);
+        // 오류 발생 시 추가 로그
+        console.error('웹소켓 연결 실패:', error); // 오류 전체 출력
+        if (error) {
+          console.error('상세 오류 메시지:', error.message);
+          console.error('오류 스택:', error.stack);
+          console.error('오류 코드:', error.code);
+        }
       },
     );
   };
