@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
-function ServiceStatusCard({ service }) {
+function VolunteerWorkStatusCard({ service }) {
   console.log(service);
   const stateMap = {
     progress: '진행중',
@@ -17,8 +17,8 @@ function ServiceStatusCard({ service }) {
       // onClick={handleRescueAnimalDetail}
     >
       <img
-        src=""
-        // src=`${service.이미지 이름}`
+        // src=""
+        src={`${service.imageUrl}`}
         alt="동물 사진"
         className="w-[180px] h-[170px] object-cover border-1 border-amber-500 rounded-sm "
       />
@@ -29,11 +29,11 @@ function ServiceStatusCard({ service }) {
         </div>
         <div className="flex gap-1">
           <p className="w-[50px] text-gray-500">요청자</p>
-          <p>{service.requestor}</p>
+          <p>{service.requestorNickname}</p>
         </div>
         <div className="flex gap-1">
           <p className="w-[50px] text-gray-500">봉사자</p>
-          <p>{service.requestor}</p>
+          <p>{service.volunteerNickname}</p>
         </div>
         <div className="flex gap-1">
           <p className="w-[50px] text-gray-500">여정</p>
@@ -51,4 +51,4 @@ function ServiceStatusCard({ service }) {
     </li>
   );
 }
-export default ServiceStatusCard;
+export default VolunteerWorkStatusCard;
