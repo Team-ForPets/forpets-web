@@ -12,9 +12,11 @@ import com.forpets.be.domain.volunteerworkstatus.entity.WorkState;
 import com.forpets.be.domain.volunteerworkstatus.repository.VolunteerWorkStatusRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -85,6 +87,28 @@ public class VolunteerWorkStatusService {
         if (volunteerWorkStatusResponseDtos.isEmpty()) {
 
         }
+
+        Integer total = volunteerWorkStatusResponseDtos.size();
+
+        return VolunteerWorkStatusListResponseDto.from(volunteerWorkStatusResponseDtos, total);
+    }
+
+    // 나의 이동봉사 현황 조회
+    public VolunteerWorkStatusListResponseDto getMyVolunteerWorkStatus(User user) {
+        // 로그인한 사용자가 요청자 또는 봉사자로 참여했던 이동봉사 현황 조회
+        List<VolunteerWorkStatus> volunteerWorkStatuses = volunteerWorkStatusRepository.findByRequestorOrVolunteer(
+            user.getId());
+
+        // 로그인한 사용자가 요청자 또는 봉사자로 참여했던 이동봉사 현황이 존재하지 않는 경우를 검증
+        if (volunteerWorkStatuses.isEmpty()) {
+            throw new IllegalArgumentException("해당 사용자가 요청자 또는 봉사자로 참여했던 이동봉사 현황을 찾을 수 없습니다.");
+        }
+
+        List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos = volunteerWorkStatuses.stream()
+            .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
+                volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
+                volunteerWorkStatus.getVolunteer()))
+            .toList();
 
         Integer total = volunteerWorkStatusResponseDtos.size();
 
