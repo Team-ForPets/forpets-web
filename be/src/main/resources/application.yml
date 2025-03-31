@@ -80,7 +80,7 @@ spring:
             user-name-attribute: response # Naver 응답 값 resultCode, message, response 중 response 지정
 
   redis:
-    host: ${REDIS_HOST}
+    host: redis-container
     port: ${REDIS_PORT}
   application:
     name: be
