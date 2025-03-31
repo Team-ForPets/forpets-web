@@ -23,8 +23,23 @@ const Signup = () => {
   });
 
   const [isClickEmailDuplicate, setIsClickEmailDuplicate] = useState(false); // 이메일 중복 확인 버튼 클릭 여부
-  const [isSendAuthCode, setIsSendAuthCode] = useState(false); // 인증 코드 전송 성공 여부
   const [isClickNicknameDuplicate, setIsClickNicknameDuplicate] = useState(false); // 닉네임 중복 확인 버튼 클릭 여부
+
+  const AUTH_TYPE = {
+    DEFAULT: 'default', // 초기 상태 - 인증 코드 전송 버튼 클릭 전
+    SENDING: 'sending', // 인증 코드 전송 중
+    SEND: 'send', // 인증 코드 전송 완료
+    CONFIRMING: 'confirming', // 인증 코드 검증 중
+    CONFIRM: 'confirm', // 인증 코드 검증 성공
+  };
+
+  const [authState, setAuthState] = useState(AUTH_TYPE.DEFAULT);
+  const [authCodeMessage, setAuthCodeMessage] = useState(null);
+
+  const handleClickAuthCodeButton = () => {
+    if (authState === (AUTH_TYPE.DEFAULT || AUTH_TYPE.SENDING)) return handleSendAuthCode();
+    if (authState === AUTH_TYPE.SEND) return handleVerifyCode();
+  };
 
   const isSignupButtonEnabled =
     validation.email && validation.nickname && validation.password && validation.confirmPassword;
@@ -44,7 +59,7 @@ const Signup = () => {
     const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,15}$/;
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[#?!]).{8,}$/;
 
-    let isValid;
+    let isValid = true;
     if (name === 'email') {
       isValid = emailRegex.test(value);
     } else if (name === 'nickname') {
@@ -53,6 +68,8 @@ const Signup = () => {
       isValid = passwordRegex.test(value);
     } else if (name === 'confirmPassword') {
       isValid = value === formData.password;
+    } else if (name === 'authCode') {
+      return;
     }
 
     setValidation((prev) => ({
@@ -62,8 +79,11 @@ const Signup = () => {
   };
 
   const handleCheckEmailDuplicate = async () => {
+    // 이메일 중복 확인 버튼 클릭 시 인증 코드 재검증
+    setAuthState(AUTH_TYPE.DEFAULT); // 인증 코드 전송 버튼 클릭 전 상태로 초기화
+    setValidation((prev) => ({ ...prev, authCode: false }));
+
     if (validation.email) {
-      setIsClickEmailDuplicate(true);
       // 서버에 email 검증 요청
       try {
         const response = await authApi.checkUsername(formData.email);
@@ -73,6 +93,7 @@ const Signup = () => {
           ...prev,
           email: isPossible,
         }));
+        setIsClickEmailDuplicate(true);
       } catch (e) {
         console.log(e);
         alert('이메일 중복 확인에 실패했습니다. 다시 시도해주세요.');
@@ -82,27 +103,38 @@ const Signup = () => {
 
   const handleSendAuthCode = async () => {
     // TODO : 3 minute
+    setAuthState(AUTH_TYPE.SENDING); // 인증코드 전송 중
     try {
       const response = await authApi.sendAuthCode(formData.email);
       const sendCode = response.data;
-      setIsSendAuthCode(true);
-      setValidation((prev) => ({
-        ...prev,
-        email: sendCode,
-      }));
-    } catch (err) {
-      setIsSendAuthCode(false);
-      alert('인증 코드 전송에 실패했습니다.');
+      console.log(typeof sendCode, sendCode);
+
+      if (sendCode) {
+        setAuthState(AUTH_TYPE.SEND); // 인증코드 전송 성공
+        setAuthCodeMessage('인증 코드 전송에 성공했습니다. 인증 코드를 입력해주세요.');
+      }
+      setValidation((prev) => ({ ...prev, authCode: sendCode }));
+    } catch (e) {
+      console.log(e);
+      setAuthCodeMessage('인증 코드 전송에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
   const handleVerifyCode = async () => {
+    setAuthState(AUTH_TYPE.CONFIRMING); // 인증코드 검증 중
     try {
       const response = await authApi.verifyCode(formData.email, formData.authCode);
       const isVerified = response.data.status;
+      if (isVerified) {
+        setAuthState(AUTH_TYPE.CONFIRM); // 인증코드 검증 성공
+        setAuthCodeMessage('인증 코드 검증에 성공했습니다.');
+      } else {
+        setAuthState(AUTH_TYPE.SEND); // 인증코드 검증 실패
+        setAuthCodeMessage('인증 코드 검증에 실패했습니다. 다시 시도해주세요.');
+      }
       setValidation((prev) => ({ ...prev, authCode: isVerified }));
-    } catch (error) {
-      alert('인증 코드 검증에 실패했습니다.');
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -182,27 +214,25 @@ const Signup = () => {
                 className="rounded-lg overflow-hidden"
                 value={formData.authCode}
                 onChange={handleChangeInput}
+                disabled={authState === AUTH_TYPE.CONFIRM} // 인증 코드 검증 성공 시 입력 불가
               />
 
               <Button
-                text={isSendAuthCode ? '인증 코드 검증' : '인증 코드 전송'}
-                onClick={isSendAuthCode ? handleVerifyCode : handleSendAuthCode}
+                text={
+                  authState === (AUTH_TYPE.DEFAULT || AUTH_TYPE.SENDING)
+                    ? '인증 코드 전송'
+                    : '인증 코드 검증'
+                }
+                onClick={handleClickAuthCodeButton}
               />
             </div>
+            {/* temp */}
+            {/* <p>
+              authState: {authState} | message : {authCodeMessage} | isValid: {validation.authCode}
+            </p> */}
 
-            {isSendAuthCode && (
-              <ValidationMessage
-                message={
-                  validation.authCode
-                    ? isSendAuthCode // 검증일때
-                      ? '인증 코드 검증에 성공했습니다.'
-                      : '인증 코드 검증에 실패했습니다.'
-                    : isSendAuthCode // 전송일때
-                      ? '인증 코드 전송에 성공했습니다.'
-                      : '인증 코드 전송에 실패했습니다.'
-                }
-                isValid={isSendAuthCode}
-              />
+            {authState !== AUTH_TYPE.DEFAULT && (
+              <ValidationMessage message={authCodeMessage} isValid={validation.authCode} />
             )}
           </div>
         )}
