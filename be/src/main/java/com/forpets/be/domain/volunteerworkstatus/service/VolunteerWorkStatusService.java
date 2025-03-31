@@ -26,10 +26,10 @@ public class VolunteerWorkStatusService {
     private final MyAnimalRepository myAnimalRepository;
     private final UserRepository userRepository;
 
-    // 이동봉사 현황 생성
+    // 이동봉사 현황 생성 (약속 잡기)
     @Transactional
     public VolunteerWorkStatusResponseDto createServiceStatus(
-        VolunteerWorkStatusRequestDto requestDto) {
+        VolunteerWorkStatusRequestDto requestDto, User user) {
         MyAnimal myAnimal = myAnimalRepository.findById(requestDto.getMyAnimalId())
             .orElseThrow(() -> new IllegalArgumentException("해당 나의 아이를 찾을 수 없습니다."));
 
@@ -38,10 +38,16 @@ public class VolunteerWorkStatusService {
         User volunteer = userRepository.findById(requestDto.getVolunteerId())
             .orElseThrow(() -> new IllegalArgumentException("해당 봉사자(사용자)를 찾을 수 없습니다."));
 
-        // 나의 아이을 등록한 사용자가 요청을 보낸 사용자도 아니고 봉사자도 아닌 경우
-        if (!(myAnimal.getUser().getId() == requestDto.getRequestorId()
-            || myAnimal.getUser().getId() == requestDto.getVolunteerId())) {
-            throw new IllegalArgumentException("나의 아이를 등록한 사용자와 요청자 또는 봉사자의 정보가 일치하지 않습니다.");
+        // 나의 아이을 등록한 사용자가 요청자인지 검증
+        if (myAnimal.getUser().getId() == null || !myAnimal.getUser().getId()
+            .equals(requestDto.getRequestorId())) {
+            throw new IllegalArgumentException("나의 아이를 등록한 사용자와 요청자의 정보가 일치하지 않습니다.");
+        }
+
+        // 이동봉사 현황은 요청자와 봉사자만 생성 가능하도록 검증
+        if (!user.getId().equals(requestDto.getRequestorId()) && !user.getId()
+            .equals(requestDto.getVolunteerId())) {
+            throw new IllegalArgumentException("이동봉사 현황을 생성할 권한이 없습니다.");
         }
 
         if (volunteerWorkStatusRepository.existsByMyAnimalAndRequestorAndVolunteer(myAnimal,

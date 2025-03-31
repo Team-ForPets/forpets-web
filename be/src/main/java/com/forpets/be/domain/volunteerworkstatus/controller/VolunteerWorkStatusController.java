@@ -27,12 +27,13 @@ public class VolunteerWorkStatusController {
 
     private final VolunteerWorkStatusService volunteerWorkStatusService;
 
-    // 이동봉사 현황 생성
+    // 이동봉사 현황 생성 (약속 잡기)
     @PostMapping("/volunteer-work-status")
     public ResponseEntity<ApiResponse<VolunteerWorkStatusResponseDto>> createServiceStatus(
-        @RequestBody @Valid VolunteerWorkStatusRequestDto requestDto) {
+        @RequestBody @Valid VolunteerWorkStatusRequestDto requestDto,
+        @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.ok("이동봉사 현황이 생성되었습니다.", "CREATED",
-            volunteerWorkStatusService.createServiceStatus(requestDto)));
+            volunteerWorkStatusService.createServiceStatus(requestDto, user)));
     }
 
     // 이동봉사 현황 전체 조회
