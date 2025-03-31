@@ -102,8 +102,12 @@ public class ChatRoomService {
 
     // 내가 요청자로 속한 채팅방 전체 조회
     public RequestorChatRoomsListResponseDto getRequestorChatRooms(Long requestorId) {
+        User user = userRepository.findById(requestorId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 요청자(사용자)를 찾을 수 없습니다."));
+
         List<RequestorChatRoomsResponseDto> chatRooms = chatRoomRepository.findAllByRequestorId(
-            requestorId).stream().map(RequestorChatRoomsResponseDto::from).toList();
+                requestorId).stream().filter(chatRoom -> !chatRoom.isRequestorLeft())
+            .map(RequestorChatRoomsResponseDto::from).toList();
 
         Integer total = chatRooms.size();
 
@@ -182,7 +186,7 @@ public class ChatRoomService {
         }
 
         // 채팅방에서 참여자가 모두 나갔을 경우 삭제되도록 로직 추가
-        if (chatRoom.getIsRequestorLeft() && chatRoom.getIsVolunteerLeft()) {
+        if (chatRoom.isRequestorLeft() && chatRoom.isVolunteerLeft()) {
             chatRoomRepository.delete(chatRoom);
         }
     }
