@@ -98,3 +98,8 @@ cors:
   allowed-origin: https://${DOMAIN}
 server:
   port: '8080'
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.boot.autoconfigure.data.redis: DEBUG
+    io.lettuce.core: DEBUG
