@@ -12,7 +12,7 @@ function RegisterAnimal() {
   const open = useDaumPostcodePopup(postcodeScriptUrl);
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [animalData, setAnimalData] = useState({
     animalName: '',
     animalType: '',
     departureArea: '',
@@ -23,10 +23,12 @@ function RegisterAnimal() {
     notice: '',
     memo: '',
     selectedDate: '',
-    imageUrl: '',
     isOpen: false,
     isDelete: false,
   });
+
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -38,9 +40,14 @@ function RegisterAnimal() {
     }
 
     const today = new Date().toISOString().slice(0, 10);
-    setFormData((prev) => ({ ...prev, selectedDate: today }));
-    setFormData((prev) => ({ ...prev, imageUrl: logo }));
+    setAnimalData((prev) => ({ ...prev, selectedDate: today }));
+    setImageUrl(logo);
   }, []);
+
+  useEffect(() => {
+    console.log(image);
+    
+  }, [image]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -51,21 +58,23 @@ function RegisterAnimal() {
   };
 
   const handleInput = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setAnimalData({ ...animalData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, imageUrl: imageUrl }));
+      // setAnimalData((prev) => ({ ...prev, imageUrl: imageUrl }));
+      setImage(file);
+      setImageUrl(imageUrl);
     }
   };
 
   // 다음 지오코딩 활용한 주소 입력
   const handleComplete = (data, key) => {
     let fullAddress = data.address;
-    setFormData((prev) => ({ ...prev, [key]: fullAddress }));
+    setAnimalData((prev) => ({ ...prev, [key]: fullAddress }));
   };
 
   // 다음 지오코딩 활용한 주소 입력
@@ -76,6 +85,27 @@ function RegisterAnimal() {
 
   const submit = async (e) => {
     try {
+
+      const formData = new FormData();
+
+      const jsonBlob = new Blob([JSON.stringify(animalData)], { type: "application/json" });
+    
+      formData.append("data", jsonBlob);  // JSON 데이터를 Blob 형태로 추가
+    
+      // formData.append("data", animalData);
+      // formData.append("file", image);
+
+      // Object.entries(animalData).forEach(([key, value]) => {
+      //   formData.append(key, value);
+      // });
+      
+      console.log(image);
+      
+      // 파일이 있을 경우에만 추가
+      if (image) {
+        formData.append("file", image);
+      }
+
       const response = await animalsApi.createAnimal(formData);
       console.log(response);
       closeModal();
@@ -100,9 +130,9 @@ function RegisterAnimal() {
               className="flex items-center justify-center cursor-pointer border border-gray rounded-xl w-[25vw] h-[35vh]"
             >
               <img
-                src={formData.imageUrl}
+                src={imageUrl}
                 alt="업로드된 이미지"
-                className={`object-cover rounded-xl ${formData.imageUrl === logo ? 'h-[50%]' : 'w-full h-full'}`}
+                className={`object-cover rounded-xl ${imageUrl === logo ? 'h-[50%]' : 'w-full h-full'}`}
               />
               <input
                 id="imageInput"
@@ -118,7 +148,7 @@ function RegisterAnimal() {
                 <input
                   type="date"
                   name="selectedDate"
-                  value={formData.selectedDate}
+                  value={animalData.selectedDate}
                   onChange={handleInput}
                   onClick={(e) => e.target.showPicker()}
                   className="flex-1 border-1 rounded-xl p-2 border-gray"
@@ -141,7 +171,7 @@ function RegisterAnimal() {
                   type="button"
                   name="departureArea"
                   className="flex-1 border-1 rounded-xl p-2 border-gray text-center placeholder-black"
-                  value={formData.departureArea || '출발지역'}
+                  value={animalData.departureArea || '출발지역'}
                   onClick={handleClick}
                   required
                 />
@@ -149,7 +179,7 @@ function RegisterAnimal() {
                   type="button"
                   name="arrivalArea"
                   className="flex-1 border-1 rounded-xl p-2 border-gray text-center placeholder-black"
-                  value={formData.arrivalArea || '도착지역'}
+                  value={animalData.arrivalArea || '도착지역'}
                   onClick={handleClick}
                   required
                 />
@@ -161,7 +191,7 @@ function RegisterAnimal() {
                 placeholder="이름"
                 minLength="1"
                 maxLength="10"
-                value={formData.animalName}
+                value={animalData.animalName}
                 onChange={handleInput}
                 required
               />
@@ -172,7 +202,7 @@ function RegisterAnimal() {
                 placeholder="품종"
                 minLength="1"
                 maxLength="10"
-                value={formData.breed}
+                value={animalData.breed}
                 onChange={handleInput}
                 required
               />
@@ -182,7 +212,7 @@ function RegisterAnimal() {
                 className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
                 [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                 placeholder="나이"
-                value={formData.age}
+                value={animalData.age}
                 onChange={handleInput}
                 required
               />
@@ -192,7 +222,7 @@ function RegisterAnimal() {
                 className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
                 [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                 placeholder="체중"
-                value={formData.weight}
+                value={animalData.weight}
                 onChange={handleInput}
               />
             </section>
@@ -203,7 +233,7 @@ function RegisterAnimal() {
             name="notice"
             className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
             placeholder="특징 및 주의사항"
-            value={formData.notice}
+            value={animalData.notice}
             onChange={handleInput}
           />
           <textarea
@@ -211,7 +241,7 @@ function RegisterAnimal() {
             name="memo"
             className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
             placeholder="봉사자에게 전하고 싶은 말"
-            value={formData.memo}
+            value={animalData.memo}
             onChange={handleInput}
           />
 
@@ -220,9 +250,9 @@ function RegisterAnimal() {
               name="isOpen"
               type="button"
               className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
-              onClick={() => setFormData((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
+              onClick={() => setAnimalData((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
             >
-              {formData.isOpen ? '비공개' : '공개'}
+              {animalData.isOpen ? '비공개' : '공개'}
             </button>
             <button
               type="button"

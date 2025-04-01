@@ -25,6 +25,7 @@ public class MyAnimalReadResponseDto {
     private String memo;
     private LocalDate selectedDate;
     private String imageUrl;
+    private String originalFileName;
 
     public static MyAnimalReadResponseDto from(MyAnimal myAnimal) {
         return MyAnimalReadResponseDto.builder()
@@ -40,6 +41,7 @@ public class MyAnimalReadResponseDto {
             .memo(myAnimal.getMemo())
             .selectedDate(myAnimal.getSelectedDate())
             .imageUrl(myAnimal.getImageUrl())
+            .originalFileName(myAnimal.getOriginalFileName())
             .build();
     }
 }

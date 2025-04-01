@@ -9,8 +9,17 @@ const animalsApi = {
   },
 
   // 나의 아이 생성
+  // createAnimal: async (formData) => {
+  //   const response = await api.post(`${ENDPOINT}`, formData);
+  //   return response.data;
+  // },
+
   createAnimal: async (formData) => {
-    const response = await api.post(`${ENDPOINT}`, formData);
+    const response = await api.post(`${ENDPOINT}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   },
 
