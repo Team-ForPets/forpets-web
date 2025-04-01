@@ -33,10 +33,10 @@ function MyPage() {
   };
 
   return (
-    <div className="h-[85%] flex gap-10 pt-10">
+    <div className="h-[70vh] flex gap-10 pt-10">
       <aside className="w-[25%] flex flex-col gap-10 items-center pt-5">
         <button
-          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all text-lg ${selectedButton === 'profile' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'profile' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('profile');
             handleProfileRead();
@@ -45,7 +45,7 @@ function MyPage() {
           프로필
         </button>
         <button
-          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all text-lg ${selectedButton === 'animals' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'animals' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('animals');
             handleAnimalRead();
@@ -54,7 +54,7 @@ function MyPage() {
           나의 아이
         </button>
         <button
-          className={`w-[80%] px-4 py-3 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all text-lg ${selectedButton === 'volunteer-posts' ? 'bg-amber-500' : 'bg-amber-300'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'volunteer-posts' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('volunteer-posts');
             handleVolunteerRead();
@@ -63,7 +63,7 @@ function MyPage() {
           나의 봉사글
         </button>
       </aside>
-      <section className="w-[75%] bg-gray-100 rounded border-2 border-gray-200">
+      <section className="w-[75%] h-[100%] bg-gray-100 rounded border-2 border-gray-200">
         <Outlet></Outlet>
       </section>
     </div>

@@ -51,10 +51,10 @@ public class ChatRoom extends BaseTimeEntity {
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
     @Column(nullable = false)
-    private Boolean isRequestorLeft;
+    private boolean isRequestorLeft;
 
     @Column(nullable = false)
-    private Boolean isVolunteerLeft;
+    private boolean isVolunteerLeft;
 
     @Builder
     public ChatRoom(MyAnimal myAnimal, VolunteerWork volunteerWork, User requestor,

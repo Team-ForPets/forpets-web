@@ -69,8 +69,6 @@ function Chat() {
     handleButtonClick('요청'); // 첫 렌더링 시, '요청' 탭의 채팅방 목록을 불러온다
   }, []);
 
-  console.log(myAnimal);
-
   return (
     <main className="h-[90vh] pb-[10%] flex justify-between">
       {/* 요청, 봉사자 목록 */}

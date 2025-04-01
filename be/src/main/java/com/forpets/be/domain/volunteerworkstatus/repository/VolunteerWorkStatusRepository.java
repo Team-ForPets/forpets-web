@@ -2,8 +2,8 @@ package com.forpets.be.domain.volunteerworkstatus.repository;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerStatus;
 import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerWorkStatus;
-import com.forpets.be.domain.volunteerworkstatus.entity.WorkState;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +16,7 @@ public interface VolunteerWorkStatusRepository extends JpaRepository<VolunteerWo
         User volunteer);
 
     // 상태에 대한 이동봉사 현황 조회
-    List<VolunteerWorkStatus> findAllByState(WorkState state);
+    List<VolunteerWorkStatus> findAllByStatus(VolunteerStatus status);
 
     // 로그인한 사용자가 요청자 또는 봉사자로 참여했던 이동봉사 현황 조회
     @Query("SELECT v FROM VolunteerWorkStatus v "

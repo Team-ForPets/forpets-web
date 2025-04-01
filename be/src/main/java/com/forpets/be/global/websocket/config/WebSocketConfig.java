@@ -15,7 +15,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompHandler stompHandler;
-    @Value("${cors.allowed-origin}")
+    @Value("${global.allowed-origin}")
     private String allowedOrigin;
 
     public WebSocketConfig(StompHandler stompHandler) {

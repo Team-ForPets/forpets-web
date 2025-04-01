@@ -4,6 +4,8 @@ import authApi from '../api/authApi';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/slices/authSlice';
 function Login() {
+  const VITE_DOMAIN = import.meta.env.VITE_DOMAIN;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -29,10 +31,11 @@ function Login() {
     }
   };
   const handleKakaoLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+    window.location.href = `${VITE_DOMAIN}/oauth2/authorization/kakao`;
+    // window.location.href = `http://localhost:8080/oauth2/authorization/kakao`;
   };
   const handleNaverLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+    window.location.href = `${VITE_DOMAIN}/oauth2/authorization/naver`;
   };
 
   return (

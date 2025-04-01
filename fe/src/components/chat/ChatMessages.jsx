@@ -30,7 +30,6 @@ function ChatMessages({ chatRoomData }) {
     } else {
       console.error('❌ WebSocket 연결이 없습니다.');
     }
-
     setInputValue('');
   };
 
@@ -132,5 +131,4 @@ function ChatMessages({ chatRoomData }) {
     </>
   );
 }
-
 export default ChatMessages;

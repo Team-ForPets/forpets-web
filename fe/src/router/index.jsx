@@ -5,7 +5,7 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Mypage from '../pages/MyPage';
 import Chat from '../pages/Chat';
-import ServiceStatus from '../pages/ServiceStatus';
+import VolunteerWorkStatus from '../pages/VolunteerWorkStatus';
 import RegisterAnimal from '../pages/RegisterAnimal';
 import RegisterVolunteer from '../pages/RegisterVolunteer';
 import ProfileCard from '../components/mypage/ProfileCard';
@@ -92,8 +92,8 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/service-status',
-        element: <ServiceStatus />,
+        path: '/volunteer-work-status',
+        element: <VolunteerWorkStatus />,
       },
       {
         path: '/register-animal',

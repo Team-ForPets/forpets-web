@@ -48,7 +48,8 @@ spring:
               #              - profile_image
               - account_email
             #            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            redirect-uri: 'http://localhost:8080/login/oauth2/code/kakao'
+            redirect-uri: '{baseUrl}/login/oauth2/code/kakao'
+            # redirect-uri: 'http://localhost:8080/login/oauth2/code/kakao'
             client-name: Kakao
 
           naver:
@@ -79,9 +80,10 @@ spring:
             user-info-authentication-method: header
             user-name-attribute: response # Naver 응답 값 resultCode, message, response 중 response 지정
 
-  redis:
-    host: redis-container
-    port: ${REDIS_PORT}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   application:
     name: be
   datasource:
@@ -94,8 +96,10 @@ spring:
       lifecycle-management: start-and-stop
 jwt:
   secret: ${JWT_SECRET}
-cors:
+global:
   allowed-origin: https://${DOMAIN}
+  social-login-domain: ${social-login-domain}
+
 server:
   port: '8080'
 logging:

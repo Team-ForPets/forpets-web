@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -27,6 +29,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisRepository redisRepository;
+
+    @Value("${global.social-login-domain}")
+    private String socialLoginDomain;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -84,7 +89,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("RefreshToken 쿠키 저장 완료");
 
         String targetUrl =
-            "http://localhost:5173/social-login?accessToken=" + accessToken + "&username=" + email;
+            // "http://localhost:5173/social-login?accessToken=" + accessToken + "&username=" + email;
+            socialLoginDomain + "/social-login?accessToken=" + accessToken + "&username=" + email;
 
         log.info("프론트로 리디렉트: {}", targetUrl);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
