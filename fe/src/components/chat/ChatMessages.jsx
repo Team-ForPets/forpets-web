@@ -9,12 +9,6 @@ function ChatMessages({ chatRoomData }) {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([...chatMessages]); // 채팅 메시지 상태
   const stompClientRef = useRef(null); // stompClient를 useRef로 저장
-  const VITE_DOMAIN = import.meta.env.VITE_DOMAIN;
-
-  const chatMessage = {
-    senderId: senderId,
-    content: inputValue,
-  };
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -36,11 +30,6 @@ function ChatMessages({ chatRoomData }) {
     } else {
       console.error('❌ WebSocket 연결이 없습니다.');
     }
-  const connect = () => {
-    // WebSocket 서버에 연결
-    // const socket = new SockJS('http://localhost:8080/ws/connection');
-    const socket = new SockJS(`${VITE_DOMAIN}/ws/connection`);
-    stompClient = Stomp.over(socket);
     setInputValue('');
   };
 
@@ -142,5 +131,4 @@ function ChatMessages({ chatRoomData }) {
     </>
   );
 }
-
 export default ChatMessages;
