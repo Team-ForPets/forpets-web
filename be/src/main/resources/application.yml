@@ -81,7 +81,7 @@ spring:
 
   data:
     redis:
-      host: redis-container
+      host: ${REDIS_HOST}
       port: ${REDIS_PORT}
   application:
     name: be
