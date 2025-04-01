@@ -36,8 +36,7 @@ public class ChatMessageController {
         chatMessageService.sendMessage(chatRoomId, requestDto);
 
         // 메시지 수신할 특정 토픽 설정
-        messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatRoomId,
-            requestDto.getContent());
+        messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatRoomId, requestDto);
     }
 
     // 채팅방 퇴장 메시지 발신
