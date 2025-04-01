@@ -15,14 +15,14 @@ const animalsApi = {
   },
 
   // 나의 아이 수정
-  updateAnimal: async (bucketId, AnimalId, formData) => {
-    const response = await api.patch(`${ENDPOINT}/${bucketId}/Animals/${AnimalId}`, formData);
+  updateAnimal: async (myAnimalId, formData) => {
+    const response = await api.patch(`/my${ENDPOINT}/${myAnimalId}`, formData);
     return response.data;
   },
 
   // 나의 아이 삭제
-  deleteAnimal: async (bucketId, AnimalId) => {
-    const response = await api.delete(`${ENDPOINT}/${bucketId}/todos/${todoId}`);
+  deleteAnimal: async (myAnimalId) => {
+    const response = await api.delete(`/my${ENDPOINT}/${myAnimalId}`);
     return response;
   },
 };
