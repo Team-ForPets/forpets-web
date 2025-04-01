@@ -16,7 +16,7 @@ const animalsApi = {
 
   // 나의 아이 수정
   updateAnimal: async (myAnimalId, formData) => {
-    const response = await api.patch(`/my${ENDPOINT}/${myAnimalId}`, formData);
+    const response = await api.put(`/my${ENDPOINT}/${myAnimalId}`, formData);
     return response.data;
   },
 
