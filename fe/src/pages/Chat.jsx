@@ -94,6 +94,7 @@ function Chat() {
               chatRoomData={chatRoomData}
               myAnimal={myAnimal}
               handleAnimalModal={handleAnimalModal}
+              requestorId={requestorId}
             />
             <ChatMessages chatRoomData={chatRoomData} handleChatRoomClick={handleChatRoomClick} />
           </>

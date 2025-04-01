@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PromiseModal from '../PromiseModal';
 
-function ChatRoomHeader({ chatRoomStatus, chatRoomData, myAnimal, handleAnimalModal }) {
+function ChatRoomHeader({
+  chatRoomStatus,
+  chatRoomData,
+  myAnimal,
+  handleAnimalModal,
+  requestorId,
+}) {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  console.log(chatRoomData);
+
   return (
     <div className="h-[10%] flex justify-between items-center rounded-t-md bg-white">
       <div className="w-[80%] flex gap-3 items-center justify-start">
@@ -39,8 +50,21 @@ function ChatRoomHeader({ chatRoomStatus, chatRoomData, myAnimal, handleAnimalMo
       </div>
 
       <div className="w-[20%] text-center">
-        <button className="p-2 text-white bg-[#FF983F] rounded-md cursor-pointer">약속잡기</button>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="p-2 text-white bg-[#FF983F] rounded-md cursor-pointer"
+        >
+          약속잡기
+        </button>
       </div>
+      {modalOpen && (
+        <PromiseModal
+          requestorId={requestorId}
+          setModalOpen={setModalOpen}
+          myAnimal={myAnimal}
+          chatRoomData={chatRoomData}
+        />
+      )}
     </div>
   );
 }

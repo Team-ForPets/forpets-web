@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
 function VolunteerWorkStatusCard({ service }) {
-  console.log(service);
   const stateMap = {
     progress: '진행중',
     done: '완료',
