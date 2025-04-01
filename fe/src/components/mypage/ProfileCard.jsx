@@ -93,13 +93,13 @@ function ProfileCard() {
                 <div className="absolute top-2 right-2 flex gap-2">
                   <button
                     onClick={() => document.getElementById('fileInput').click()}
-                    className="bg-amber-300 hover:bg-amber-500 text-black px-2 py-1 rounded"
+                    className="bg-secondary hover:bg-primary text-white px-2 py-1 rounded"
                   >
                     수정
                   </button>
                   <button
                     onClick={handleImageDelete}
-                    className="bg-red-300 hover:bg-red-500 text-black px-2 py-1 rounded"
+                    className="bg-gray-400 hover:bg-hover text-white px-2 py-1 rounded"
                   >
                     삭제
                   </button>
@@ -110,7 +110,7 @@ function ProfileCard() {
             <div className="flex flex-col items-center justify-center w-[100%] h-[100%]">
               <button
                 onClick={() => document.getElementById('fileInput').click()}
-                className="bg-amber-300 hover:bg-amber-500 text-black px-4 py-2 rounded cursor-pointer"
+                className="bg-secondary hover:bg-primary text-white px-4 py-2 rounded cursor-pointer"
               >
                 추가
               </button>
@@ -130,7 +130,7 @@ function ProfileCard() {
       </div>
       <div className="p-10 flex h-[50%]">
         <button
-          className="self-end ml-auto w-[25%] h-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all"
+          className="self-end ml-auto w-[25%] h-[25%] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
           onClick={handleUserInfoEdit}
         >
           회원정보 수정
