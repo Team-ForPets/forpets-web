@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AnimalInfoModal({ myAnimal, onClose }) {
+function ChatAnimalInfoModal({ myAnimal, onClose }) {
   if (!myAnimal) return null; // myAnimal이 없으면 모달 표시 X
 
   return (
@@ -27,7 +27,7 @@ function AnimalInfoModal({ myAnimal, onClose }) {
         <div className="mt-4 p-4 bg-[#F5F5F5] rounded-lg">
           <p className="font-semibold">🚗 이동 경로</p>
           <p className="text-sm text-gray-600">
-            {myAnimal.arrivalArea} → {myAnimal.departureArea}
+            {myAnimal.departureArea} → {myAnimal.arrivalArea}
           </p>
           <p className="font-semibold mt-3">🗒️ 특이사항</p>
           <p className="text-sm text-gray-600">{myAnimal.notice}</p>
@@ -45,4 +45,4 @@ function AnimalInfoModal({ myAnimal, onClose }) {
   );
 }
 
-export default AnimalInfoModal;
+export default ChatAnimalInfoModal;

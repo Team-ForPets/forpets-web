@@ -1,9 +1,7 @@
 import React from 'react';
 
 function ChatUserCard({ chatRoom, activeBtn, onClick }) {
-  const { id, arrivalArea, departureArea, createdAt, requestorNickname, volunteerNickname } =
-    chatRoom;
-  console.log(chatRoom);
+  const { departureArea, arrivalArea, createdAt, requestorNickname, volunteerNickname } = chatRoom;
 
   return (
     <li
@@ -20,8 +18,8 @@ function ChatUserCard({ chatRoom, activeBtn, onClick }) {
             : `요청자 이름: ${requestorNickname}`}
         </li>
         <li className="font-sm">방 생성시간 {createdAt}</li>
-        <li className="font-sm">출발지: {arrivalArea}</li>
-        <li className="text-sm">도착지: {departureArea}</li>
+        <li className="font-sm">출발지: {departureArea}</li>
+        <li className="text-sm">도착지: {arrivalArea}</li>
       </ul>
     </li>
   );
