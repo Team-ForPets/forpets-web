@@ -25,7 +25,8 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
 
   const connect = () => {
     // WebSocket 서버에 연결
-    const socket = new SockJS('http://localhost:8080/ws/connection');
+    // const socket = new SockJS('http://localhost:8080/ws/connection');
+    const socket = new SockJS(`${DOMAIN}/ws/connection`);
     stompClient = Stomp.over(socket);
 
     stompClient.reconnectDelay = 5000; // 자동 재연결
