@@ -9,6 +9,7 @@ function ChatMessages({ chatRoomData }) {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([...chatMessages]); // 채팅 메시지 상태
   const stompClientRef = useRef(null); // stompClient를 useRef로 저장
+  const VITE_DOMAIN = import.meta.env.VITE_DOMAIN;
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -37,7 +38,7 @@ function ChatMessages({ chatRoomData }) {
     // 메시지 상태 초기화 (방 변경 시마다 새로 고침)
     setMessages([...chatMessages]);
 
-    const socket = new SockJS('http://localhost:8080/ws/connection');
+    const socket = new SockJS(`${VITE_DOMAIN}/ws/connection`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
