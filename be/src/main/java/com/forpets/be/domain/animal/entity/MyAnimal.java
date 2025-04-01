@@ -19,6 +19,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "my_animal")
@@ -64,12 +66,14 @@ public class MyAnimal extends BaseTimeEntity {
 
     // S3 객체의 접근 URL
     // AWS S3 버킷 객체의 URL
+    @Setter
     @Column(nullable = true)
     private String imageUrl;
 
     // S3 객체의 키(식별자)
     // 버킷 내 객체를 구분하기 위해 필요하다.
     // 객체 삭제에 활용되는 필드
+    @Setter
     @Column(nullable = true)
     private String s3Key;
 
@@ -113,7 +117,8 @@ public class MyAnimal extends BaseTimeEntity {
         this.isDelete = isDelete;
     }
 
-    public MyAnimal update(MyAnimalUpdateRequestDto updateRequestDto) {
+    public MyAnimal update(MyAnimalUpdateRequestDto updateRequestDto, MultipartFile file,
+        String originalFilename) {
         this.animalName = updateRequestDto.getAnimalName();
         this.animalType = updateRequestDto.getAnimalType();
         this.departureArea = updateRequestDto.getDepartureArea();
@@ -124,11 +129,15 @@ public class MyAnimal extends BaseTimeEntity {
         this.notice = updateRequestDto.getNotice();
         this.memo = updateRequestDto.getMemo();
         this.selectedDate = updateRequestDto.getSelectedDate();
-        this.imageUrl = updateRequestDto.getImageUrl();
-        this.s3Key = updateRequestDto.getS3Key();
-        this.originalFileName = updateRequestDto.getOriginalFileName();
         this.isOpen = updateRequestDto.getIsOpen();
+
+        if (file == null) {
+            this.originalFileName = originalFilename;
+        } else {
+            this.originalFileName = file.getOriginalFilename();
+        }
 
         return this;
     }
+
 }

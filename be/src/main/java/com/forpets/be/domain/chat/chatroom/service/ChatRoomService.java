@@ -1,6 +1,6 @@
 package com.forpets.be.domain.chat.chatroom.service;
 
-import com.forpets.be.domain.animal.dto.response.MyAnimalReadResponseDto;
+import com.forpets.be.domain.animal.dto.response.MyAnimalResponseDto;
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
 import com.forpets.be.domain.chat.chatmessage.dto.response.ChatMessageResponseDto;
@@ -168,7 +168,7 @@ public class ChatRoomService {
             : chatRoom.getVolunteerWork().getArrivalArea();
 
         // 나의 아이 등록글의 정보 조회
-        MyAnimalReadResponseDto responseDto = MyAnimalReadResponseDto.from(chatRoom.getMyAnimal());
+        MyAnimalResponseDto responseDto = MyAnimalResponseDto.from(chatRoom.getMyAnimal());
 
         // 해당 채팅방의 채팅 메시지 내역 조회
         List<ChatMessageResponseDto> chatMessages = chatMessageRepository.findByChatRoomId(
