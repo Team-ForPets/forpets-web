@@ -42,13 +42,20 @@ public class VolunteerWorkStatus extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VolunteerStatus state;
+    private VolunteerStatus status;
 
     @Builder
     public VolunteerWorkStatus(MyAnimal myAnimal, User requestor, User volunteer) {
         this.myAnimal = myAnimal;
         this.requestor = requestor;
         this.volunteer = volunteer;
-        this.state = VolunteerStatus.IN_PROGRESS;
+        this.status = VolunteerStatus.IN_PROGRESS;
+    }
+
+    // 이동봉사 현황 상태 업데이트
+    public VolunteerWorkStatus updateStatus(VolunteerStatus status) {
+        this.status = status;
+
+        return this;
     }
 }

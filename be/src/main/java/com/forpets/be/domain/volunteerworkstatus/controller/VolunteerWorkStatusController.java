@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +27,13 @@ public class VolunteerWorkStatusController {
 
     private final VolunteerWorkStatusService volunteerWorkStatusService;
 
-    // 이동봉사 현황 생성
+    // 이동봉사 현황 생성 (약속 잡기)
     @PostMapping("/volunteer-work-status")
     public ResponseEntity<ApiResponse<VolunteerWorkStatusResponseDto>> createServiceStatus(
-        @RequestBody @Valid VolunteerWorkStatusRequestDto requestDto) {
+        @RequestBody @Valid VolunteerWorkStatusRequestDto requestDto,
+        @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.ok("이동봉사 현황이 생성되었습니다.", "CREATED",
-            volunteerWorkStatusService.createServiceStatus(requestDto)));
+            volunteerWorkStatusService.createServiceStatus(requestDto, user)));
     }
 
     // 이동봉사 현황 전체 조회
@@ -51,11 +53,20 @@ public class VolunteerWorkStatusController {
             volunteerWorkStatusService.getMyVolunteerWorkStatus(user)));
     }
 
-    // 이동봉사 현황 삭제
+    // 이동봉사 현황 수정 (이동 완료)
+    @PatchMapping("/volunteer-work-status/{volunteerWorkStatusId}")
+    public ResponseEntity<ApiResponse<VolunteerWorkStatusResponseDto>> updateVolunteerWorkStatus(
+        @PathVariable Long volunteerWorkStatusId,
+        @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ApiResponse.ok("이동봉사 현황이 수정되었습니다.", "UPDATED",
+            volunteerWorkStatusService.updateVolunteerWorkStatus(volunteerWorkStatusId, user)));
+    }
+
+    // 이동봉사 현황 삭제 (약속 취소)
     @DeleteMapping("/volunteer-work-status/{volunteerWorkStatusId}")
     public ResponseEntity<ApiResponse<Void>> deleteVolunteerWorkStatus(
-        @PathVariable Long volunteerWorkStatusId) {
-        volunteerWorkStatusService.deleteVolunteerWorkStatus(volunteerWorkStatusId);
+        @PathVariable Long volunteerWorkStatusId, @AuthenticationPrincipal User user) {
+        volunteerWorkStatusService.deleteVolunteerWorkStatus(volunteerWorkStatusId, user);
 
         return ResponseEntity.ok(ApiResponse.ok("이동봉사 현황이 삭제되었습니다.", "DELETED", null));
     }
