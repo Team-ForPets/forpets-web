@@ -7,6 +7,8 @@ let stompClient = null;
 function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
   const { id, chatMessages } = chatRoomData;
   const [inputValue, setInputValue] = useState('');
+  const VITE_DOMAIN = import.meta.env.VITE_DOMAIN;
+
   const chatMessage = {
     senderId: senderId,
     content: inputValue,
@@ -26,7 +28,7 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
   const connect = () => {
     // WebSocket 서버에 연결
     // const socket = new SockJS('http://localhost:8080/ws/connection');
-    const socket = new SockJS(`${DOMAIN}/ws/connection`);
+    const socket = new SockJS(`${VITE_DOMAIN}/ws/connection`);
     stompClient = Stomp.over(socket);
 
     stompClient.reconnectDelay = 5000; // 자동 재연결
