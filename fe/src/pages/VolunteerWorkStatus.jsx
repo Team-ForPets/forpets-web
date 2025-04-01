@@ -18,10 +18,11 @@ function VolunteerWorkStatus() {
       }
       console.log('스테이터스', status);
       console.log('응답 데이터', response);
-      setServices(response.data.volunteerworkStatuses);
+      setServices(response.data.volunteerworkStatuses || []);
     } catch (err) {
       console.error(err);
       console.log('데이터를 읽어오지 못했습니다.');
+      setServices([]);
     }
   };
 
