@@ -7,7 +7,6 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 function ProfileCard() {
-  const [showModal, setShowModal] = useState(false);
   const [profile, setProfile] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -54,7 +53,7 @@ function ProfileCard() {
     });
 
     // Todo: 사용자가 입력한 비밀번호를 확인하는 로직 구현 필요
-    // setShowModal(false);
+
     setModalIsOpen(false);
   };
 
@@ -62,10 +61,6 @@ function ProfileCard() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
-  // const handleCancel = () => {
-  //   setShowModal(false);
-  // };
 
   return (
     <>
@@ -98,7 +93,7 @@ function ProfileCard() {
       </div>
       <div className="p-10 flex h-[50%]">
         <button
-          className="self-end ml-auto w-[8vw] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
+          className="self-end ml-auto w-[20%] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
           onClick={openModal}
         >
           회원정보 수정
