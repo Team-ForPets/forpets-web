@@ -82,11 +82,11 @@ function ProfileCard() {
         </div>
         <div className="w-[60%] flex flex-col gap-y-3 mt-10">
           <div className="flex gap-10">
-            <label className="text-gray-400 text-lg">이메일</label>
+            <label className="text-gray-500 text-lg">이메일</label>
             <div className="text-lg">{profile.username}</div>
           </div>
           <div className="flex gap-10">
-            <label className="text-gray-400 text-lg">닉네임</label>
+            <label className="text-gray-500 text-lg">닉네임</label>
             <div className="text-lg">{profile.nickname}</div>
           </div>
         </div>

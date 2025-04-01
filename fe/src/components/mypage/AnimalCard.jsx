@@ -55,7 +55,7 @@ function AnimalCard() {
             </div>
             <div className="flex gap-5">
               <label className="text-gray-400">도착지</label>
-              <div>천안시 어쩌구</div>
+              <div>서울시 강남구</div>
             </div>
 
             <div className="flex gap-5">
