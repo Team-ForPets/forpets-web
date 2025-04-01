@@ -17,7 +17,9 @@ function AnimalDetail() {
   const navigate = useNavigate();
   const { animal } = location.state; // 넘어온 state에서 animal 꺼내기
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ ...animal, isOpen: false });
+  const [detailData, setDetailData] = useState({ ...animal, isOpen: false });
+  const [modalData, setModalData] = useState({ ...animal, isOpen: false });
+  const [image, setImage] = useState(null);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -30,21 +32,24 @@ function AnimalDetail() {
   const handleInput = (e) => {
     console.log();
 
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setModalData({ ...modalData, [e.target.name]: e.target.value });
   };
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+      console.log(file);
+      console.log(detailData);
       const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, imageUrl: imageUrl }));
+      setImage(file);
+      setModalData((prev) => ({ ...prev, imageUrl: imageUrl }));
     }
   };
 
   // 다음 지오코딩 활용한 주소 입력
   const handleComplete = (data, key) => {
     let fullAddress = data.address;
-    setFormData((prev) => ({ ...prev, [key]: fullAddress }));
+    setModalData((prev) => ({ ...prev, [key]: fullAddress }));
   };
 
   // 다음 지오코딩 활용한 주소 입력
@@ -56,8 +61,19 @@ function AnimalDetail() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
+      const formData = new FormData();
+      const jsonBlob = new Blob([JSON.stringify(modalData)], { type: 'application/json' });
+
+      formData.append('data', jsonBlob);
+
+      if (image) {
+        formData.append('file', image);
+      } else {
+        formData.append('file', animal.imageUrl);
+      }
+
       const response = await animalsApi.updateAnimal(animal.id, formData);
+      setDetailData(modalData);
       console.log(response);
       closeModal();
       // navigate('/animal-detail');
@@ -91,42 +107,42 @@ function AnimalDetail() {
         <section className="flex gap-10">
           <section className="flex items-center justify-center cursor-pointer border border-gray rounded-xl w-[25vw] h-[35vh]">
             <img
-              src={animal.imageUrl}
+              src={detailData.imageUrl}
               alt="업로드된 이미지"
-              className={`object-cover rounded-xl ${animal.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
+              className={`object-cover rounded-xl ${detailData.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
             />
             {/* 동물정보 이름 나이 품종 체중 시작날짜 출발지역 도착지역 */}
           </section>
           <section className="flex flex-col w-[52%] h-[35vh] gap-2.5 ">
             <p className="text-2xl text-center">동물정보</p>
             <p className="mt-4 font-medium">
-              이름 : <span className="font-normal">{formData.animalName}</span>
+              이름 : <span className="font-normal">{detailData.animalName}</span>
             </p>
             <p className="font-medium">
-              나이 : <span className="font-normal">{formData.age}</span>
+              나이 : <span className="font-normal">{detailData.age}</span>
             </p>
             <p className="font-medium">
-              품종 : <span className="font-normal">{formData.breed}</span>
+              품종 : <span className="font-normal">{detailData.breed}</span>
             </p>
             <p className="font-medium">
-              체중 : <span className="font-normal">{formData.weight}</span>
+              체중 : <span className="font-normal">{detailData.weight}</span>
             </p>
             <p className="font-medium">
-              시작날짜 : <span className="font-normal">{formData.selectedDate}</span>
+              시작날짜 : <span className="font-normal">{detailData.selectedDate}</span>
             </p>
             <p className="font-medium">
-              출발지역 : <span className="font-normal">{formData.departureArea}</span>
+              출발지역 : <span className="font-normal">{detailData.departureArea}</span>
             </p>
             <p className="font-medium">
-              도착지역 : <span className="font-normal">{formData.arrivalArea}</span>
+              도착지역 : <span className="font-normal">{detailData.arrivalArea}</span>
             </p>
           </section>
         </section>
 
         <p className="mt-5 font-medium">특징 및 주의사항</p>
-        <p className="my-2">: {formData.notice}</p>
+        <p className="my-2">: {detailData.notice}</p>
         <p className="mt-3 font-medium">봉사자에게 전하고 싶은 말</p>
-        <p className="my-2">: {formData.memo}</p>
+        <p className="my-2">: {detailData.memo}</p>
 
         <section className="flex justify-end gap-5 mt-5">
           <button
@@ -160,9 +176,9 @@ function AnimalDetail() {
                 className="flex items-center justify-center cursor-pointer border border-gray rounded-xl w-[25vw] h-[35vh]"
               >
                 <img
-                  src={formData.imageUrl}
+                  src={modalData.imageUrl}
                   alt="업로드된 이미지"
-                  className={`object-cover rounded-xl ${formData.imageUrl === logo ? 'h-[50%]' : 'w-full h-full'}`}
+                  className={`object-cover rounded-xl ${modalData.imageUrl === logo ? 'h-[50%]' : 'w-full h-full'}`}
                 />
                 <input
                   id="imageInput"
@@ -178,7 +194,7 @@ function AnimalDetail() {
                   <input
                     type="date"
                     name="selectedDate"
-                    value={formData.selectedDate}
+                    value={modalData.selectedDate}
                     onChange={handleInput}
                     onClick={(e) => e.target.showPicker()}
                     className="flex-1 border-1 rounded-xl p-2 border-gray"
@@ -188,7 +204,7 @@ function AnimalDetail() {
                     name="animalType"
                     className="flex-1 border-1 rounded-xl p-2 border-gray"
                     onChange={handleInput}
-                    value={formData.animalType}
+                    value={modalData.animalType}
                     required
                   >
                     <option value="">동물 유형</option>
@@ -202,7 +218,7 @@ function AnimalDetail() {
                     type="button"
                     name="departureArea"
                     className="flex-1 border-1 rounded-xl p-2 border-gray text-center placeholder-black"
-                    value={formData.departureArea || '출발지역'}
+                    value={modalData.departureArea || '출발지역'}
                     onClick={handleClick}
                     required
                   />
@@ -210,7 +226,7 @@ function AnimalDetail() {
                     type="button"
                     name="arrivalArea"
                     className="flex-1 border-1 rounded-xl p-2 border-gray text-center placeholder-black"
-                    value={formData.arrivalArea || '도착지역'}
+                    value={modalData.arrivalArea || '도착지역'}
                     onClick={handleClick}
                     required
                   />
@@ -222,7 +238,7 @@ function AnimalDetail() {
                   placeholder="이름"
                   minLength="1"
                   maxLength="10"
-                  value={formData.animalName}
+                  value={modalData.animalName}
                   onChange={handleInput}
                   required
                 />
@@ -233,7 +249,7 @@ function AnimalDetail() {
                   placeholder="품종"
                   minLength="1"
                   maxLength="10"
-                  value={formData.breed}
+                  value={modalData.breed}
                   onChange={handleInput}
                   required
                 />
@@ -243,7 +259,7 @@ function AnimalDetail() {
                   className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
                 [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                   placeholder="나이"
-                  value={formData.age}
+                  value={modalData.age}
                   onChange={handleInput}
                   required
                 />
@@ -253,7 +269,7 @@ function AnimalDetail() {
                   className="flex flex-1 items-center justify-center border-1 rounded-xl [&::-webkit-outer-spin-button]:appearance-none 
                 [&::-webkit-inner-spin-button]:appearance-none border-gray text-center placeholder-black"
                   placeholder="체중"
-                  value={formData.weight}
+                  value={modalData.weight}
                   onChange={handleInput}
                 />
               </section>
@@ -264,7 +280,7 @@ function AnimalDetail() {
               name="notice"
               className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
               placeholder="특징 및 주의사항"
-              value={formData.notice}
+              value={modalData.notice}
               onChange={handleInput}
             />
             <textarea
@@ -272,7 +288,7 @@ function AnimalDetail() {
               name="memo"
               className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
               placeholder="봉사자에게 전하고 싶은 말"
-              value={formData.memo}
+              value={modalData.memo}
               onChange={handleInput}
             />
 
@@ -281,9 +297,9 @@ function AnimalDetail() {
                 name="isOpen"
                 type="button"
                 className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
-                onClick={() => setFormData((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
+                onClick={() => setDetailData((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
               >
-                {formData.isOpen ? '비공개' : '공개'}
+                {modalData.isOpen ? '비공개' : '공개'}
               </button>
               <section className="flex gap-5">
                 <button

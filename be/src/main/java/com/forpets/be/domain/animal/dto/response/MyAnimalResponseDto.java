@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MyAnimalReadResponseDto {
+public class MyAnimalResponseDto {
 
     private Long id;
     private String animalName;
@@ -25,9 +25,10 @@ public class MyAnimalReadResponseDto {
     private String memo;
     private LocalDate selectedDate;
     private String imageUrl;
+    private String originalFileName;
 
-    public static MyAnimalReadResponseDto from(MyAnimal myAnimal) {
-        return MyAnimalReadResponseDto.builder()
+    public static MyAnimalResponseDto from(MyAnimal myAnimal) {
+        return MyAnimalResponseDto.builder()
             .id(myAnimal.getId())
             .animalName(myAnimal.getAnimalName())
             .animalType(myAnimal.getAnimalType())
@@ -40,6 +41,7 @@ public class MyAnimalReadResponseDto {
             .memo(myAnimal.getMemo())
             .selectedDate(myAnimal.getSelectedDate())
             .imageUrl(myAnimal.getImageUrl())
+            .originalFileName(myAnimal.getOriginalFileName())
             .build();
     }
 }

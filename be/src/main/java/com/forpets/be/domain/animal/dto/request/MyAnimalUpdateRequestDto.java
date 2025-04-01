@@ -1,10 +1,9 @@
 package com.forpets.be.domain.animal.dto.request;
 
-import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -24,14 +23,12 @@ public class MyAnimalUpdateRequestDto {
 
     private String arrivalArea;
 
-    @Size(min = 2, max = 10, message = "품종은 2자 이상 10자 이하여야 합니다")
+    @Size(min = 1, max = 10, message = "품종은 1자 이상 10자 이하여야 합니다")
     private String breed;
 
-    @Positive
     @Range(min = 0, max = 25)
     private Integer age;
 
-    @Positive
     @Range(min = 0, max = 60)
     private Integer weight;
 
@@ -41,36 +38,9 @@ public class MyAnimalUpdateRequestDto {
     @Length(min = 1, max = 255)
     private String memo;
 
+    @NotNull(message = "날짜는 필수 입력값입니다")
     private LocalDate selectedDate;
 
-    @Length(min = 1, max = 255)
-    private String imageUrl;
-
-    @Length(min = 1, max = 255)
-    private String s3Key;
-
-    @Length(min = 1, max = 255)
-    private String originalFileName;
-
+    @NotNull
     private Boolean isOpen;
-
-
-    public MyAnimal toEntity() {
-        return MyAnimal.builder()
-            .animalName(this.animalName)
-            .animalType(this.animalType)
-            .departureArea(this.departureArea)
-            .arrivalArea(this.arrivalArea)
-            .breed(this.breed)
-            .age(this.age)
-            .weight(this.weight)
-            .notice(this.notice)
-            .memo(this.memo)
-            .selectedDate(this.selectedDate)
-            .imageUrl(this.imageUrl)
-            .s3Key(this.s3Key)
-            .originalFileName(this.originalFileName)
-            .isOpen(this.isOpen)
-            .build();
-    }
 }
