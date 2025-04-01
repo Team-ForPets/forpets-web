@@ -19,7 +19,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       interval: 10s
       timeout: 5s
       retries: 3
@@ -51,6 +51,9 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL}
         - VITE_RESCUE_ANIMALS_KEY=${VITE_RESCUE_ANIMALS_KEY}
+        - VITE_KAKAOMAP_KEY=${VITE_KAKAOMAP_KEY}
+        - VITE_KAKAO_REST_KEY=${VITE_KAKAO_REST_KEY}
+        - VITE_DOMAIN=${VITE_DOMAIN}
       cache_from:
         - type=local,src=/tmp/docker-cache/fe
       cache_to:
@@ -59,8 +62,8 @@ services:
     env_file:
       - .env
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     networks:
       - be-network
     volumes:
