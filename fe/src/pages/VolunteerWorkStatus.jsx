@@ -7,18 +7,19 @@ function VolunteerWorkStatus() {
   const [status, setStatus] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all'); // 현재 선택된 버튼 상태
 
-  const selectBtn = ['all', 'in-progress', 'completed', ''];
+  const selectBtn = ['all', 'in-progress', 'completed', 'my'];
   const fetchServices = async (status) => {
     try {
       let response;
-      if (status !== 'myVolunteerWorkStatus') {
-        response = await VolunteerWorkStatusApi.getVolunteerWorkStatus(status);
+      if (status === 'my') {
+        response = await VolunteerWorkStatusApi.getMyVolunteerWorkStatus();
+        setServices(response.data.data.volunteerWorkStatuses || []);
       } else {
-        response = await VolunteerWorkStatusApi.getVolunteerWorkStatus();
+        response = await VolunteerWorkStatusApi.getVolunteerWorkStatus(status);
+        setServices(response.data.volunteerWorkStatuses || []);
       }
       console.log('스테이터스', status);
       console.log('응답 데이터', response);
-      setServices(response.data.volunteerworkStatuses || []);
     } catch (err) {
       console.error(err);
       console.log('데이터를 읽어오지 못했습니다.');
@@ -52,7 +53,9 @@ function VolunteerWorkStatus() {
                 ? '진행중'
                 : status === 'completed'
                   ? '완료'
-                  : '내아이'}
+                  : status === 'my'
+                    ? '내아이'
+                    : ''}
           </button>
         ))}
       </div>
