@@ -50,6 +50,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=${VITE_API_URL}
+        - VITE_RESCUE_ANIMALS_KEY=${VITE_RESCUE_ANIMALS_KEY}
       cache_from:
         - type=local,src=/tmp/docker-cache/fe
       cache_to:

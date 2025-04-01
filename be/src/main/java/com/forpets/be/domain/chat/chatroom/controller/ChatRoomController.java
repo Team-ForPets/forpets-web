@@ -55,9 +55,9 @@ public class ChatRoomController {
     // 채팅방 상세 조회
     @GetMapping("/{chatRoomId}")
     public ResponseEntity<ApiResponse<ChatRoomDetailResponseDto>> getChatRoom(
-        @PathVariable Long chatRoomId) {
+        @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.ok(chatRoomId + "번 채팅방이 조회되었습니다.", "OK",
-            chatRoomService.getChatRoomById(chatRoomId)));
+            chatRoomService.getChatRoomById(chatRoomId, user)));
     }
 
     // 채팅방 퇴장/삭제

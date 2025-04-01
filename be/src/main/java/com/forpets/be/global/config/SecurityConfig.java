@@ -35,7 +35,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler successHandler;
-    @Value("${cors.allowed-origin}")
+    @Value("${global.allowed-origin}")
     private String allowedOrigin;
 
     //
