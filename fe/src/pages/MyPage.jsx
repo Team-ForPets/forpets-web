@@ -36,7 +36,7 @@ function MyPage() {
     <div className="h-[70vh] flex gap-10 pt-10">
       <aside className="w-[25%] flex flex-col gap-10 items-center pt-5">
         <button
-          className={`w-[80%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'profile' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'profile' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('profile');
             handleProfileRead();
@@ -45,7 +45,7 @@ function MyPage() {
           프로필
         </button>
         <button
-          className={`w-[80%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'animals' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'animals' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('animals');
             handleAnimalRead();
@@ -54,7 +54,7 @@ function MyPage() {
           나의 아이
         </button>
         <button
-          className={`w-[80%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'volunteer-posts' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
+          className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'volunteer-posts' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
             setSelectedButton('volunteer-posts');
             handleVolunteerRead();
