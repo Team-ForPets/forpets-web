@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Stomp } from '@stomp/stompjs'; // `Stomp`를 직접 import
+import React, { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
-let stompClient = null;
-
-function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
+function ChatMessages({ chatRoomData }) {
+  const accessToken = localStorage.getItem('accessToken');
+  const userId = parseInt(localStorage.getItem('userId')); // userId 가져오기
   const { id, chatMessages } = chatRoomData;
   const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState([...chatMessages]); // 채팅 메시지 상태
+  const stompClientRef = useRef(null); // stompClient를 useRef로 저장
   const VITE_DOMAIN = import.meta.env.VITE_DOMAIN;
 
   const chatMessage = {
@@ -14,99 +16,103 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
     content: inputValue,
   };
 
-  // 페이지 진입시 웹소켓 연결
-  useEffect(() => {
-    // 컴포넌트가 마운트되었을 때 WebSocket 연결을 설정
-    connect();
+  const sendMessage = (e) => {
+    e.preventDefault();
 
-    // 컴포넌트가 언마운트되었을 때 WebSocket 연결을 끊음
-    return () => {
-      disconnect();
+    // 빈 문자열이 아니면만 메시지를 전송
+    if (!inputValue.trim()) return;
+
+    const chatMessage = {
+      senderId: userId,
+      content: inputValue,
     };
-  }, [id]);
 
+    // 서버로 메시지 전송
+    if (stompClientRef.current && stompClientRef.current.connected) {
+      stompClientRef.current.publish({
+        destination: `/pub/chat/rooms/${id}/message`,
+        body: JSON.stringify(chatMessage),
+      });
+    } else {
+      console.error('❌ WebSocket 연결이 없습니다.');
+    }
   const connect = () => {
     // WebSocket 서버에 연결
     // const socket = new SockJS('http://localhost:8080/ws/connection');
     const socket = new SockJS(`${VITE_DOMAIN}/ws/connection`);
     stompClient = Stomp.over(socket);
-
-    stompClient.reconnectDelay = 5000; // 자동 재연결
-    stompClient.debug = (str) => console.log(str); // 디버깅 로그
-
-    // WebSocket 연결 시 처리
-    stompClient.connect(
-      {},
-      () => {
-        console.log('웹소켓 연결 완료');
-
-        // 채팅방 구독
-        console.log(`채팅방 구독: /sub/chat/rooms/${id}`);
-        stompClient.subscribe(`/sub/chat/rooms/${id}`, (message) => {
-          try {
-            onMessageReceived(message.body); // onMessageReceived는 이미 파싱된 메시지를 받음
-          } catch (error) {
-            console.log('받은 원본 메시지:', message.body); // 원본 메시지 출력
-          }
-        });
-      },
-      (error) => {
-        // 오류 발생 시 추가 로그
-        console.error('웹소켓 연결 실패:', error); // 오류 전체 출력
-        if (error) {
-          console.error('상세 오류 메시지:', error.message);
-          console.error('오류 스택:', error.stack);
-          console.error('오류 코드:', error.code);
-        }
-      },
-    );
-  };
-
-  // 웹소켓 연결 종료
-  const disconnect = () => {
-    if (stompClient) {
-      stompClient.disconnect(() => {
-        console.log('웹소켓 연결 종료');
-      });
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleChatRoomClick();
-    // WebSocket 연결이 되어 있지 않으면 오류 메시지 출력
-    if (!stompClient || !stompClient.connected) {
-      console.error('WebSocket 연결이 안되었습니다.');
-      return;
-    }
-
-    // 메시지가 비어 있으면 오류 메시지 출력
-    if (!inputValue.trim()) {
-      console.error('메시지가 비어있습니다.');
-      return;
-    }
-
-    // 서버로 메시지 전송
-    stompClient.send(`/pub/chat/rooms/${id}/message`, {}, JSON.stringify(chatMessage));
-
-    // 채팅방 데이터를 새로 고침
-    handleChatRoomClick(id);
-
-    // 메시지 전송 후 입력란 비우기
     setInputValue('');
   };
+
+  useEffect(() => {
+    // 메시지 상태 초기화 (방 변경 시마다 새로 고침)
+    setMessages([...chatMessages]);
+
+    const socket = new SockJS('http://localhost:8080/ws/connection');
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
+      connectHeaders: {
+        Authorization: accessToken, // 🔥 토큰을 포함하여 인증
+        'accept-version': '1.1,1.2',
+        host: 'localhost',
+      },
+      // debug: (msg) => console.log('[STOMP] ' + msg),
+      onConnect: () => {
+        console.log('✅ WebSocket 연결 성공!');
+
+        // 채팅방 구독 (수신)
+        stompClient.subscribe(`/sub/chat/rooms/${id}`, (message) => {
+          const receivedMessage = JSON.parse(message.body); // 메시지가 문자열이라면 그대로 사용
+          // 빈 메시지가 아닌 경우만 상태 업데이트
+          if (receivedMessage.content.trim()) {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              {
+                senderId: receivedMessage.senderId, // 보낸 사람 ID
+                content: receivedMessage.content, // 받은 메시지 내용
+              },
+            ]);
+          }
+        });
+
+        // 입장 메시지 전송
+        stompClient.publish({
+          destination: `/pub/chat/rooms/${id}/enter`,
+          body: JSON.stringify({ senderId: userId }),
+        });
+
+        stompClient.onStompError = (frame) => {
+          console.error('❌ STOMP 오류 발생:', frame);
+        };
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP 오류 발생:', frame);
+      },
+    });
+
+    stompClient.activate();
+    stompClientRef.current = stompClient; // stompClient를 useRef에 저장
+
+    return () => {
+      stompClient.deactivate(); // 컴포넌트 언마운트 시 WebSocket 연결 해제
+    };
+  }, [id, userId]);
+
   return (
     <>
       <div className="h-[80%] bg-[#F5F5F5] flex flex-col-reverse overflow-auto">
         <div className="flex flex-col p-2">
-          {chatMessages.map((message, index) => (
+          {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex  mb-2 ${message.senderId !== senderId ? 'justify-end' : 'justify-start'}`}
+              className={`flex mb-2 ${message.senderId === userId ? 'justify-end' : 'justify-start'}`}
             >
+              {/* {console.log(message)} */}
+
               <div
                 className={`max-w-[70%] p-2 rounded-lg ${
-                  message.senderId !== senderId ? 'bg-[#FF983F] text-white' : 'bg-[#E3E3E3]'
+                  message.senderId === userId ? 'bg-[#FF983F] text-white' : 'bg-[#E3E3E3]'
                 }`}
               >
                 <p>{message.content}</p>
@@ -117,7 +123,7 @@ function ChatMessages({ chatRoomData, senderId, handleChatRoomClick }) {
       </div>
 
       <div className="w-full h-[10%] px-2 bg-[#FFC28D] rounded-md absolute bottom-0">
-        <form className="h-[100%] flex justify-around items-center" onSubmit={handleSubmit}>
+        <form className="h-[100%] flex justify-around items-center" onSubmit={sendMessage}>
           <input
             type="text"
             className="w-[100%] h-[70%] bg-white rounded-xl"

@@ -1,8 +1,6 @@
 import React from 'react';
 
-function ChatRoomHeader({ chatRoomData, handleAnimalModal }) {
-  console.log(chatRoomData);
-
+function ChatRoomHeader({ chatRoomStatus, chatRoomData, myAnimal, handleAnimalModal }) {
   return (
     <div className="h-[10%] flex justify-between items-center rounded-t-md bg-white">
       <div className="w-[80%] flex gap-3 items-center justify-start">
@@ -13,12 +11,25 @@ function ChatRoomHeader({ chatRoomData, handleAnimalModal }) {
             className="w-[100px] h-[50px] p-2 box-border"
           />
         </div>
-        <div>
-          <h3 className="font-black">{chatRoomData?.nickName}</h3>
-          <p className="text-xs">
-            {chatRoomData.arrivalArea} -&gt; {chatRoomData?.departureArea}
-          </p>
-        </div>
+
+        {/* 요청일 경우 */}
+        {chatRoomStatus === '봉사' ? (
+          <div>
+            <h3 className="font-black">{myAnimal?.nickName}</h3>
+            <p className="text-xs">
+              {myAnimal?.departureArea} -&gt; {myAnimal?.arrivalArea}
+            </p>
+          </div>
+        ) : (
+          //  봉사일 경우
+          <div>
+            <h3 className="font-black">{chatRoomData?.volunteerNickName}</h3>{' '}
+            <p className="text-xs">
+              {chatRoomData?.departureArea} -&gt; {chatRoomData?.arrivalArea}
+            </p>
+          </div>
+        )}
+
         <button
           onClick={handleAnimalModal}
           className="py-0.5 px-2 text-xs bg-[#FFC28D] rounded-md mt-auto mb-0.5 cursor-pointer"
