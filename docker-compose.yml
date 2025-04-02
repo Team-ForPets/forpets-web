@@ -54,6 +54,7 @@ services:
         - VITE_KAKAOMAP_KEY=${VITE_KAKAOMAP_KEY}
         - VITE_KAKAO_REST_KEY=${VITE_KAKAO_REST_KEY}
         - VITE_DOMAIN=${VITE_DOMAIN}
+        - VITE_SOCIAL_LOGIN_DOMAIN=$P{VITE_SOCIAL_LOGIN_DOMAIN}
       cache_from:
         - type=local,src=/tmp/docker-cache/fe
       cache_to:
