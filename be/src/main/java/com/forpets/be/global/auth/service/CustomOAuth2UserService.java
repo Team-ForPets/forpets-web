@@ -55,7 +55,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             socialName = "id";
         } else if (provider.equals("naver")) {
             socialName = "response";
-            // 기본 이메일 (연락처 이메일)
         }
         log.info(socialName);
 
