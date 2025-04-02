@@ -10,8 +10,12 @@ function Banner() {
   }
 
   return (
-    <div>
-      <img className="w-[100%] h-[70%] max-h-[70vh]" src="/assets/banner.png" alt="배너이미지" />
+    <div className="w-[60vw] m-auto">
+      <img
+        className="w-[100%] h-[70%] max-h-[70vh] rounded-md "
+        src="/assets/banner.png"
+        alt="배너이미지"
+      />
     </div>
   );
 }

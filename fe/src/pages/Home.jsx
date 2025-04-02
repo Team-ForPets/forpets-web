@@ -55,9 +55,9 @@ function Home() {
   };
 
   return (
-    <main className="flex justify-between my-[10vh]">
+    <main className="flex justify-between mt-[2vh] mb-[5vh]">
       {/* 지도 섹션 (왼쪽) */}
-      <section className="w-[65%] rounded-md">
+      <section className="w-[68%] rounded-md">
         <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
       </section>
 
