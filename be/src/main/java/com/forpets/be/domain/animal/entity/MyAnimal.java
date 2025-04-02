@@ -1,8 +1,8 @@
 package com.forpets.be.domain.animal.entity;
 
 import com.forpets.be.domain.animal.dto.request.MyAnimalUpdateRequestDto;
-import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerwork.entity.AnimalType;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

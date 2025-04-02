@@ -2,8 +2,8 @@ package com.forpets.be.domain.chat.chatroom.entity;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.chat.chatmessage.entity.ChatMessage;
-import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerwork.entity.VolunteerWork;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

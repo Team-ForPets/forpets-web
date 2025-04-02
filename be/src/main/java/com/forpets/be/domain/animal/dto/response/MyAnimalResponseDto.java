@@ -1,7 +1,7 @@
 package com.forpets.be.domain.animal.dto.response;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
-import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
+import com.forpets.be.domain.volunteerwork.entity.AnimalType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.time.LocalDate;

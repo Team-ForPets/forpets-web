@@ -1,8 +1,8 @@
-package com.forpets.be.domain.servicevolunteer.dto.response;
+package com.forpets.be.domain.volunteerwork.dto.response;
 
-import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
-import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.dto.response.UserNickNameImageResponseDto;
+import com.forpets.be.domain.volunteerwork.entity.AnimalType;
+import com.forpets.be.domain.volunteerwork.entity.VolunteerWork;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ServiceVolunteerDetailResponseDto {
+public class VolunteerWorkDetailResponseDto {
 
     private final Long id;
     private final String title;
@@ -25,8 +25,8 @@ public class ServiceVolunteerDetailResponseDto {
     private final UserNickNameImageResponseDto user;
 //  private final User user;
 
-    public static ServiceVolunteerDetailResponseDto from(VolunteerWork entity) {
-        return ServiceVolunteerDetailResponseDto.builder()
+    public static VolunteerWorkDetailResponseDto from(VolunteerWork entity) {
+        return VolunteerWorkDetailResponseDto.builder()
             .id(entity.getId())
             .title(entity.getTitle())
             .animalType(entity.getAnimalType())

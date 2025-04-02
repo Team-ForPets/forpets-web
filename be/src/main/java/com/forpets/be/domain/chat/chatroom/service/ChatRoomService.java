@@ -14,10 +14,10 @@ import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsListRe
 import com.forpets.be.domain.chat.chatroom.dto.response.VolunteerChatRoomsResponseDto;
 import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
-import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
-import com.forpets.be.domain.servicevolunteer.repository.VolunteerRepository;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
+import com.forpets.be.domain.volunteerwork.entity.VolunteerWork;
+import com.forpets.be.domain.volunteerwork.repository.VolunteerWorkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MyAnimalRepository myAnimalRepository;
-    private final VolunteerRepository volunteerRepository;
+    private final VolunteerWorkRepository volunteerWorkRepository;
     private final UserRepository userRepository;
     private final ChatMessageRepository chatMessageRepository;
 
@@ -65,7 +65,7 @@ public class ChatRoomService {
         } else {
             // 봉사글에서 채팅이 시작된 경우
 
-            volunteerWork = volunteerRepository.findById(
+            volunteerWork = volunteerWorkRepository.findById(
                     requestDto.getVolunteerWorkId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 봉사 등록글이 존재하지 않습니다."));
 

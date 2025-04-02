@@ -1,7 +1,7 @@
-package com.forpets.be.domain.servicevolunteer.dto.response;
+package com.forpets.be.domain.volunteerwork.dto.response;
 
-import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerwork.entity.VolunteerWork;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ServiceVolunteerListResponseDto {
+public class VolunteerWorkListResponseDto {
 
     private final String title;
     private final LocalDate startDate;
@@ -20,8 +20,8 @@ public class ServiceVolunteerListResponseDto {
     private final String imageUrl;
     private Long id;
 
-    public static ServiceVolunteerListResponseDto from(VolunteerWork entity, User user) {
-        return ServiceVolunteerListResponseDto.builder()
+    public static VolunteerWorkListResponseDto from(VolunteerWork entity, User user) {
+        return VolunteerWorkListResponseDto.builder()
             .id(entity.getId())
             .imageUrl(user != null ? user.getImageUrl()
                 : "https://via.placeholder.com/150") // Default image handling
