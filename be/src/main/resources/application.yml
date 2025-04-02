@@ -90,6 +90,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DATABASE_USERNAME}
     url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
   docker:
     compose:
       lifecycle-management: start-and-stop
