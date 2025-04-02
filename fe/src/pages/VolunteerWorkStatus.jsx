@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import VolunteerWorkStatusApi from '../api/volunteerWorkStatusApi';
 import VolunteerWorkStatusCard from '../components/VolunteerWorkStatusCard';
 
@@ -6,8 +7,9 @@ function VolunteerWorkStatus() {
   const [services, setServices] = useState([]);
   const [status, setStatus] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all'); // 현재 선택된 버튼 상태
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const selectBtn = ['all', 'in-progress', 'completed', 'my'];
+  const selectBtn = ['all', 'in-progress', 'completed'];
   const fetchServices = async (status) => {
     try {
       let response;
@@ -36,7 +38,9 @@ function VolunteerWorkStatus() {
     setStatus(newStatus);
     setSelectedStatus(newStatus);
   };
-
+  if (isLoggedIn) {
+    selectBtn.push('my');
+  }
   return (
     <div>
       {/* 카테고리 탭 */}
@@ -53,9 +57,7 @@ function VolunteerWorkStatus() {
                 ? '진행중'
                 : status === 'completed'
                   ? '완료'
-                  : status === 'my'
-                    ? '내아이'
-                    : ''}
+                  : '나의 현황'}
           </button>
         ))}
       </div>
