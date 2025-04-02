@@ -55,14 +55,14 @@ function Home() {
   };
 
   return (
-    <main className="flex justify-between mt-[2vh] mb-[5vh]">
+    <main className="h-[90vh] flex justify-between mt-[2vh] mb-[5vh]">
       {/* 지도 섹션 (왼쪽) */}
       <section className="w-[68%] rounded-md">
         <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
       </section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
-      <section className="w-[30%] flex flex-col">
+      <section className="w-[30%] flex flex-col relative">
         {/* 버튼 */}
         <article className="h-[5%] flex justify-between">
           <div className="w-[50%] flex gap-[3%]">
@@ -84,13 +84,18 @@ function Home() {
             </button>
           </div>
           <button>
-            <Link to={activeTab === 'animals' ? '/animal-list' : '/volunteer-list'}>더보기</Link>
+            <Link
+              className="text-gray-500"
+              to={activeTab === 'animals' ? '/animal-list' : '/volunteer-list'}
+            >
+              더보기
+            </Link>
           </button>
         </article>
 
         {/* 카드 리스트 (스크롤 가능) */}
-        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md h-[70vh]">
-          <ul className="flex flex-col gap-3">
+        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md rounded-bl-md flex-grow flex flex-col h-[70vh]">
+          <ul className="flex flex-col gap-3 flex-grow overflow-y-auto pb-14">
             {activeTab === 'animals' ? (
               animals && animals.length > 0 ? (
                 animals.map((animal) => <MainAnimalCard key={animal.id} animal={animal} />)
@@ -105,12 +110,18 @@ function Home() {
               <p>봉사자 정보를 불러올 수 없습니다.</p>
             )}
           </ul>
+
+          {/* 하단 고정 버튼 */}
+          <button className="bg-[#ff983f] text-black  rounded-md sticky bottom-0">
+            <Link
+              className="w-full p-3 block rounded-md hover:bg-[#FF771D] hover:text-white
+"
+              to={activeTab === 'animals' ? 'register-animal' : 'register-volunteer'}
+            >
+              {activeTab === 'animals' ? '나의 아이 등록' : '봉사자 등록'}
+            </Link>
+          </button>
         </article>
-        <button className="w-[100%] p-3 bg-[#FF771D] text-white ">
-          <Link to={activeTab === 'animals' ? 'register-animal' : 'register-volunteer'}>
-            {activeTab === 'animals' ? '나의 아이 등록' : '봉사자 등록'}
-          </Link>
-        </button>
       </section>
     </main>
   );

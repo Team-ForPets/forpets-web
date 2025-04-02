@@ -10,7 +10,7 @@ function Banner() {
   }
 
   return (
-    <div className="w-[60vw] m-auto">
+    <div className="w-[100vw] m-auto">
       <img
         className="w-[100%] h-[70%] max-h-[70vh] rounded-md "
         src="/assets/banner.png"

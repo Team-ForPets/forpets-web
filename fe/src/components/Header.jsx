@@ -24,7 +24,7 @@ function Header() {
       </h1>
 
       {/* 데스크톱 네비게이션 */}
-      <nav className="hidden xl:flex gap-6">
+      <nav className="hidden xl:flex gap-20">
         <Link to="/" className="transition">
           홈
         </Link>
@@ -37,7 +37,7 @@ function Header() {
       </nav>
 
       {/* 로그인 상태에 따른 메뉴 */}
-      <div className="hidden xl:flex gap-4 items-center">
+      <div className="hidden xl:flex gap-5 items-center">
         {isLoggedIn ? (
           <>
             <Link to="/chat" className="transition flex items-center gap-2">
