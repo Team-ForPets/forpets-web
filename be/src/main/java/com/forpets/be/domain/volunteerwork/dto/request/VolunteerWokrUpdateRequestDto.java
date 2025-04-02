@@ -1,11 +1,11 @@
-package com.forpets.be.domain.servicevolunteer.dto.request;
+package com.forpets.be.domain.volunteerwork.dto.request;
 
-import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
+import com.forpets.be.domain.volunteerwork.entity.AnimalType;
 import java.time.LocalDate;
 import lombok.Getter;
 
 @Getter
-public class ServiceVolunteerUpdateRequestDto {
+public class VolunteerWokrUpdateRequestDto {
 
     private String title;
     private AnimalType animalType;

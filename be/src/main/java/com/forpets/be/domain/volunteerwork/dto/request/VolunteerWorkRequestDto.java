@@ -1,8 +1,8 @@
-package com.forpets.be.domain.servicevolunteer.dto.request;
+package com.forpets.be.domain.volunteerwork.dto.request;
 
 
-import com.forpets.be.domain.servicevolunteer.entity.AnimalType;
-import com.forpets.be.domain.servicevolunteer.entity.VolunteerWork;
+import com.forpets.be.domain.volunteerwork.entity.AnimalType;
+import com.forpets.be.domain.volunteerwork.entity.VolunteerWork;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @NoArgsConstructor
 @Slf4j
-public class ServiceVolunteerRequestDto {
+public class VolunteerWorkRequestDto {
 
     private String title;
     private AnimalType animalType;

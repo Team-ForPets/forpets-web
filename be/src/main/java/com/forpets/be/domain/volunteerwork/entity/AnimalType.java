@@ -1,4 +1,4 @@
-package com.forpets.be.domain.servicevolunteer.entity;
+package com.forpets.be.domain.volunteerwork.entity;
 
 public enum AnimalType {
     DOG,

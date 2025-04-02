@@ -1,7 +1,7 @@
-package com.forpets.be.domain.servicevolunteer.entity;
+package com.forpets.be.domain.volunteerwork.entity;
 
-import com.forpets.be.domain.servicevolunteer.dto.request.ServiceVolunteerUpdateRequestDto;
 import com.forpets.be.domain.user.entity.User;
+import com.forpets.be.domain.volunteerwork.dto.request.VolunteerWokrUpdateRequestDto;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,7 +74,7 @@ public class VolunteerWork extends BaseTimeEntity {
         this.user = user;
     }
 
-    public VolunteerWork update(ServiceVolunteerUpdateRequestDto requestDto) {
+    public VolunteerWork update(VolunteerWokrUpdateRequestDto requestDto) {
 
         this.title = requestDto.getTitle();
         this.animalType = requestDto.getAnimalType();
