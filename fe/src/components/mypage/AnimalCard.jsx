@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AnimalCard() {
   const [image, setImage] = useState('');
   const [hovered, setHovered] = useState(false);
+
+  const navigate = useNavigate();
 
   // 파일이 선택되었을 때 실행될 핸들러 함수
   const handleImageChange = (e) => {
@@ -22,6 +25,10 @@ function AnimalCard() {
     setImage('');
   };
 
+  const handleAnimalInfoEdit = () => {
+    navigate('/animal-detail');
+  };
+
   return (
     <section className="flex justify-center overflow-y-auto h-full">
       <article className="bg-white w-[95%] h-[95%] rounded-md self-center">
@@ -38,7 +45,7 @@ function AnimalCard() {
             <div className="flex gap-5">
               <label className="text-gray-400">날짜</label>
               <div>2025년 03월 16일</div>
-              <button className="self-end ml-auto px-2 y-1 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all">
+              <button className="self-end ml-auto px-2 y-1 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all">
                 X
               </button>
             </div>
@@ -48,7 +55,7 @@ function AnimalCard() {
             </div>
             <div className="flex gap-5">
               <label className="text-gray-400">도착지</label>
-              <div>천안시 어쩌구</div>
+              <div>서울시 강남구</div>
             </div>
 
             <div className="flex gap-5">
@@ -101,7 +108,10 @@ function AnimalCard() {
               </label>
             </div>
           </div>
-          <button className="self-end ml-auto w-[25%] h-[25%] px-2 py-2 bg-amber-300 cursor-pointer text-black rounded hover:bg-amber-500 transition-all">
+          <button
+            className="self-end ml-auto w-[20%] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
+            onClick={handleAnimalInfoEdit}
+          >
             정보 수정
           </button>
         </div>
