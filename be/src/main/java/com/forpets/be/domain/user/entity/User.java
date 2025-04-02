@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "user_repo")
@@ -72,6 +73,36 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.imageUrl = imageUrl;
         this.s3Key = s3Key;
         this.snsProvider = snsProvider;
+    }
+
+    // 마이페이지 회원정보(프로필) 수정에서 회원정보 업데이트
+    public User update(String encodedPassword, String newNickname, MultipartFile file,
+        String imageUrl, String s3Key) {
+        // 파일 처리
+        if (file != null) {
+            this.originalFileName = file.getOriginalFilename();
+        }
+
+        // 패스워드 업데이트 (null이 아닌 경우에만)
+        if (encodedPassword != null) {
+            this.password = encodedPassword;
+        }
+
+        // 닉네임 업데이트 (null이 아닌 경우에만)
+        if (newNickname != null) {
+            this.nickname = newNickname;
+        }
+
+        // 이미지 URL 업데이트 (필요한 경우에만)
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+
+        // S3 키 업데이트 (필요한 경우에만)
+        if (s3Key != null) {
+            this.s3Key = s3Key;
+        }
+        return this;
     }
 
     @Override
