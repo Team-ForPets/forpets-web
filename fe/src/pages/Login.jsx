@@ -45,7 +45,7 @@ function Login() {
         onSubmit={handleSubmitLogin}
       >
         <input
-          className="h-10 p-2 border rounded-md"
+          className="h-13 p-2 border rounded-md"
           type="email"
           value={formData.username}
           placeholder="이메일"
@@ -53,38 +53,45 @@ function Login() {
           onChange={(e) => setFormData({ ...formData, username: e.target.value })}
         />
         <input
-          className="h-10 p-2 border rounded-md"
+          className="h-13 p-2 border rounded-md"
           type="password"
           placeholder="비밀번호"
           required
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
         <button
-          className="h-10 p-2 text-center border rounded-md bg-[#FF983F] text-[#ffffff] cursor-pointer"
+          className="h-13 p-2 text-center border rounded-md bg-[#FF983F] text-[#ffffff] cursor-pointer"
           type="submit"
         >
           로그인
         </button>
-        <button className="h-10 text-center  rounded-md cursor-pointer" onClick={handleKakaoLogin}>
-          <img
-            className="w-[100%] h-[100%] rounded-md overflow-hidden"
-            src="/assets/kakao-login-button.png"
-            alt=""
-          />
+        <div className="flex justify-between">
+          <button
+            className="w-[49%] h-13 text-center  rounded-md cursor-pointer"
+            onClick={handleKakaoLogin}
+          >
+            <img
+              className="w-[100%] h-[100%] rounded-md overflow-hidden"
+              src="/assets/kakao-login-button.png"
+              alt=""
+            />
+          </button>
+          <button
+            className="w-[49%] h-13 text-center  rounded-md cursor-pointer"
+            onClick={handleNaverLogin}
+          >
+            <img
+              className="w-[100%] h-[100%] rounded-md overflow-hidden"
+              src="/assets/naver-login-button.png"
+              alt=""
+            />
+          </button>
+        </div>
+        <button className="w-[50%] h-13 p-2 border rounded-md  bg-[#FF983F] text-[#ffffff] m-auto cursor-pointer">
+          <Link to="/signup" className="w-[100%] h-[100%]">
+            회원가입
+          </Link>
         </button>
-        <button className="h-10 text-center  rounded-md cursor-pointer" onClick={handleNaverLogin}>
-          <img
-            className="w-[100%] h-[100%] rounded-md overflow-hidden"
-            src="/assets/naver-login-button.png"
-            alt=""
-          />
-        </button>
-        <Link
-          className="w-[50%] h-10 p-2 border rounded-md  bg-[#FF983F] text-[#ffffff] m-auto"
-          to="/signup"
-        >
-          회원가입
-        </Link>
       </form>
     </>
   );

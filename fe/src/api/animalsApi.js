@@ -6,13 +6,7 @@ const animalsApi = {
   getAnimals: async () => {
     const response = await api.get(`${ENDPOINT}`);
     return response.data;
-  },
-
-  // 나의 아이 생성
-  // createAnimal: async (formData) => {
-  //   const response = await api.post(`${ENDPOINT}`, formData);
-  //   return response.data;
-  // },
+  }, 
 
   createAnimal: async (formData) => {
     const response = await api.post(`${ENDPOINT}`, formData, {

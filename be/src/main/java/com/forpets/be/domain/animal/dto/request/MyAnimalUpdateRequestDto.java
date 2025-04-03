@@ -41,6 +41,9 @@ public class MyAnimalUpdateRequestDto {
     @NotNull(message = "날짜는 필수 입력값입니다")
     private LocalDate selectedDate;
 
+    @NotNull(message = "s3key는 필수 입력값입니다")
+    private String s3Key;
+
     @NotNull
     private Boolean isOpen;
 }
