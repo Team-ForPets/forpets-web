@@ -46,7 +46,6 @@ function RegisterAnimal() {
 
   useEffect(() => {
     console.log(image);
-    
   }, [image]);
 
   const openModal = () => {
@@ -84,26 +83,26 @@ function RegisterAnimal() {
   };
 
   const submit = async (e) => {
+    e.preventDefault();
     try {
-
       const formData = new FormData();
 
-      const jsonBlob = new Blob([JSON.stringify(animalData)], { type: "application/json" });
-    
-      formData.append("data", jsonBlob);  // JSON 데이터를 Blob 형태로 추가
-    
+      const jsonBlob = new Blob([JSON.stringify(animalData)], { type: 'application/json' });
+
+      formData.append('data', jsonBlob); // JSON 데이터를 Blob 형태로 추가
+
       // formData.append("data", animalData);
       // formData.append("file", image);
 
       // Object.entries(animalData).forEach(([key, value]) => {
       //   formData.append(key, value);
       // });
-      
+
       console.log(image);
-      
+
       // 파일이 있을 경우에만 추가
       if (image) {
-        formData.append("file", image);
+        formData.append('file', image);
       }
 
       const response = await animalsApi.createAnimal(formData);

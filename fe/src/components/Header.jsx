@@ -19,7 +19,7 @@ function Header() {
     <header className="w-[60vw] max-w-[60vw] h-[80px] flex justify-between items-center bg-white m-auto z-10 relative">
       <h1>
         <Link to="/">
-          <img className="h-[50px]" src="/assets/forpets-logopng.png" alt="로고" />
+          <img className="h-[50px]" src="/assets/forpets-logo.png" alt="로고" />
         </Link>
       </h1>
 
@@ -47,7 +47,7 @@ function Header() {
             <Link to="/my" className="transition">
               마이페이지
             </Link>
-            <button onClick={handleLogout} className="text-red-500 transition">
+            <button onClick={handleLogout} className="text-red-500 transition cursor-pointer">
               로그아웃
             </button>
           </>
@@ -110,7 +110,7 @@ function Header() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full py-2 text-red-500 hover:bg-gray-200 transition"
+                className="w-full py-2 text-red-500 hover:bg-gray-200 transition cursor-pointer"
               >
                 로그아웃
               </button>
