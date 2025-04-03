@@ -1,1 +1,4 @@
 fe/public/assets/gif/*.gif filter=lfs diff=lfs merge=lfs -text
+fe/public/assets/gif/login.gif filter=lfs diff=lfs merge=lfs -text
+fe/public/assets/gif/registerAnimal.gif filter=lfs diff=lfs merge=lfs -text
+fe/public/assets/gif/registerVolunteer.gif filter=lfs diff=lfs merge=lfs -text
