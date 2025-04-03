@@ -8,6 +8,7 @@ function MyPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('현재 경로', location.pathname); 
     if (location.pathname === '/my' || location.pathname === '/my/profile') {
       setSelectedButton('profile');
     } else if (location.pathname === '/my/animals') {

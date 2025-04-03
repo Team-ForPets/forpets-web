@@ -10,7 +10,7 @@ import RegisterAnimal from '../pages/RegisterAnimal';
 import RegisterVolunteer from '../pages/RegisterVolunteer';
 import ProfileCard from '../components/mypage/ProfileCard';
 import AnimalCard from '../components/mypage/AnimalCard';
-import VolunteerCard from '../components/mypage/VolunteerCard';
+import VolunteerCardList from '../components/mypage/VolunteerCardList';
 import AnimalList from '../pages/AnimalList';
 import AnimalDetail from '../pages/AnimalDetail';
 import VolunteerList from '../pages/VolunteerList';
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/my/volunteer-posts',
-            element: <VolunteerCard />,
+            element: <VolunteerCardList />,
           },
         ],
       },

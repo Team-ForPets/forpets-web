@@ -25,6 +25,7 @@ public class MyAnimalResponseDto {
     private String memo;
     private LocalDate selectedDate;
     private String imageUrl;
+    private String s3Key;
     private String originalFileName;
 
     public static MyAnimalResponseDto from(MyAnimal myAnimal) {
@@ -41,6 +42,7 @@ public class MyAnimalResponseDto {
             .memo(myAnimal.getMemo())
             .selectedDate(myAnimal.getSelectedDate())
             .imageUrl(myAnimal.getImageUrl())
+            .s3Key(myAnimal.getS3Key())
             .originalFileName(myAnimal.getOriginalFileName())
             .build();
     }

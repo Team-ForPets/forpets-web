@@ -183,7 +183,6 @@ function ProfileEditCard() {
         formData.append('file', image);
       }
 
-      
       await mypageApi.updateUserInfo(formData);
       closeModal();
       navigate('/my/profile');

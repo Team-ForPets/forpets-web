@@ -84,6 +84,8 @@ public class MyAnimalService {
             myAnimal.update(updateRequestDto, file, null);
             myAnimal.setImageUrl(imageUrl);
             myAnimal.setS3Key(s3Key);
+
+            s3Service.deleteFile(updateRequestDto.getS3Key());
         } else {
             myAnimal.update(updateRequestDto, null, myAnimal.getOriginalFileName());
         }

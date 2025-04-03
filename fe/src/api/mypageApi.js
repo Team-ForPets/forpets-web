@@ -31,6 +31,10 @@ const mypageApi = {
     });
     return response.data;
   },
+  getMyVolunteerPost: async () => {
+    const response = await api.get(`${ENDPOINT}/volunteer-posts`, { withCredentials: true });
+    return response;
+  },
 };
 
 export default mypageApi;

@@ -13,9 +13,7 @@ function MainAnimalCard({ animal }) {
       onClick={handleDetailPage}
     >
       <div className="w-[100px] ">
-        <img className="w-[100px] object-cover" src={`assets/logo.png`} alt="나의아이 이미지" />
-        {/* 이미지 값 들어오면 변경예정 */}
-        {/* <img src={`${imageUrl}`} alt="나의아이 이미지" /> */}
+        <img src={`${imageUrl}`} alt="나의아이 이미지" />
       </div>
       <ul className="text-[12px]">
         <li>출발지: {departureArea}</li>

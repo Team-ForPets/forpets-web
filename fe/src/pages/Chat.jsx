@@ -8,6 +8,7 @@ import ChatAnimalInfoModal from '../components/chat/ChatAnimalInfoModal';
 import ChatRoomList from '../components/chat/ChatRoomList';
 import ChatRoomHeader from '../components/chat/ChatRoomHeader';
 import ChatMessages from '../components/chat/ChatMessages';
+import PromiseStatusModal from '../components/PromiseStatusModal';
 
 function Chat() {
   const requestorId = parseInt(useSelector((state) => state.auth.user.id)); // userId 가져오기
@@ -50,6 +51,8 @@ function Chat() {
   const handleChatRoomClick = async (id, isRequestor) => {
     try {
       const response = await chatApi.getChatRoomDetail(id);
+      console.log(response.data);
+      console.log(requestorId);
       setChatRoomData(response.data);
       const animalData = response.data.myAnimal;
       setMyAnimal(animalData);
@@ -66,7 +69,7 @@ function Chat() {
 
   // 첫 렌더링 시, 요청 탭으로 채팅방 목록을 불러온다
   useEffect(() => {
-    handleButtonClick('요청'); // 첫 렌더링 시, '요청' 탭의 채팅방 목록을 불러온다
+    handleButtonClick('요청');
   }, []);
 
   return (
