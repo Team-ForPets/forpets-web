@@ -8,18 +8,21 @@
 > 프로젝트 기간 : 2025.03.10 ~ 2025.04.04
 >
 > 매년 약 10만 마리씩 발생하는 유기동물을 위한 이동봉사 플랫폼입니다.
-많은 기관/단체 또는 개인들이 유기동물을 구조하고 돕기위해 노력하고 봉사하고 있습니다. 하지만 아직 많은 도움의 손길이 필요합니다. 제일 큰 문제는 봉사 요청자와 자원 봉사자를 연결해 주는 전문 매체가 없다는 것입니다. 그래서 저희는 유기동물을 위한 봉사 플랫폼을 만들기로 했습니다.
-![메인 이미지](assets/main.png)
-
+많은 기관/단체 또는 개인들이 유기동물을 구조하고 돕기위해 노력하고 봉사하고 있습니다. 하지만 아직 많은 도움의 손길이 필요합니다.
+> 제일 큰 문제는 봉사 요청자와 자원 봉사자를 연결해 주는 전문 매체가 없다는 것입니다.</br>
+>
+> 그래서 우리는 유기동물을 위한 이동봉사 플랫폼을 만들었습니다.
+> 도움이 필요한 곳에 손길이 닿을 수 있도록, 더 많은 유기동물이 안전한 보금자리를 찾을 수 있도록 돕고 싶습니다.
 
 <br />
 
-## ⚒️ 기술 스택 내일
+## ⚒️ 기술 스택
 
-- **Frontend** : React 19, Redux 9.2, Axios 1.7
-- **Backend** : Spring Boot 3.4.3, Java 21, MySQL 8
-- **Infra** : Docker, AWS EC2, AWS S3, GitHub Action
-- **Tool** : Figma, Notion, Jira, GitHub
+- **Frontend** : React 19, React-Router 7.4.0, Redux 9.2.0, TailWindcss 4.0.14
+- **Backend** : Spring Boot 3.4.3, Spring Security 6.4.3, Java 21, SMTP, WebSocket/STOMP 6.2.3
+- **Database** : MySQL 8.0.4, Redis 7.4.2
+- **Infra** : Docker 20.0.3, AWS(EC2, S3), GitHub Actions
+- **Tool** : GitHub, Jira, PostMan, Figma, Notion 
 
 <br />
 
@@ -48,7 +51,7 @@
 <br />
 
 ## 로컬 설치 및 실행 방법
-- 환경변수는 /be 경로에 있는 .env.example 파일을 참고하여 작성
+- 환경변수는 Root(최상단), fe, be 경로에 있는 .env.example 파일을 참고하여 작성
 
 FrontEnd
 ```
@@ -59,27 +62,31 @@ npm run dev
 BackEnd
 ```
 cd be/
-docker compose -f docker-compose-db.yml up
-./gradlew bootrun
+docker compose -f docker-compose.yml up
+./gradlew bootrun (실행 권한 설정 : chmod +x gradlew)
 ```
+<br />
 
 ## 🏗️ 아키텍처
 
 ### 서비스 아키텍처
 
-![서비스 아키텍처](assets/service.png)
+<img width="800" alt="서비스 아키텍처 " src="https://github.com/user-attachments/assets/59072921-30c3-4f14-8aac-970103d7fc0d" />
+
 
 ### CI / CD
 
-![CI / CD](assets/ci_cd_architecture.png)
+<img width="800" alt="CD" src="https://github.com/user-attachments/assets/e494bb82-6252-43e9-9764-35d0e8f38dce" />
+
 
 ### ERD 설계도
 <img width="800" alt="erd" src="https://github.com/user-attachments/assets/b48555eb-3e78-49ce-abe5-3fc08fc38148" />
 
 ### 와이어프레임
 
-![와이어프레임](assets/wireframe.png)
+<img width="800" alt="figma250403" src="https://github.com/user-attachments/assets/66c08002-b98c-40ca-b88d-07c609a90f64" />
 
+<br />
 <br />
 
 ## 👥 팀 소개
@@ -95,6 +102,6 @@ docker compose -f docker-compose-db.yml up
 
 | 📃 리소스     | 🔗 링크                                                                                                                                                                          | 설명                        |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| 팀 노션       | [Notion 링크](https://www.notion.so/BucketDo-19d8cf3b3b228052a204e7b2f8f40099?pvs=21)                                                                                            | 프로젝트 계획 및 일정 관리  |
-| 피그마 디자인 | [Figma 링크](https://www.figma.com/design/QM8vJ0pEPeqOPIAi6CDCde/%EB%94%94%EC%9E%90%EC%9D%B8-%EC%84%A4%EA%B3%84?node-id=0-1&t=Pm5B6xXHu8BQp6X8-1)                                | UI / UX 디자인              |
-| Jira 백로그   | [jira 링크](https://bucket-do.atlassian.net/jira/software/projects/BD/boards/1/backlog?epics=visible&atlOrigin=eyJpIjoiOTliMThlZDg1YTUzNDNkMzhhNDk5NWE2MTBhMjg2NzIiLCJwIjoiaiJ9) | 프로젝트 개발 프로세스 관리 |
+| 팀 노션       | [Notion 링크](https://www.notion.so/ForPets-API-1cac0c1bb1f780ceb6a6e6eac45a2eaa?pvs=4)                                                                                            | 프로젝트 계획 및 일정 관리  |
+| 피그마 디자인 | [Figma 링크](https://www.figma.com/design/BXiVXtG8drnWt52oj1GYIF/for-pets.me-%ED%94%BC%EA%B7%B8%EB%A7%88?node-id=0-1&t=4SduUsj2BBmxsjeZ-1)                                | UI / UX 디자인              |
+| Jira 백로그   | [jira 링크](https://project-forpets.atlassian.net/jira/software/projects/FR/boards/2/backlog?epics=visible&atlOrigin=eyJpIjoiZTBmMDIwODdlNzZmNGNkNDkwNWIwNTRiMDExZTliNDQiLCJwIjoiaiJ9) | 프로젝트 개발 프로세스 관리 |
