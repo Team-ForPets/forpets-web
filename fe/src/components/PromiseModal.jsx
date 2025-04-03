@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import VolunteerWorkStatusApi from '../api/volunteerWorkStatusApi';
-function PromiseModal({ requestorId, setModalOpen, myAnimal, chatRoomData }) {
-  const [requestData, setRequestData] = useState(null);
-
+function PromiseModal({
+  requestorId,
+  setModalOpen,
+  myAnimal,
+  chatRoomData,
+  setContent,
+  setPromiseStatus,
+}) {
   // chatRoomData에서 봉사자 ID 가져오기
-  useEffect(() => {
+  useEffect(() => {}, [chatRoomData, requestorId, myAnimal.id]);
+
+  const handleSubmit = async () => {
     const myVolunteer = chatRoomData.chatMessages.find(
       (volunteer) => volunteer.senderId !== requestorId,
     );
     const volunteerId = myVolunteer?.senderId || null;
 
-    setRequestData({
+    const requestData = {
       requestorId: requestorId,
       volunteerId: volunteerId,
       myAnimalId: myAnimal.id,
-    });
-  }, [chatRoomData, requestorId, myAnimal.id]);
+    };
 
-  console.log('requestData:', requestData);
-
-  const handleSubmit = async () => {
-    if (!requestData?.volunteerId) {
-      console.error('봉사자 ID가 설정되지 않았습니다.');
-      return;
-    }
     const response = await VolunteerWorkStatusApi.createVolunteerWorkStatus(requestData);
-    console.log(response);
+    
     setModalOpen(false);
+    setContent('약속잡기 완료!');
+    setPromiseStatus(true);
   };
 
   return (

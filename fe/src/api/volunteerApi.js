@@ -1,6 +1,6 @@
 import api from './axios';
 
-const ENDPOINT = '/service-volunteer';
+const ENDPOINT = '/volunteer-work';
 const volunteerApi = {
   
   createVolunteer: async (formdata) => {
