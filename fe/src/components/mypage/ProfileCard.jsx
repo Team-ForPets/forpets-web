@@ -30,9 +30,13 @@ function ProfileCard() {
   }, []);
 
   // 사용자가 입력한 비밀번호 확인
+  const handleChange = (e) => {
+    setRequestData(e.target.value);
+  };
+
+  // 모달창에서 키보드로 엔터 누르면 실행
   const handlePasswordInput = (e) => {
     if (e.key === 'Enter') {
-      setRequestData(e.target.value);
       handleConfirm();
     }
   };
@@ -124,7 +128,8 @@ function ProfileCard() {
           <p className="text-[22px] font-semibold mb-8">비밀번호를 입력해주세요.</p>
           <input
             type="password"
-            className="bg-white text-lg"
+            className="bg-white text-2xl"
+            onChange={handleChange}
             onKeyDown={(e) => handlePasswordInput(e)}
           />
         </section>

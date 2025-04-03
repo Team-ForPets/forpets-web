@@ -17,6 +17,20 @@ const mypageApi = {
     const response = await api.post(`${ENDPOINT}/profile/password-verifications`, data);
     return response.data;
   },
+  // 닉네임 중복 확인 검증
+  getNicknameVerification: async (nickname) => {
+    const response = await api.get(`/auth/nickname-verifications?nickname=${nickname}`);
+    return response.data;
+  },
+  // 프로필(회원정보) 수정
+  updateUserInfo: async (formData) => {
+    const response = await api.patch(`${ENDPOINT}/profile`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
 };
 
 export default mypageApi;

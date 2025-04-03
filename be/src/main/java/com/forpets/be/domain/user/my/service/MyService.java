@@ -62,13 +62,13 @@ public class MyService {
             newNickname = requestDto.getNickname();
 
             // 사용자가 입력한 새로운 닉네임이 이미 존재하는지 검증
-            if (newNickname != null && userRepository.existsByNickname(newNickname)) {
-                throw new IllegalArgumentException("해당 닉네임이 이미 존재합니다.");
-            }
+//            if (newNickname != null && userRepository.existsByNickname(newNickname)) {
+//                throw new IllegalArgumentException("해당 닉네임이 이미 존재합니다.");
+//            }
 
             String newPassword = requestDto.getPassword();
 
-            if (newPassword != null) {
+            if (newPassword != null && !newPassword.isBlank()) {
                 // 사용자가 입력한 새로운 비밀번호와 기존 비밀번호가 동일한지 검증
                 if (passwordEncoder.matches(newPassword, user.getPassword())) {
                     throw new IllegalArgumentException("동일한 비밀번호로 변경할 수 없습니다.");
@@ -98,7 +98,9 @@ public class MyService {
             }
         }
         // 회원정보 업데이트
-        me.update(encodedPassword, newNickname, file, imageUrl, s3Key);
+        me.update((encodedPassword != null && !encodedPassword.isBlank()) ? encodedPassword
+                : me.getPassword(), newNickname, file,
+            imageUrl, s3Key);
 
         return MyProfileUpdateResponseDto.from(me, imageUrl != null ? imageUrl : me.getImageUrl());
     }

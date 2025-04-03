@@ -8,13 +8,13 @@ import com.forpets.be.domain.user.my.dto.response.MyProfileResponseDto;
 import com.forpets.be.domain.user.my.dto.response.MyProfileUpdateResponseDto;
 import com.forpets.be.domain.user.my.service.MyService;
 import com.forpets.be.global.response.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -38,7 +38,7 @@ public class MyController {
     }
 
     // 마이페이지 회원정보 수정 시 비밀번호 검증
-    @GetMapping("/profile/password-verifications")
+    @PostMapping("/profile/password-verifications")
     public ResponseEntity<ApiResponse<UserCheckResponseDto>> checkPassword(
         @RequestBody UserPasswordRequestRecord requestRecord,
         @AuthenticationPrincipal User user) {
@@ -50,7 +50,7 @@ public class MyController {
     // 마이페이지 회원정보 수정
     @PatchMapping("/profile")
     public ResponseEntity<ApiResponse<MyProfileUpdateResponseDto>> updateUserInfo(
-        @Valid @RequestPart(value = "data", required = false) MyProfileUpdateRequestDto requestDto,
+        @RequestPart(value = "data", required = false) MyProfileUpdateRequestDto requestDto,
         @RequestPart(value = "file", required = false) MultipartFile file,
         @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ApiResponse.ok("회원정보가 수정되었습니다.", "UPDATED",
