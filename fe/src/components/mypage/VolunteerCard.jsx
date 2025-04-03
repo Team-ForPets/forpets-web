@@ -45,10 +45,10 @@ function VolunteerCard({ myVolunteerPost }) {
                     <label className="text-gray-400 text-sm">출발 가능 지역</label>
                     <div className="text-sm">{myVolunteerPost.arrivalArea}</div>
                   </div>
-                  <div className="flex gap-5">
+                  {/* <div className="flex gap-5">
                     <label className="text-gray-400 text-sm">봉사 가능 품종</label>
                     <div className="text-sm">{myVolunteerPost.breed}</div>
-                  </div>
+                  </div> */}
                   <div className="flex gap-5">
                     <label className="text-gray-400 text-sm">전할 말</label>
                     <div className="text-sm">{myVolunteerPost.notice}</div>
