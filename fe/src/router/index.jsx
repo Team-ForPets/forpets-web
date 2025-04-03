@@ -9,7 +9,7 @@ import VolunteerWorkStatus from '../pages/VolunteerWorkStatus';
 import RegisterAnimal from '../pages/RegisterAnimal';
 import RegisterVolunteer from '../pages/RegisterVolunteer';
 import ProfileCard from '../components/mypage/ProfileCard';
-import AnimalCard from '../components/mypage/AnimalCard';
+import AnimalCardList from '../components/mypage/AnimalCardList';
 import VolunteerCardList from '../components/mypage/VolunteerCardList';
 import AnimalList from '../pages/AnimalList';
 import AnimalDetail from '../pages/AnimalDetail';
@@ -75,7 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/my/animals',
-            element: <AnimalCard />,
+            element: <AnimalCardList />,
           },
           {
             path: '/my/volunteer-posts',
