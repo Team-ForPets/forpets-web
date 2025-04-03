@@ -74,8 +74,7 @@ docker compose -f docker-compose-db.yml up
 ![CI / CD](assets/ci_cd_architecture.png)
 
 ### ERD 설계도
-
-![ERD 설계도](assets/erd.png)
+<img width="800" alt="erd" src="https://github.com/user-attachments/assets/b48555eb-3e78-49ce-abe5-3fc08fc38148" />
 
 ### 와이어프레임
 
