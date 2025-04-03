@@ -55,17 +55,19 @@ function Home() {
   };
 
   return (
-    <main className="h-[90vh] flex justify-between mt-[2vh] mb-[5vh]">
+    <main className=" h-[70vh] max-h-[70vh] flex justify-between mt-[2vh] mb-[5vh]">
       {/* 지도 섹션 (왼쪽) */}
-      <section className="w-[68%] rounded-md">
-        <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
+      <section className="w-[68%] rounded-md relative">
+        <div className="w-full h-full">
+          <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
+        </div>
       </section>
 
       {/* 카드 리스트 섹션 (오른쪽) */}
-      <section className="w-[30%] flex flex-col relative">
+      <section className="w-[30%] h-[100%] max-h-[70vh] flex flex-col relative">
         {/* 버튼 */}
-        <article className="h-[5%] flex justify-between">
-          <div className="w-[50%] flex gap-[3%]">
+        <article className=" h-[5%] flex justify-between">
+          <div className="w-[70%] flex gap-[3%]">
             <button
               onClick={handleAnimalList}
               className={`w-[100%] rounded-t-md cursor-pointer transition ${
@@ -94,7 +96,7 @@ function Home() {
         </article>
 
         {/* 카드 리스트 (스크롤 가능) */}
-        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md rounded-bl-md flex-grow flex flex-col h-[70vh]">
+        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md rounded-bl-md flex-grow flex flex-col ">
           <ul className="flex flex-col gap-3 flex-grow overflow-y-auto pb-14">
             {activeTab === 'animals' ? (
               animals && animals.length > 0 ? (
@@ -112,10 +114,9 @@ function Home() {
           </ul>
 
           {/* 하단 고정 버튼 */}
-          <button className="bg-[#ff983f] text-black  rounded-md sticky bottom-0">
+          <button className="bg-[#ff983f] text-black rounded-md sticky bottom-0">
             <Link
-              className="w-full p-3 block rounded-md hover:bg-[#FF771D] hover:text-white
-"
+              className="w-full p-3 block rounded-md hover:bg-[#FF771D] hover:text-white"
               to={activeTab === 'animals' ? 'register-animal' : 'register-volunteer'}
             >
               {activeTab === 'animals' ? '나의 아이 등록' : '봉사자 등록'}
