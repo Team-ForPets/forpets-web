@@ -66,7 +66,8 @@
 
 
 ### ERD 설계도
-<img width="800" alt="erd" src="https://github.com/user-attachments/assets/b48555eb-3e78-49ce-abe5-3fc08fc38148" />
+<img width="800" alt="erd" src="https://github.com/user-attachments/assets/eebd2686-1d55-4404-8492-debd68ae3c46" />
+
 
 ### 와이어프레임
 
