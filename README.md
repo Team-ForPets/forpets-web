@@ -1,5 +1,7 @@
 # 포페츠(For Pets)
-유기동물을 위한 이동봉사 서비스 ForPets
+### 유기동물을 위한 이동봉사 서비스 ForPets
+![포페츠](https://github.com/user-attachments/assets/9ed5489b-3fad-469a-adbf-b29f89c8d024)
+
 
 <br />
 
@@ -50,22 +52,6 @@
 
 <br />
 
-## 로컬 설치 및 실행 방법
-- 환경변수는 Root(최상단), fe, be 경로에 있는 .env.example 파일을 참고하여 작성
-
-FrontEnd
-```
-cd fe/
-npm install
-npm run dev
-```
-BackEnd
-```
-cd be/
-docker compose -f docker-compose.yml up
-./gradlew bootrun (실행 권한 설정 : chmod +x gradlew)
-```
-<br />
 
 ## 🏗️ 아키텍처
 
@@ -88,13 +74,32 @@ docker compose -f docker-compose.yml up
 
 <br />
 <br />
+<br />
+
+## 로컬 설치 및 실행 방법
+- 환경변수는 Root(최상단), fe, be 경로에 있는 .env.example 파일을 참고하여 작성
+
+FrontEnd
+```
+cd fe/
+npm install
+npm run dev
+```
+BackEnd
+```
+cd be/
+docker compose -f docker-compose.yml up
+./gradlew bootrun (실행 권한 설정 : chmod +x gradlew)
+```
+<br />
+<br />
 
 ## 👥 팀 소개
 
-| Frontend                                                            | Frontend                                                       | Backend                                                         | Backend                                                             | Backend                                                            |
+| FE / BE                                                            | FE                                                                                                                | FE / BE                                                                                                                    | FE / BE                                                                                                                        | FE / BE                                                                                                                       |
 | ------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | <img src="https://github.com/user-attachments/assets/c397f043-9034-493a-942b-93288469cf54" alt="가경식" width="150" /> | <img src="https://github.com/user-attachments/assets/6695318c-5b1c-4f6b-8256-5e3aa54f3d09" alt="원성준" width="150" /> | <img src="https://github.com/user-attachments/assets/f2310c56-bf3b-41c5-8804-81ecbd27db38" alt="이상호" width="150" /> | <img src="https://github.com/user-attachments/assets/28ea1911-5242-4967-a50e-547d1ddd0c08" alt="정명훈" width="150" /> | <img src="https://github.com/user-attachments/assets/efa77d9a-79a1-412b-ad55-ed9bc59e8dda" alt="최원호" width="150" /> |
-| [가경식](https://github.com/kska01)                             | [원성준](https://github.com/sungjoon92)                             | [이상호](https://github.com/steve0312)                             | [정명훈](https://github.com/wag192625)                              | [최원호](https://github.com/Wonho)                             |
+| <p align="center">[가경식](https://github.com/kska01)</p>                     | <p align="center">[원성준](https://github.com/sungjoon92)</p>                          | <p align="center">[이상호](https://github.com/steve0312)</p>                            |  <p align="center">[정명훈](https://github.com/wag192625)</p>                              | <p align="center">[최원호](https://github.com/Wonho)</p>                           |
 
 <br />
 
@@ -102,6 +107,6 @@ docker compose -f docker-compose.yml up
 
 | 📃 리소스     | 🔗 링크                                                                                                                                                                          | 설명                        |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| 팀 노션       | [Notion 링크](https://www.notion.so/ForPets-API-1cac0c1bb1f780ceb6a6e6eac45a2eaa?pvs=4)                                                                                            | 프로젝트 계획 및 일정 관리  |
-| 피그마 디자인 | [Figma 링크](https://www.figma.com/design/BXiVXtG8drnWt52oj1GYIF/for-pets.me-%ED%94%BC%EA%B7%B8%EB%A7%88?node-id=0-1&t=4SduUsj2BBmxsjeZ-1)                                | UI / UX 디자인              |
+| API 명세서       | [Notion 링크](https://www.notion.so/ForPets-API-1cac0c1bb1f780ceb6a6e6eac45a2eaa?pvs=4)                                                                                            | 포페츠 API 명세서  |
+| 피그마 화면설계서 | [Figma 링크](https://www.figma.com/design/BXiVXtG8drnWt52oj1GYIF/for-pets.me-%ED%94%BC%EA%B7%B8%EB%A7%88?node-id=0-1&t=4SduUsj2BBmxsjeZ-1)                                | UI / UX 디자인          
 | Jira 백로그   | [jira 링크](https://project-forpets.atlassian.net/jira/software/projects/FR/boards/2/backlog?epics=visible&atlOrigin=eyJpIjoiZTBmMDIwODdlNzZmNGNkNDkwNWIwNTRiMDExZTliNDQiLCJwIjoiaiJ9) | 프로젝트 개발 프로세스 관리 |
