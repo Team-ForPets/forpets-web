@@ -3,6 +3,7 @@ package com.forpets.be.domain.volunteerwork.service;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.volunteerwork.dto.request.VolunteerWokrUpdateRequestDto;
 import com.forpets.be.domain.volunteerwork.dto.request.VolunteerWorkRequestDto;
+import com.forpets.be.domain.volunteerwork.dto.response.MyVolunteerWorkListResponseDto;
 import com.forpets.be.domain.volunteerwork.dto.response.VolunteerWorkDetailResponseDto;
 import com.forpets.be.domain.volunteerwork.dto.response.VolunteerWorkListResponseDto;
 import com.forpets.be.domain.volunteerwork.dto.response.VolunteerWorkResponseDto;
@@ -71,5 +72,14 @@ public class VolunteerWorkService {
             .orElseThrow(
                 () -> new ResourceNotFoundException("VolunteerWork not found with ID: " + id));
         volunteerWorkRepository.delete(volunteerWork);
+    }
+
+
+    public MyVolunteerWorkListResponseDto getMyVolunteerPost(User user) {
+        Long userId = user.getId();
+        List<VolunteerWork> volunteerWorks = volunteerWorkRepository.findByUserId(
+            userId);
+
+        return MyVolunteerWorkListResponseDto.fromList(volunteerWorks);
     }
 }
