@@ -19,7 +19,7 @@ public class MyVolunteerWorkResponseDto {
     private final String departureArea;
     private final String arrivalArea;
     //    private final String imageUrl;
-    private final String breed;
+//    private final String breed;
     private final String notice;
     private final LocalDateTime createdAt;// from BaseTimeEntity
     private final LocalDateTime updatedAt;
@@ -30,7 +30,7 @@ public class MyVolunteerWorkResponseDto {
             .title(entity.getTitle())
             .notice(entity.getNotice())
 //            .imageUrl(User.)
-            .breed(entity.getNotice())
+//            .breed(entity.getBreed())
             .startDate(entity.getStartDate())
             .endDate(entity.getEndDate())
             .departureArea(entity.getDepartureArea())
