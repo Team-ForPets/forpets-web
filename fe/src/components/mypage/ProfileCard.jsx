@@ -9,6 +9,7 @@ Modal.setAppElement('#root');
 function ProfileCard() {
   const [profile, setProfile] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [requestData, setRequestData] = useState('');
 
   const navigate = useNavigate();
 
@@ -29,8 +30,15 @@ function ProfileCard() {
   }, []);
 
   // 사용자가 입력한 비밀번호 확인
-  const handlePwVerify = (e) => {
-    console.log(e.target.value);
+  const handleChange = (e) => {
+    setRequestData(e.target.value);
+  };
+
+  // 모달창에서 키보드로 엔터 누르면 실행
+  const handlePasswordInput = (e) => {
+    if (e.key === 'Enter') {
+      handleConfirm();
+    }
   };
 
   // 회원정보 수정 버튼 클릭 시 모달창 팝업
@@ -39,22 +47,31 @@ function ProfileCard() {
   };
 
   // 모달창에서 확인 버튼 클릭 시 회원정보 수정 카드로 이동
-  const handleConfirm = ({}) => {
-    if (profile.imageUrl === null) {
-      profile.imageUrl = '/assets/profile_thumbnail.png';
+  const handleConfirm = async () => {
+    // 사용자가 입력한 비밀번호를 가지고 /profile/password-verifications로 요청을 보내서 비밀번호 검증
+    const response = await mypageApi.getCheckPassword({ password: requestData });
+
+    console.log(response.data.available);
+
+    if (response.data.available === true) {
+      if (profile.imageUrl === null) {
+        profile.imageUrl = '/assets/profile_thumbnail.png';
+      }
+
+      navigate('/my/profile/edit', {
+        state: {
+          imageUrl: profile.imageUrl,
+          username: profile.username,
+          nickname: profile.nickname,
+        },
+      });
+
+      // Todo: 사용자가 입력한 비밀번호를 확인하는 로직 구현 필요
+
+      setModalIsOpen(false);
+    } else {
+      alert('비밀번호를 다시 확인해주세요.');
     }
-
-    navigate('/my/profile/edit', {
-      state: {
-        imageUrl: profile.imageUrl,
-        username: profile.username,
-        nickname: profile.nickname,
-      },
-    });
-
-    // Todo: 사용자가 입력한 비밀번호를 확인하는 로직 구현 필요
-
-    setModalIsOpen(false);
   };
 
   // 모달창에서 취소 버튼 클릭 시 현재 카드 그대로 표시
@@ -109,10 +126,14 @@ function ProfileCard() {
       >
         <section className="flex flex-col justify-center items-center h-full">
           <p className="text-[22px] font-semibold mb-8">비밀번호를 입력해주세요.</p>
-          <input type="password" className="bg-white text-lg" onChange={handlePwVerify} />
+          <input
+            type="password"
+            className="bg-white text-2xl"
+            onChange={handleChange}
+            onKeyDown={(e) => handlePasswordInput(e)}
+          />
         </section>
         <section className="absolute bottom-4 right-4 flex space-x-4">
-          {/* <input type="password" className="bg-gray-200" onChange={handlePwVerify} /> */}
           <button
             className="px-4 py-2 bg-gray-300 text-white rounded-xl hover:bg-gray-400"
             onClick={closeModal}

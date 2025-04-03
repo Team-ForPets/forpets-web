@@ -35,7 +35,7 @@ function MyPage() {
 
   return (
     <div className="h-[70vh] flex gap-10 pt-10">
-      <aside className="w-[25%] flex flex-col gap-10 items-center pt-5">
+      <aside className="w-[25%] flex flex-col gap-5 items-center pt-5">
         <button
           className={`w-[70%] px-4 py-3 cursor-pointer text-white rounded hover:bg-[#FF771D] transition-all text-lg ${selectedButton === 'profile' ? 'bg-[#FF771D]' : 'bg-amber-500'}`}
           onClick={() => {
