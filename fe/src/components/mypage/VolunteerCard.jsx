@@ -22,7 +22,7 @@ function VolunteerCard({ myVolunteerPost }) {
               onMouseLeave={() => setHovered(false)}
             >
               {/* <img
-                src={myVolunteerPost.image || '../assets/forpetsLogo.png'}
+                src={myVolunteerPost.imageUrl || '../assets/forpetsLogo.png'}
                 alt="봉사자 프로필 이미지"
                 className="w-full h-full rounded-md"
               /> */}
@@ -45,14 +45,14 @@ function VolunteerCard({ myVolunteerPost }) {
                     <label className="text-gray-400 text-sm">출발 가능 지역</label>
                     <div className="text-sm">{myVolunteerPost.arrivalArea}</div>
                   </div>
-                  {/* <div className="flex gap-5">
+                  <div className="flex gap-5">
                     <label className="text-gray-400 text-sm">봉사 가능 품종</label>
-                    <div className="text-sm">{myVolunteerPost.title}</div>
+                    <div className="text-sm">{myVolunteerPost.breed}</div>
                   </div>
                   <div className="flex gap-5">
                     <label className="text-gray-400 text-sm">전할 말</label>
-                    <div className="text-sm">{myVolunteerPost.title}</div>
-                  </div> */}
+                    <div className="text-sm">{myVolunteerPost.notice}</div>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-y-3">
                   <div className="flex gap-5 justify-between">
