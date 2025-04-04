@@ -21,16 +21,27 @@ public class RequestorChatRoomsResponseDto {
     private final LocalDateTime updatedAt;
 
     public static RequestorChatRoomsResponseDto from(ChatRoom chatRoom) {
-        log.info("VolunteerChatRoomListResponseDto- chatRoom : {}", chatRoom);
+        log.info("RequestorChatRoomsResponseDto - chatRoom: {}", chatRoom);
+
+        String departureArea = null;
+        String arrivalArea = null;
+
+        if (chatRoom.getVolunteerWork() != null) {
+            departureArea = chatRoom.getVolunteerWork().getDepartureArea();
+            arrivalArea = chatRoom.getVolunteerWork().getArrivalArea();
+        } else {
+            log.warn("ChatRoom(id={}) has no VolunteerWork set!", chatRoom.getId());
+        }
 
         return RequestorChatRoomsResponseDto.builder()
-            .id(chatRoom.getId())
-            .imageUrl(chatRoom.getVolunteer().getImageUrl())
-            .volunteerNickname(chatRoom.getVolunteer().getNickname())
-            .departureArea(chatRoom.getVolunteerWork().getDepartureArea())
-            .arrivalArea(chatRoom.getVolunteerWork().getArrivalArea())
-            .createdAt(chatRoom.getCreatedAt())
-            .updatedAt(chatRoom.getUpdatedAt())
-            .build();
+                .id(chatRoom.getId())
+                .imageUrl(chatRoom.getVolunteer().getImageUrl())
+                .volunteerNickname(chatRoom.getVolunteer().getNickname())
+                .departureArea(departureArea)
+                .arrivalArea(arrivalArea)
+                .createdAt(chatRoom.getCreatedAt())
+                .updatedAt(chatRoom.getUpdatedAt())
+                .build();
     }
+
 }
