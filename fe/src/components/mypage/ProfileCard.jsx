@@ -7,7 +7,13 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 function ProfileCard() {
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState({
+    imageUrl: '/assets/profile_thumbnail.png',
+    nickname: '',
+    username: '',
+  });
+  const [loading, setLoading] = useState(true);
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [requestData, setRequestData] = useState('');
 
@@ -17,9 +23,15 @@ function ProfileCard() {
   const fetchProfile = async () => {
     try {
       const response = await mypageApi.getProfile();
-      console.log('response : ', response);
       const { imageUrl, nickname, username } = response.data;
-      setProfile({ imageUrl, nickname, username });
+
+      setProfile((prevState) => ({
+        ...prevState,
+        imageUrl: imageUrl || prevState.imageUrl, // 기존 이미지 유지
+        nickname: nickname || prevState.nickname,
+        username: username || prevState.username,
+      }));
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,17 +94,23 @@ function ProfileCard() {
   return (
     <>
       <div className="flex gap-10 p-10 h-[50%]">
-        <div className="w-[40%] h-[100%] bg-gray-300 rounded-md flex items-center justify-center relative">
-          {profile.imageUrl ? (
+        <div className="w-[40%] h-[100%] rounded-md flex items-center justify-center relative">
+          {loading ? (
+            // 로딩 중일 때 (이미지가 존재하면 흰 배경, 없으면 기본 이미지)
+            profile.imageUrl ? (
+              <div className="bg-white w-full h-full"></div>
+            ) : (
+              <img
+                src="/assets/profile_thumbnail.png"
+                alt="기본 프로필 이미지"
+                className="w-[100%] h-[100%] rounded-md"
+              />
+            )
+          ) : (
+            // 로딩이 끝나면 이미지 표시
             <img
               src={profile.imageUrl}
               alt="프로필 이미지"
-              className="w-[100%] h-[100%] rounded-md"
-            />
-          ) : (
-            <img
-              src="/assets/profile_thumbnail.png"
-              alt="기본 프로필 이미지"
               className="w-[100%] h-[100%] rounded-md"
             />
           )}
