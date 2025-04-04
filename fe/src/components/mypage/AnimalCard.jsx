@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function AnimalCard() {
+function AnimalCard({ animal }) {
   const [image, setImage] = useState('');
   const [hovered, setHovered] = useState(false);
 
@@ -39,48 +39,54 @@ function AnimalCard() {
             onMouseLeave={() => setHovered(false)}
           >
             <input type="file" onChange={handleImageChange} className="hidden" id="fileInput" />
-            <img src={image} alt="나의 아이 이미지" className="w-full h-full rounded-md" />
+            {animal.imageUrl && (
+              <img
+                src={animal.imageUrl}
+                alt="나의 아이 이미지"
+                className="w-full h-full rounded-md"
+              />
+            )}
           </div>
           <div className="w-[60%] flex flex-col gap-y-3">
             <div className="flex gap-5">
               <label className="text-gray-400">날짜</label>
-              <div>2025년 03월 16일</div>
+              <div>{animal.selectedDate}</div>
               <button className="self-end ml-auto px-2 y-1 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all">
                 X
               </button>
             </div>
             <div className="flex gap-5">
               <label className="text-gray-400">출발지</label>
-              <div>서울시 도봉구</div>
+              <div>{animal.arrivalArea}</div>
             </div>
             <div className="flex gap-5">
               <label className="text-gray-400">도착지</label>
-              <div>서울시 강남구</div>
+              <div>{animal.departureArea}</div>
             </div>
 
             <div className="flex gap-5">
               <div className="flex flex-col gap-y-3">
                 <div className="flex gap-5 justify-between">
                   <label className="text-gray-400">이름</label>
-                  <div>노려보는 고양이</div>
+                  <div>{animal.animalName}</div>
                 </div>
                 <div className="flex gap-5">
                   <label className="text-gray-400">품종</label>
-                  <div>도메스틱 숏헤어</div>
+                  <div>{animal.breed}</div>
                 </div>
                 <div className="flex gap-5">
                   <label className="text-gray-400">나이</label>
-                  <div>16개월</div>
+                  <div>{animal.age}</div>
                 </div>
               </div>
               <div className="flex flex-col gap-y-3">
                 <div className="flex gap-5 justify-between">
                   <label className="text-gray-400">동물유형</label>
-                  <div>고양이</div>
+                  <div>{animal.animalType}</div>
                 </div>
                 <div className="flex gap-5">
                   <label className="text-gray-400">체중</label>
-                  <div>2kg</div>
+                  <div>{animal.weight}</div>
                 </div>
               </div>
             </div>
@@ -90,11 +96,11 @@ function AnimalCard() {
           <div className="flex flex-col gap-y-3">
             <div className="flex flex-col gap-y-1">
               <label className="text-gray-400">특징 및 주의사항</label>
-              <div>매섭게 노려봄</div>
+              <div>{animal.notes}</div>
             </div>
             <div className="flex flex-col gap-y-1">
               <label className="text-gray-400">봉사자에게 전하고 싶은 말</label>
-              <div>노려보지 말 것</div>
+              <div>{animal.memo}</div>
             </div>
             <div className="flex mt-5 gap-10">
               <label className="text-gray-400">이동봉사 요청글에 보이기</label>
