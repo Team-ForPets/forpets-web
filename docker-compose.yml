@@ -50,6 +50,8 @@ services:
       dockerfile: Dockerfile
       args:
         - API_URL=${API_URL}
+        - DOMAIN=${DOMAIN}
+        
         - VITE_API_URL=${VITE_API_URL}
         - VITE_RESCUE_ANIMALS_KEY=${VITE_RESCUE_ANIMALS_KEY}
         - VITE_KAKAOMAP_KEY=${VITE_KAKAOMAP_KEY}
