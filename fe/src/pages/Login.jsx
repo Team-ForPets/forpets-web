@@ -87,12 +87,15 @@ function Login() {
             />
           </button>
         </div>
-        <button className="w-[50%] h-13 p-2 border rounded-md  bg-[#FF983F] text-[#ffffff] m-auto cursor-pointer">
-          <Link to="/signup" className="w-[100%] h-[100%]">
-            회원가입
-          </Link>
-        </button>
       </form>
+      <div className="flex justify-center mt-4">
+        <Link
+          to="/signup"
+          className="w-[50%] h-13 p-2 border rounded-md bg-[#FF983F] text-[#ffffff] flex items-center justify-center cursor-pointer"
+        >
+          회원가입
+        </Link>
+      </div>
     </>
   );
 }
