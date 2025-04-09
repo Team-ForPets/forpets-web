@@ -22,7 +22,7 @@ function VolunteerCardList() {
   return (
     <section className="flex justify-center overflow-y-auto h-full">
       {/* 내 봉사자 카드 렌더링 */}
-      <ul>
+      <ul className="flex flex-col gap-4">
         {myVolunteerPost.length > 0 ? (
           myVolunteerPost.map((post) => <VolunteerCard key={post.id} myVolunteerPost={post} />)
         ) : (

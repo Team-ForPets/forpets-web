@@ -8,7 +8,7 @@ function MyPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('현재 경로', location.pathname); 
+    console.log('현재 경로', location.pathname);
     if (location.pathname === '/my' || location.pathname === '/my/profile') {
       setSelectedButton('profile');
     } else if (location.pathname === '/my/animals') {
@@ -64,7 +64,7 @@ function MyPage() {
           나의 봉사글
         </button>
       </aside>
-      <section className="w-[75%] h-[100%] bg-gray-100 rounded border-2 border-gray-200">
+        <section className="w-[75%] bg-gray-100 rounded border-2 border-gray-200 overflow-y-auto h-full">
         <Outlet></Outlet>
       </section>
     </div>

@@ -26,74 +26,75 @@ function AnimalCard({ animal }) {
   };
 
   const handleAnimalInfoEdit = () => {
-    navigate('/animal-detail');
+    navigate(`/animal-detail/${animal.id}`);
   };
 
   return (
-    <section className="flex justify-center overflow-y-auto h-full">
-      <article className="bg-white w-[95%] h-[95%] rounded-md self-center">
-        <div className="flex gap-10 p-5 h-[50%]">
-          <div
-            className="w-[40%] bg-gray-300 rounded-md flex items-center justify-center relative"
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-          >
-            <input type="file" onChange={handleImageChange} className="hidden" id="fileInput" />
-            {animal.imageUrl && (
-              <img
-                src={animal.imageUrl}
-                alt="나의 아이 이미지"
-                className="w-full h-full rounded-md"
-              />
-            )}
-          </div>
-          <div className="w-[60%] flex flex-col gap-y-3">
-            <div className="flex gap-5">
-              <label className="text-gray-400">날짜</label>
-              <div>{animal.selectedDate}</div>
-              <button className="self-end ml-auto px-2 y-1 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all">
-                X
-              </button>
+    <li>
+      <section className="flex  justify-center  ">
+        <article className="bg-white w-[95%] h-auto rounded-md self-center overflow-y-auto">
+          {/* 상단 정보 */}
+          <div className="flex gap-10 p-5 ">
+            <div
+              className="w-[40%] bg-gray-300 rounded-md flex items-center justify-center relative"
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+            >
+              <input type="file" onChange={handleImageChange} className="hidden" id="fileInput" />
+              {animal.imageUrl && (
+                <img
+                  src={animal.imageUrl}
+                  alt="나의 아이 이미지"
+                  className="w-full h-full rounded-md"
+                />
+              )}
             </div>
-            <div className="flex gap-5">
-              <label className="text-gray-400">출발지</label>
-              <div>{animal.arrivalArea}</div>
-            </div>
-            <div className="flex gap-5">
-              <label className="text-gray-400">도착지</label>
-              <div>{animal.departureArea}</div>
-            </div>
-
-            <div className="flex gap-5">
-              <div className="flex flex-col gap-y-3">
-                <div className="flex gap-5 justify-between">
-                  <label className="text-gray-400">이름</label>
-                  <div>{animal.animalName}</div>
+            <div className="w-[60%] flex flex-col gap-y-3">
+              <div className="flex gap-5">
+                <label className="text-gray-400">날짜</label>
+                <div>{animal.selectedDate}</div>
+                <button className="self-end ml-auto px-2 y-1 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all">
+                  X
+                </button>
+              </div>
+              <div className="flex gap-5">
+                <label className="text-gray-400">출발지</label>
+                <div>{animal.arrivalArea}</div>
+              </div>
+              <div className="flex gap-5">
+                <label className="text-gray-400">도착지</label>
+                <div>{animal.departureArea}</div>
+              </div>
+              <div className="flex gap-5">
+                <div className="flex flex-col gap-y-3">
+                  <div className="flex gap-5 justify-between">
+                    <label className="text-gray-400">이름</label>
+                    <div>{animal.animalName}</div>
+                  </div>
+                  <div className="flex gap-5">
+                    <label className="text-gray-400">품종</label>
+                    <div>{animal.breed}</div>
+                  </div>
+                  <div className="flex gap-5">
+                    <label className="text-gray-400">나이</label>
+                    <div>{animal.age}</div>
+                  </div>
                 </div>
-                <div className="flex gap-5">
-                  <label className="text-gray-400">품종</label>
-                  <div>{animal.breed}</div>
-                </div>
-                <div className="flex gap-5">
-                  <label className="text-gray-400">나이</label>
-                  <div>{animal.age}</div>
+                <div className="flex flex-col gap-y-3">
+                  <div className="flex gap-5 justify-between">
+                    <label className="text-gray-400">동물유형</label>
+                    <div>{animal.animalType}</div>
+                  </div>
+                  <div className="flex gap-5">
+                    <label className="text-gray-400">체중</label>
+                    <div>{animal.weight}</div>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-y-3">
-                <div className="flex gap-5 justify-between">
-                  <label className="text-gray-400">동물유형</label>
-                  <div>{animal.animalType}</div>
-                </div>
-                <div className="flex gap-5">
-                  <label className="text-gray-400">체중</label>
-                  <div>{animal.weight}</div>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-        <div className="p-5 flex h-[50%]">
-          <div className="flex flex-col gap-y-3">
+          {/* 하위 정보 */}
+          <div className="p-5 flex flex-col gap-y-1 relative">
             <div className="flex flex-col gap-y-1">
               <label className="text-gray-400">특징 및 주의사항</label>
               <div>{animal.notes}</div>
@@ -113,16 +114,16 @@ function AnimalCard({ animal }) {
                 </span>
               </label>
             </div>
+            <button
+              className="self-end ml-auto w-[20%] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
+              onClick={handleAnimalInfoEdit}
+            >
+              정보 수정
+            </button>
           </div>
-          <button
-            className="self-end ml-auto w-[20%] px-2 py-2 bg-secondary cursor-pointer text-white rounded hover:bg-primary transition-all"
-            onClick={handleAnimalInfoEdit}
-          >
-            정보 수정
-          </button>
-        </div>
-      </article>
-    </section>
+        </article>
+      </section>
+    </li>
   );
 }
 

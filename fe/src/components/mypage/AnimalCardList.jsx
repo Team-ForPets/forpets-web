@@ -24,9 +24,9 @@ function AnimalCardList() {
   }, []);
 
   return (
-    <section className="flex justify-center overflow-y-auto h-full">
+    <section className="flex justify-center overflow-y-auto h-full max-h-[70vh]">
       {/* 내 동물 카드 렌더링 */}
-      <ul>
+      <ul className="flex flex-col gap-4">
         {myAnimals.length > 0 ? (
           myAnimals.map((animal) => <AnimalCard key={animal.id} animal={animal} />)
         ) : (
