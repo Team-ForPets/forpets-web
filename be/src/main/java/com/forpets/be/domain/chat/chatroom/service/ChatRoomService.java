@@ -178,6 +178,8 @@ public class ChatRoomService {
 
         return ChatRoomDetailResponseDto.builder()
             .id(chatRoomId)
+            .requestorId(chatRoom.getRequestor().getId())
+            .volunteerId(chatRoom.getVolunteer().getId())
             .nickname(nickname)
             .departureArea(departureArea)
             .arrivalArea(arrivalArea)
