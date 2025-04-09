@@ -51,14 +51,12 @@ function Chat() {
   const handleChatRoomClick = async (id, isRequestor) => {
     try {
       const response = await chatApi.getChatRoomDetail(id);
-      console.log(response.data);
-      console.log(requestorId);
       setChatRoomData(response.data);
       const animalData = response.data.myAnimal;
       setMyAnimal(animalData);
       setActiveChatRoomStatus(isRequestor ? '요청' : '봉사');
     } catch (error) {
-      console.error('Failed to fetch chat room details', error);
+      console.error('상세정보 조회 실패', error);
     }
   };
 
