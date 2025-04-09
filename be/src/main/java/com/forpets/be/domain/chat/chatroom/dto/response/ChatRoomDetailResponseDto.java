@@ -12,6 +12,8 @@ import lombok.Getter;
 public class ChatRoomDetailResponseDto {
 
     private final Long id;
+    private final Long requestorId;
+    private final Long volunteerId;
     private final String nickname;
     private final String departureArea;
     private final String arrivalArea;
