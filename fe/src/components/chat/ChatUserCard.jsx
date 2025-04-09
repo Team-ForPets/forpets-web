@@ -18,8 +18,8 @@ function ChatUserCard({ chatRoom, activeBtn, onClick }) {
             : `요청자 이름: ${requestorNickname}`}
         </li>
         <li className="font-sm">방 생성시간 {createdAt}</li>
-        <li className="font-sm">출발지: {departureArea}</li>
-        <li className="text-sm">도착지: {arrivalArea}</li>
+        <li className="font-sm">출발지: {departureArea ?? '지정안함'}</li>
+        <li className="text-sm">도착지: {arrivalArea ?? '지정안함'}</li>
       </ul>
     </li>
   );
