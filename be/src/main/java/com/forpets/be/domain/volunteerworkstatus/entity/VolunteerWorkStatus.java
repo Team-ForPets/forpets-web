@@ -1,6 +1,7 @@
 package com.forpets.be.domain.volunteerworkstatus.entity;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
+import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -40,15 +41,20 @@ public class VolunteerWorkStatus extends BaseTimeEntity {
     @JoinColumn(name = "volunteer_user_id", nullable = false)
     private User volunteer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="chat_room_id", nullable = false)
+    private ChatRoom chatRoom;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VolunteerStatus status;
 
     @Builder
-    public VolunteerWorkStatus(MyAnimal myAnimal, User requestor, User volunteer) {
+    public VolunteerWorkStatus(MyAnimal myAnimal, User requestor, User volunteer, ChatRoom chatRoom) {
         this.myAnimal = myAnimal;
         this.requestor = requestor;
         this.volunteer = volunteer;
+        this.chatRoom = chatRoom;
         this.status = VolunteerStatus.IN_PROGRESS;
     }
 

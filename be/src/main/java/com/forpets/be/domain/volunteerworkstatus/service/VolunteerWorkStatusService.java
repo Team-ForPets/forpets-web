@@ -2,6 +2,8 @@ package com.forpets.be.domain.volunteerworkstatus.service;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
 import com.forpets.be.domain.animal.repository.MyAnimalRepository;
+import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
+import com.forpets.be.domain.chat.chatroom.repository.ChatRoomRepository;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.user.repository.UserRepository;
 import com.forpets.be.domain.volunteerworkstatus.dto.request.VolunteerWorkStatusRequestDto;
@@ -25,6 +27,7 @@ public class VolunteerWorkStatusService {
     private final VolunteerWorkStatusRepository volunteerWorkStatusRepository;
     private final MyAnimalRepository myAnimalRepository;
     private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     // 이동봉사 현황 생성 (약속 잡기)
     @Transactional
@@ -37,6 +40,9 @@ public class VolunteerWorkStatusService {
             .orElseThrow(() -> new IllegalArgumentException("해당 요청자(사용자)를 찾을 수 없습니다."));
         User volunteer = userRepository.findById(requestDto.getVolunteerId())
             .orElseThrow(() -> new IllegalArgumentException("해당 봉사자(사용자)를 찾을 수 없습니다."));
+
+        ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId())
+            .orElseThrow(() -> new IllegalArgumentException("해당 채팅방을 찾을 수 없습니다."));
 
         // 나의 아이을 등록한 사용자가 요청자인지 검증
         if (myAnimal.getUser().getId() == null || !myAnimal.getUser().getId()
@@ -59,10 +65,11 @@ public class VolunteerWorkStatusService {
             .myAnimal(myAnimal)
             .requestor(requestor)
             .volunteer(volunteer)
+            .chatRoom(chatRoom)
             .build();
 
         return VolunteerWorkStatusResponseDto.from(
-            volunteerWorkStatusRepository.save(volunteerWorkStatus), myAnimal, requestor,
+            volunteerWorkStatusRepository.save(volunteerWorkStatus), chatRoom, myAnimal, requestor,
             volunteer);
     }
 
@@ -86,7 +93,7 @@ public class VolunteerWorkStatusService {
         }
 
         List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos = volunteerWorkStatuses.stream()
-            .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
+            .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus, volunteerWorkStatus.getChatRoom(),
                 volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
                 volunteerWorkStatus.getVolunteer()))
             .toList();
@@ -108,7 +115,7 @@ public class VolunteerWorkStatusService {
         }
 
         List<VolunteerWorkStatusResponseDto> volunteerWorkStatusResponseDtos = volunteerWorkStatuses.stream()
-            .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
+            .map(volunteerWorkStatus -> VolunteerWorkStatusResponseDto.from(volunteerWorkStatus, volunteerWorkStatus.getChatRoom(),
                 volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
                 volunteerWorkStatus.getVolunteer()))
             .toList();
@@ -138,7 +145,7 @@ public class VolunteerWorkStatusService {
 
         volunteerWorkStatus.updateStatus(VolunteerStatus.COMPLETED);
 
-        return VolunteerWorkStatusResponseDto.from(volunteerWorkStatus,
+        return VolunteerWorkStatusResponseDto.from(volunteerWorkStatus, volunteerWorkStatus.getChatRoom(),
             volunteerWorkStatus.getMyAnimal(), volunteerWorkStatus.getRequestor(),
             volunteerWorkStatus.getVolunteer());
     }

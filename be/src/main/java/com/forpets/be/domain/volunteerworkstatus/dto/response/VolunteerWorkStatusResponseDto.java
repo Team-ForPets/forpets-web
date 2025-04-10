@@ -1,6 +1,7 @@
 package com.forpets.be.domain.volunteerworkstatus.dto.response;
 
 import com.forpets.be.domain.animal.entity.MyAnimal;
+import com.forpets.be.domain.chat.chatroom.entity.ChatRoom;
 import com.forpets.be.domain.user.entity.User;
 import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerStatus;
 import com.forpets.be.domain.volunteerworkstatus.entity.VolunteerWorkStatus;
@@ -13,6 +14,7 @@ import lombok.Getter;
 public class VolunteerWorkStatusResponseDto {
 
     private final Long id;
+    private final Long chatRoomId;
     private final String imageUrl;
     private final String animalName;
     private final String requestorNickname;
@@ -23,10 +25,11 @@ public class VolunteerWorkStatusResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static VolunteerWorkStatusResponseDto from(VolunteerWorkStatus volunteerWorkStatus,
+    public static VolunteerWorkStatusResponseDto from(VolunteerWorkStatus volunteerWorkStatus, ChatRoom chatRoom,
         MyAnimal myAnimal, User requestor, User volunteer) {
         return VolunteerWorkStatusResponseDto.builder()
             .id(volunteerWorkStatus.getId())
+            .chatRoomId(chatRoom.getId())
             .imageUrl(myAnimal.getImageUrl())
             .animalName(myAnimal.getAnimalName())
             .requestorNickname(requestor.getNickname())
