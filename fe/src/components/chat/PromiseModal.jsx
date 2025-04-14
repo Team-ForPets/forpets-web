@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import VolunteerWorkStatusApi from '../../api/volunteerWorkStatusApi';
 function PromiseModal({
   actionType,
-  requestorId,
   setModalOpen,
   myAnimal,
   chatRoomData,
@@ -12,19 +11,20 @@ function PromiseModal({
   volunteerStatusId,
   fetchVolunteerWorkStatus,
 }) {
-  console.log(volunteerStatusId);
+  console.log(chatRoomData);
   const handleSubmit = async () => {
     if (actionType === 'CANCEL') {
       await VolunteerWorkStatusApi.deleteVolunteerWorkStatus(volunteerStatusId);
       setContent('약속이 취소되었습니다.');
       setPromiseStatus(null);
-    } else if (actionType === 'COMPLETE') {
+    } else if (actionType === 'COMPLETED') {
       await VolunteerWorkStatusApi.completeVolunteerWorkStatus(volunteerStatusId);
       setContent('이동이 완료되었습니다.');
       setPromiseStatus('COMPLETED');
     } else if (actionType === 'CREATE') {
       const requestData = {
-        requestorId,
+        chatRoomId: chatRoomData.id,
+        requestorId: chatRoomData.requestorId,
         volunteerId: chatRoomData.volunteerId,
         myAnimalId: myAnimal.id,
       };
