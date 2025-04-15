@@ -20,6 +20,19 @@ function Chat() {
   const [myAnimal, setMyAnimal] = useState();
   const [activeChatRoomStatus, setActiveChatRoomStatus] = useState();
 
+  // 채팅방 상세 정보 조회 (메세지 조회)
+  const handleChatRoomClick = async (id, isRequestor) => {
+    try {
+      const response = await chatApi.getChatRoomDetail(id);
+      setChatRoomData(response.data);
+      const animalData = response.data.myAnimal;
+      setMyAnimal(animalData);
+      setActiveChatRoomStatus(isRequestor ? '요청' : '봉사');
+    } catch (error) {
+      console.error('상세정보 조회 실패', error);
+    }
+  };
+
   // 요청 봉사자 탭
   const handleButtonClick = (buttonName) => {
     setActiveBtn(buttonName);
@@ -44,19 +57,6 @@ function Chat() {
       setVolunteerChatRoom(data);
     } catch (e) {
       console.error(e.response);
-    }
-  };
-
-  // 채팅방 상세 정보 조회 (메세지 조회)
-  const handleChatRoomClick = async (id, isRequestor) => {
-    try {
-      const response = await chatApi.getChatRoomDetail(id);
-      setChatRoomData(response.data);
-      const animalData = response.data.myAnimal;
-      setMyAnimal(animalData);
-      setActiveChatRoomStatus(isRequestor ? '요청' : '봉사');
-    } catch (error) {
-      console.error('상세정보 조회 실패', error);
     }
   };
 
@@ -95,7 +95,6 @@ function Chat() {
               chatRoomData={chatRoomData}
               myAnimal={myAnimal}
               handleAnimalModal={handleAnimalModal}
-              requestorId={requestorId}
             />
             <ChatMessages chatRoomData={chatRoomData} handleChatRoomClick={handleChatRoomClick} />
           </>

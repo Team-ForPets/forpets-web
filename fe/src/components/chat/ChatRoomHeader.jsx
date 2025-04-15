@@ -2,33 +2,35 @@ import React, { useEffect, useState } from 'react';
 import PromiseModal from './PromiseModal';
 import PromiseStatusModal from '../PromiseStatusModal';
 import VolunteerWorkStatusApi from '../../api/volunteerWorkStatusApi';
-function ChatRoomHeader({
-  chatRoomStatus,
-  chatRoomData,
-  myAnimal,
-  handleAnimalModal,
-  requestorId,
-}) {
+function ChatRoomHeader({ chatRoomStatus, chatRoomData, myAnimal, handleAnimalModal }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [content, setContent] = useState('');
   const [promiseStatus, setPromiseStatus] = useState(null);
   const [volunteerStatusId, setVolunteerStatusId] = useState();
-  const [actionType, setActionType] = useState(null); // 'CANCEL' or 'COMPLETE' or 'CREATE'
+  const [actionType, setActionType] = useState(null); // 'CANCEL' or 'COMPLETED' or 'CREATE'
 
   useEffect(() => {
     fetchVolunteerWorkStatus();
-  }, [chatRoomData.chatRoomId]);
+  }, [chatRoomData.id]);
 
   const fetchVolunteerWorkStatus = async () => {
-    const response = await VolunteerWorkStatusApi.getMyVolunteerWorkStatus();
-    const statuses = response.data.data.volunteerWorkStatuses;
+    try {
+      const response = await VolunteerWorkStatusApi.getMyVolunteerWorkStatus();
+      const statuses = response.data.data?.volunteerWorkStatuses || [];
 
-    // 현재 채팅방의 상태만 가져오기
-    const currentStatus = statuses.find((item) => item.chatRoomId === chatRoomData.chatRoomId);
-    setPromiseStatus(currentStatus?.status || null); // 없으면 null
-    statuses.map((item) => {
-      setVolunteerStatusId(item.id);
-    });
+      const currentStatus = statuses.find((item) => item.chatRoomId === chatRoomData.id);
+
+      if (currentStatus) {
+        setVolunteerStatusId(currentStatus.id);
+        setPromiseStatus(currentStatus.status);
+      } else {
+        // 해당 채팅방에 대한 상태가 없으면 초기화
+        setVolunteerStatusId(null);
+        setPromiseStatus(null);
+      }
+    } catch (error) {
+      console.error('봉사현황 가져오기 실패:', error);
+    }
   };
 
   return (
@@ -41,7 +43,7 @@ function ChatRoomHeader({
             className="w-[100px] h-[50px] p-2 box-border"
           />
         </div>
-        {/* 요청일 경우 */}2
+        {/* 요청일 경우 */}
         {chatRoomStatus === '봉사' ? (
           <div>
             <h3 className="font-black">{myAnimal?.nickName}</h3>
@@ -91,7 +93,7 @@ function ChatRoomHeader({
             </button>
             <button
               onClick={() => {
-                setActionType('COMPLETE');
+                setActionType('COMPLETED');
                 setModalOpen(true);
               }}
               className="p-2 text-white bg-[#FF983F] rounded-md cursor-pointer"
@@ -106,7 +108,6 @@ function ChatRoomHeader({
       {modalOpen && (
         <PromiseModal
           actionType={actionType}
-          requestorId={requestorId}
           setModalOpen={setModalOpen}
           myAnimal={myAnimal}
           chatRoomData={chatRoomData}
