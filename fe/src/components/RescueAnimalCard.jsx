@@ -34,7 +34,12 @@ function RescueAnimalCard({ animal }) {
       className="w-[220px] h-[350px] bg-white shadow-lg rounded-2xl overflow-hidden relative cursor-pointer"
       onClick={handleRescueAnimalDetail}
     >
-      <img src={popfile1} alt="구조 동물 사진" className="w-full h-[50%] " />
+      <img
+        src={`${import.meta.env.VITE_DOMAIN}/api/image-proxy?url=${encodeURIComponent(popfile1)}`}
+        alt="구조 동물 사진"
+        className="w-full h-[50%]"
+      />
+      {/* <img src={`${popfile1}`} alt="구조 동물 사진" className="w-full h-[50%]" /> */}
       <div className="p-1 flex flex-col">
         <h3 className="text-lg font-semibold mb-1">{kindFullNm}</h3>
         <p className="text-sm text-gray-600">{happenPlace}</p>
