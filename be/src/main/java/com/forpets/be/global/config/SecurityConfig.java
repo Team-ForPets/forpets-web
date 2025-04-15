@@ -62,7 +62,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/logout").authenticated()
                 .requestMatchers("/api/auth/**", "/ws/connection/**", "/error", "/auth/success",
-                    "/api/animals", "/api/redis-test", "api/volunteer-work-status").permitAll()
+                    "/api/animals", "/api/redis-test", "api/volunteer-work-status", "/api/image-proxy").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

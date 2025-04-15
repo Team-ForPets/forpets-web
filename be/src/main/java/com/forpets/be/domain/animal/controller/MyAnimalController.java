@@ -10,16 +10,10 @@ import com.forpets.be.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -29,6 +23,40 @@ import org.springframework.web.multipart.MultipartFile;
 public class MyAnimalController {
 
     private final MyAnimalService myAnimalService;
+
+
+    @GetMapping("/image-proxy")
+    public ResponseEntity<byte[]> proxyImage(@RequestParam String url) {
+        System.out.println("요청받은 이미지 URL: " + url); // ✅ 로그 찍기
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            // ✅ User-Agent 헤더 세팅
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.add("User-Agent", "Mozilla/5.0");
+            HttpEntity<Void> requestEntity = new HttpEntity<>(requestHeaders);
+
+            // ✅ 실제로 헤더를 포함해 요청 보내기
+            ResponseEntity<byte[]> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    requestEntity,
+                    byte[].class
+            );
+
+            // ✅ 응답 헤더 설정
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.setContentType(MediaType.IMAGE_JPEG); // 필요 시 타입 확인해서 바꿔도 됨
+
+            return new ResponseEntity<>(response.getBody(), responseHeaders, HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // 콘솔에 자세한 에러 로그 출력
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
 
     @PostMapping("/animals")
     public ResponseEntity<ApiResponse<MyAnimalResponseDto>> createMyAnimal(

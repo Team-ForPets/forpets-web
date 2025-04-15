@@ -35,7 +35,11 @@ function RescueAnimalDetail() {
 
   return (
     <div className="bg-white rounded-2xl shadow-md w-[100%] p-4 m-2 flex flex-col ">
-      <img src={popfile1} alt="구조동물 사진" className="rounded-xl w-full max-h-[80vh]  mb-4" />
+      <img
+        src={`${import.meta.env.VITE_DOMAIN}/api/image-proxy?url=${encodeURIComponent(popfile1)}`}
+        alt="구조동물 사진"
+        className="rounded-xl w-full max-h-[80vh]  mb-4"
+      />
 
       <h2 className="text-lg font-bold text-gray-800 mb-2">{kindFullNm}</h2>
       <p className="text-sm text-gray-600 mb-1">
