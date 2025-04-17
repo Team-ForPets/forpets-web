@@ -39,6 +39,8 @@ function ChatMessages({ chatRoomData }) {
     setMessages([...chatMessages]);
 
     const socket = new SockJS(`${VITE_DOMAIN}/ws/connection`);
+    console.log('🔌 SockJS 연결 주소:', `${VITE_DOMAIN}/ws/connection`);
+
     const stompClient = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000,

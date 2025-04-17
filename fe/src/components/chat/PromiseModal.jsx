@@ -46,7 +46,7 @@ function PromiseModal({
         <p className="text-[22px] font-semibold mb-8">
           {actionType === 'CANCEL'
             ? '정말로 약속을 취소하시겠습니까?'
-            : actionType === 'COMPLETE'
+            : actionType === 'COMPLETED'
               ? '정말로 이동을 완료하시겠습니까?'
               : '정말로 약속을 잡으시겠습니까?'}
         </p>
