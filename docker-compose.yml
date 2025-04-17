@@ -76,21 +76,6 @@ services:
     depends_on:
       - db
       - be
-  nginx:
-    container_name: nginx-container
-    image: nginx:latest
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    depends_on:
-      - fe
-      - be
-    networks:
-      - be-network
-
 volumes:
   db-volume:
   redis-volume:
