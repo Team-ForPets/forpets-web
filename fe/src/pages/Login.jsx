@@ -40,32 +40,31 @@ function Login() {
 
   return (
     <>
-      <form
-        className="flex flex-col text-center w-[50%] m-auto gap-5 mt-[10%]"
-        onSubmit={handleSubmitLogin}
-      >
-        <input
-          className="h-13 p-2 border rounded-md"
-          type="email"
-          value={formData.username}
-          placeholder="이메일"
-          required
-          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-        />
-        <input
-          className="h-13 p-2 border rounded-md"
-          type="password"
-          placeholder="비밀번호"
-          required
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        />
-        <button
-          className="h-13 p-2 text-center border rounded-md bg-[#FF983F] text-[#ffffff] cursor-pointer"
-          type="submit"
-        >
-          로그인
-        </button>
-        <div className="flex justify-between">
+      <div className="flex flex-col text-center w-[100%] m-auto gap-3 mt-[10%] items-center">
+        <form className="flex flex-col text-center w-[50%] gap-3" onSubmit={handleSubmitLogin}>
+          <input
+            className="h-13 p-2 border rounded-md"
+            type="email"
+            value={formData.username}
+            placeholder="이메일"
+            required
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+          />
+          <input
+            className="h-13 p-2 border rounded-md"
+            type="password"
+            placeholder="비밀번호"
+            required
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
+          <button
+            className="h-13 p-2 text-center border rounded-md bg-[#FF983F] text-[#ffffff] cursor-pointer"
+            type="submit"
+          >
+            로그인
+          </button>
+        </form>
+        <div className="w-[50%] flex justify-between m-auto">
           <button
             className="w-[49%] h-13 text-center  rounded-md cursor-pointer"
             onClick={handleKakaoLogin}
@@ -87,14 +86,14 @@ function Login() {
             />
           </button>
         </div>
-      </form>
-      <div className="flex justify-center mt-4">
-        <Link
-          to="/signup"
-          className="w-[50%] h-13 p-2 border rounded-md bg-[#FF983F] text-[#ffffff] flex items-center justify-center cursor-pointer"
-        >
-          회원가입
-        </Link>
+        <div className="flex justify-center w-[50%]">
+          <Link
+            to="/signup"
+            className="w-[50%] h-13 p-2 border rounded-md bg-[#FF983F] text-[#ffffff] flex items-center justify-center cursor-pointer"
+          >
+            회원가입
+          </Link>
+        </div>
       </div>
     </>
   );
