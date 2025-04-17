@@ -101,8 +101,9 @@ function VolunteerChatModal({ volunteerWorkId, handleCloseModal }) {
                       handleActive(index);
                     }}
                   >
+                    {console.log(animal)}
                     <img
-                      src="/assets/forpets-marker-2.png"
+                      src={`${animal.imageUrl}`}
                       alt="나의 아이 사진"
                       className={`w-32 h-32 rounded-md ${isActive ? 'transform translate-y-[-1rem]   transition-all ' : ''}`} // 클릭된 이미지에만 크기 증가
                     />
