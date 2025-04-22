@@ -2,9 +2,10 @@ import { Navigate } from 'react-router-dom';
 
 function VolunteerWorkStatusCard({ service }) {
   const stateMap = {
-    progress: '진행중',
-    done: '완료',
+    IN_PROGRESS: '진행중',
+    COMPLETED: '완료',
   };
+
   // const navigate = useNavigate();
 
   // const handleRescueAnimalDetail = () => {
@@ -12,14 +13,14 @@ function VolunteerWorkStatusCard({ service }) {
   // };
   return (
     <li
-      className="justify-around gap-2 min-w-[400px] w-[48%] h-[180px] flex bg-white shadow-md border border-gray-300 rounded-sm overflow-hidden relative cursor-pointer p-1"
+      className="justify-around gap-2 min-w-[400px] w-[48%] h-[210px] flex bg-white shadow-md border border-gray-300 rounded-sm overflow-hidden relative cursor-pointer p-1"
       // onClick={handleRescueAnimalDetail}
     >
       <img
         // src=""
         src={`${service.imageUrl}`}
         alt="동물 사진"
-        className="w-[180px] h-[170px] object-cover border-1 border-amber-500 rounded-sm "
+        className="w-[180px] h-[200px] object-cover border-1 border-amber-500 rounded-sm "
       />
       <div className="w-[250px] p-1 flex flex-col gap-1">
         <div className="flex gap-1">
@@ -43,7 +44,7 @@ function VolunteerWorkStatusCard({ service }) {
         </div>
         <div className="flex gap-1">
           <p className="w-[50px] text-gray-500">상태</p>
-          <p>{stateMap[service.state] || '알 수 없음'}</p>
+          <p>{stateMap[service.status] || '알 수 없음'}</p>
         </div>
         {/* </div> */}
       </div>
