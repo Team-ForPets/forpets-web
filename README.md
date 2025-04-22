@@ -1,10 +1,12 @@
 # 포페츠(For Pets)
 
-유기동물을 위한 이동봉사 서비스 ForPets
-
-### 유기동물을 위한 이동봉사 서비스 ForPets
+### 유기동물을 위한 이동봉사 서비스
 
 ![포페츠](https://github.com/user-attachments/assets/9ed5489b-3fad-469a-adbf-b29f89c8d024)
+
+<br />
+
+[🔗 포페츠(ForPets) 바로가기](https://for-pets.me/)
 
 <br />
 
@@ -14,8 +16,6 @@
 >
 > 매년 약 10만 마리씩 발생하는 유기동물을 위한 이동봉사 플랫폼입니다.
 > 많은 기관/단체 또는 개인들이 유기동물을 구조하고 돕기위해 노력하고 봉사하고 있습니다. 하지만 아직 많은 도움의 손길이 필요합니다. 제일 큰 문제는 봉사 요청자와 자원 봉사자를 연결해 주는 전문 매체가 없다는 것입니다. 그래서 저희는 유기동물을 위한 봉사 플랫폼을 만들기로 했습니다.
-> ![메인 이미지](assets/main.png)
-> 그래서 우리는 유기동물을 위한 이동봉사 플랫폼을 만들었습니다.
 > 도움이 필요한 곳에 손길이 닿을 수 있도록, 더 많은 유기동물이 안전한 보금자리를 찾을 수 있도록 돕고 싶습니다.
 
 <br />
@@ -73,9 +73,8 @@ docker compose -f docker-compose-db.yml up
 
 ### ERD 설계도
 
-<img width="800" alt="erd" src="https://github.com/user-attachments/assets/b48555eb-3e78-49ce-abe5-3fc08fc38148" />
+<img width="800" alt="ERD 수정" src="https://github.com/user-attachments/assets/791dcb84-d28c-4a8a-b0d3-5c6fe9d2756e" />
 
-<img width="800" alt="erd" src="https://github.com/user-attachments/assets/eebd2686-1d55-4404-8492-debd68ae3c46" />
 
 ### 와이어프레임
 
