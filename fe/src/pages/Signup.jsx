@@ -65,7 +65,7 @@ const Signup = () => {
 
     if (isTimerActive && timer > 0) {
       interval = setInterval(() => {
-        setTimer(prevTime => prevTime - 1);
+        setTimer((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timer === 0 && isTimerActive) {
       setIsTimerActive(false);
@@ -181,7 +181,7 @@ const Signup = () => {
       if (sendCode) {
         setAuthState(AUTH_TYPE.SEND);
         setAuthCodeMessage('인증 코드 전송에 성공했습니다. 인증 코드를 입력해주세요.');
-        setTimer(10);
+        setTimer(180);
         setIsTimerActive(true);
       } else {
         setAuthState(AUTH_TYPE.DEFAULT);
@@ -219,7 +219,11 @@ const Signup = () => {
 
   const handleClickAuthCodeButton = () => {
     // 인증 코드 전송 또는 검증 상태에 따라 해당 함수 호출
-    if (authState === AUTH_TYPE.DEFAULT || authState === AUTH_TYPE.SENDING) {
+    if (
+      authState === AUTH_TYPE.DEFAULT ||
+      authState === AUTH_TYPE.SENDING ||
+      authState === AUTH_TYPE.EXPIRED
+    ) {
       return handleSendAuthCode();
     }
     if (authState === AUTH_TYPE.SEND) {
@@ -283,6 +287,23 @@ const Signup = () => {
     }
   };
 
+  // 인증 코드 전송 버튼 클릭 처리
+  const handleAuthButtonClick = () => {
+    if (authState === AUTH_TYPE.EXPIRED || authState === AUTH_TYPE.DEFAULT) {
+      // 인증 코드 전송 시작
+      setAuthState(AUTH_TYPE.SENDING); // 전송 중 상태로 변경
+
+      // 인증 코드 전송 함수 호출 (예시)
+      sendAuthCode().then(() => {
+        // 인증 코드 전송 후 상태 업데이트
+        setAuthState(AUTH_TYPE.EXPIRED); // 인증 코드 전송 후 EXPIRED 상태로 설정
+      });
+    }
+  };
+
+  // 버튼 비활성화 여부 결정
+  const isButtonDisabled = authState === AUTH_TYPE.SENDING;
+
   // 타이머 포멧팅 함수
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -344,7 +365,7 @@ const Signup = () => {
               <Button
                 text={getAuthButtonText()}
                 onClick={handleClickAuthCodeButton}
-                disabled={authState === AUTH_TYPE.CONFIRM} // 인증 완료 시 버튼 비활성화
+                disabled={authState === AUTH_TYPE.CONFIRM || isButtonDisabled} // 인증 완료 시 버튼 비활성화
               />
             </div>
 
