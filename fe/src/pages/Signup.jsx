@@ -28,12 +28,17 @@ const Signup = () => {
   // 이메일 변경 여부 추적 상태 추가
   const [isEmailChanged, setIsEmailChanged] = useState(false);
 
+  // 타이머 상태
+  const [timer, setTimer] = useState(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+
   const AUTH_TYPE = {
     DEFAULT: 'default',
     SENDING: 'sending',
     SEND: 'send',
     CONFIRMING: 'confirming',
     CONFIRM: 'confirm',
+    EXPIRED: 'expired',
   };
 
   const [authState, setAuthState] = useState(AUTH_TYPE.DEFAULT);
@@ -48,8 +53,29 @@ const Signup = () => {
       setAuthCodeMessage(null);
       // 이메일 변경 감지 상태 초기화
       setIsEmailChanged(false);
+      // 타이머 초기화
+      setIsTimerActive(false);
+      setTimer(0);
     }
   }, [isEmailChanged, authState]);
+
+  // 타이머
+  useEffect(() => {
+    let interval;
+
+    if (isTimerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timer === 0 && isTimerActive) {
+      setIsTimerActive(false);
+      if (authState === AUTH_TYPE.SEND) {
+        setAuthState(AUTH_TYPE.EXPIRED);
+        setAuthCodeMessage('인증 시간이 만료되었습니다. 인증 코드를 재요청해주세요.');
+      }
+    }
+    return () => clearInterval(interval);
+  }, [isTimerActive, timer, authState]);
 
   // 회원가입 버튼 활성화 조건
   const isSignupButtonEnabled =
@@ -57,7 +83,6 @@ const Signup = () => {
     validation.nickname &&
     validation.password &&
     validation.confirmPassword &&
-    // 이메일 인증 코드 검증 성공 여부도 확인 - 핵심 수정
     authState === AUTH_TYPE.CONFIRM;
 
   const handleChangeInput = (e) => {
@@ -122,6 +147,10 @@ const Signup = () => {
     setValidation((prev) => ({ ...prev, authCode: false }));
     setAuthCodeMessage(null);
 
+    // 타이머 초기화
+    setIsTimerActive(false);
+    setTimer(0);
+
     setFormData((prev) => ({ ...prev, authCode: '' }));
 
     if (validation.email) {
@@ -152,6 +181,8 @@ const Signup = () => {
       if (sendCode) {
         setAuthState(AUTH_TYPE.SEND);
         setAuthCodeMessage('인증 코드 전송에 성공했습니다. 인증 코드를 입력해주세요.');
+        setTimer(180);
+        setIsTimerActive(true);
       } else {
         setAuthState(AUTH_TYPE.DEFAULT);
         setAuthCodeMessage('인증 코드 전송에 실패했습니다. 다시 시도해주세요.');
@@ -172,6 +203,7 @@ const Signup = () => {
       if (isVerified) {
         setAuthState(AUTH_TYPE.CONFIRM);
         setAuthCodeMessage('인증 코드 검증에 성공했습니다.');
+        setIsTimerActive(false);
       } else {
         setAuthState(AUTH_TYPE.SEND);
         setAuthCodeMessage('인증 코드 검증에 실패했습니다. 다시 시도해주세요.');
@@ -244,9 +276,18 @@ const Signup = () => {
         return '인증 코드 검증';
       case AUTH_TYPE.CONFIRM:
         return '인증 완료';
+      case AUTH_TYPE.EXPIRED:
+        return '인증 코드 재전송';
       default:
         return '인증 코드 전송';
     }
+  };
+
+  // 타이머 포멧팅 함수
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   return (
@@ -296,6 +337,9 @@ const Signup = () => {
                 onChange={handleChangeInput}
                 disabled={authState === AUTH_TYPE.CONFIRM || authState === AUTH_TYPE.DEFAULT} // 인증 완료 시 입력 불가
               />
+              {isTimerActive && (
+                <span className="text-red-500 text-sm px-2">{formatTime(timer)}</span>
+              )}
 
               <Button
                 text={getAuthButtonText()}
