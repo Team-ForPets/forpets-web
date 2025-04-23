@@ -65,7 +65,7 @@ const Signup = () => {
 
     if (isTimerActive && timer > 0) {
       interval = setInterval(() => {
-        setTimer((prevTime) => prevTime - 1);
+        setTimer(prevTime => prevTime - 1);
       }, 1000);
     } else if (timer === 0 && isTimerActive) {
       setIsTimerActive(false);
@@ -181,7 +181,7 @@ const Signup = () => {
       if (sendCode) {
         setAuthState(AUTH_TYPE.SEND);
         setAuthCodeMessage('인증 코드 전송에 성공했습니다. 인증 코드를 입력해주세요.');
-        setTimer(180);
+        setTimer(10);
         setIsTimerActive(true);
       } else {
         setAuthState(AUTH_TYPE.DEFAULT);
@@ -477,7 +477,7 @@ const Button = ({ text, onClick, disabled }) => {
       disabled={disabled}
       onClick={onClick}
       className={twMerge(
-        'border text-white border-amber-500 rounded px-1 py-0.5 bg-amber-500 hover:border-2 cursor-pointer whitespace-nowrap',
+        'border text-white border-amber-500 rounded px-1 py-0.5 bg-amber-500 hover:border-2 cursor-pointer whitespace-nowrap focus-visible:outline-amber-600',
         disabled && 'bg-gray-400 border-gray-400 cursor-not-allowed',
       )}
     >
