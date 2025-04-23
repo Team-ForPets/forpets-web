@@ -21,7 +21,7 @@ function VolunteerList() {
   }, []);
 
   const handleVolunteerDetail = (volunteer) => {
-    navigate(`/volunteer-detail/${volunteer.id}`,{state:{volunteer}});
+    navigate(`/volunteer-detail/${volunteer.id}`, { state: { volunteer } });
   };
 
   return (
@@ -30,7 +30,7 @@ function VolunteerList() {
       {volunteers.length === 0 ? (
         <p className="text-gray-500">봉사자 목록이 없습니다.</p>
       ) : (
-        <ul className="grid grid-cols-4 gap-4">
+        <ul className="flex flex-wrap justify-evenly gap-[18px]">
           {volunteers.map((volunteer) => (
             <div
               key={volunteer.id}

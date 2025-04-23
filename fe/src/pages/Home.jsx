@@ -41,44 +41,46 @@ function Home() {
   }, []);
 
   // 요청자 버튼 클릭 시 animals 데이터 가져오기
-  const handleAnimalList = () => {
+  const handleAnimalList = (e) => {
+    e.preventDefault();
     setActiveTab('animals');
     setResetMarker('animals');
     fetchAnimals();
   };
 
   // 봉사자 버튼 클릭 시 volunteer 데이터 가져오기
-  const handleVolunteerList = () => {
+  const handleVolunteerList = (e) => {
+    e.preventDefault();
     setActiveTab('volunteer');
     setResetMarker('volunteer');
     fetchVolunteers();
   };
 
   return (
-    <main className=" h-[70vh] max-h-[70vh] flex justify-between mt-[2vh] mb-[5vh]">
-      {/* 지도 섹션 (왼쪽) */}
-      <section className="w-[68%] rounded-md relative">
+    <main className="flex flex-col md:flex-row h-auto md:h-[70vh] justify-between mt-[2vh] mb-[5vh] gap-4 md:gap-0">
+      {/* 지도 섹션 (위쪽 또는 왼쪽) */}
+      <section className="w-full md:w-[68%] h-[300px] md:h-full rounded-md relative mb-4 md:mb-0">
         <div className="w-full h-full">
           <KakaoMap animals={animals} volunteers={volunteers} resetMarker={resetMarker} />
         </div>
       </section>
 
-      {/* 카드 리스트 섹션 (오른쪽) */}
-      <section className="w-[30%] h-[100%] max-h-[70vh] flex flex-col relative">
-        {/* 버튼 */}
-        <article className=" h-[5%] flex justify-between">
+      {/* 카드 리스트 섹션 (아래쪽 또는 오른쪽) */}
+      <section className="w-full md:w-[30%] max-h-[70vh] flex flex-col relative">
+        {/* 버튼 영역 */}
+        <article className="h-[40px] flex justify-between">
           <div className="w-[70%] flex gap-[3%]">
             <button
-              onClick={handleAnimalList}
-              className={`w-[100%] rounded-t-md cursor-pointer transition ${
+              onClick={(e) => handleAnimalList(e)}
+              className={`w-full text-[14px] rounded-t-md cursor-pointer transition ${
                 activeTab === 'animals' ? 'bg-[#FF771D] text-white' : 'bg-[#CCCBC8]'
               }`}
             >
               요청자
             </button>
             <button
-              onClick={handleVolunteerList}
-              className={`w-[100%] rounded-t-md cursor-pointer transition ${
+              onClick={(e) => handleVolunteerList(e)}
+              className={`w-full text-[14px] rounded-t-md cursor-pointer transition ${
                 activeTab === 'volunteer' ? 'bg-[#FF771D] text-white' : 'bg-[#CCCBC8]'
               }`}
             >
@@ -95,8 +97,8 @@ function Home() {
           </button>
         </article>
 
-        {/* 카드 리스트 (스크롤 가능) */}
-        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-r-md rounded-bl-md flex-grow flex flex-col ">
+        {/* 카드 리스트 */}
+        <article className="overflow-auto border bg-[#ece7e7] p-2 rounded-md flex-grow flex flex-col">
           <ul className="flex flex-col gap-3 flex-grow overflow-y-auto pb-14">
             {activeTab === 'animals' ? (
               animals && animals.length > 0 ? (

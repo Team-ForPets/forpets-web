@@ -9,13 +9,17 @@ function MainAnimalCard({ animal }) {
   };
   return (
     <li
-      className="w-full h-[150px]  flex items-center gap-5 p-3 border rounded-md box-border bg-[#ffffff] cursor-pointer"
+      className="flex flex-col sm:flex-row items-center gap-1 border rounded-md box-border bg-white cursor-pointer"
       onClick={handleDetailPage}
     >
-      <div className="w-[100px] ">
-        <img src={`${imageUrl}`} alt="나의아이 이미지" />
+      <div className="w-full sm:w-[30%] h-[150px] sm:h-[100px]">
+        <img
+          className="w-full h-full rounded-t-md sm:rounded-l-md sm:rounded-tr-none"
+          src={imageUrl}
+          alt="나의아이 이미지"
+        />
       </div>
-      <ul className="text-[12px]">
+      <ul className="w-full sm:w-[70%] text-[12px] pb-2 sm:pb-0">
         <li>출발지: {departureArea}</li>
         <li>도착지: {arrivalArea}</li>
         <li>동물유형: {animalType === 'DOG' ? '개' : animalType === 'CAT' ? '고양이' : '기타'}</li>
