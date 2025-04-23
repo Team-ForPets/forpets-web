@@ -24,10 +24,19 @@ function RegisterVolunteer() {
     if (errorMessages[name]) setErrorMessages((prev) => ({ ...prev, [name]: '' }));
   };
 
-  // 주소 선택 핸들러 (간소화)
-  const handleAddressSelect = (fieldName) => (address) => {
-    setFormData((prev) => ({ ...prev, [fieldName]: address }));
-    if (errorMessages[fieldName]) setErrorMessages((prev) => ({ ...prev, [fieldName]: '' }));
+  // 다음 주소 검색 완료 시 처리
+  const handleComplete = (data, key) => {
+    const fullAddress = data.address;
+    setFormData((prev) => ({ ...prev, [key]: fullAddress }));
+    if (errorMessages[key]) setErrorMessages((prev) => ({ ...prev, [key]: '' }));
+  };
+
+  // 버튼 클릭 시 다음 주소 검색창 열기
+  const handleClick = (e) => {
+    const key = e.currentTarget.getAttribute('name');
+    new window.daum.Postcode({
+      oncomplete: (data) => handleComplete(data, key),
+    }).open();
   };
 
   const handleSubmit = (e) => {
@@ -92,11 +101,7 @@ function RegisterVolunteer() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-end mb-4">
-          <div className="text-gray-600">홈 &gt; 이동봉사자 등록 글</div>
-        </div>
-
+      <section className="bg-white p-7 rounded-xl border-2 border-gray shadow-md">
         <form onSubmit={handleSubmit} className="min-h-[600px] flex flex-col justify-between">
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
@@ -107,7 +112,9 @@ function RegisterVolunteer() {
                   type="text"
                   name="title"
                   placeholder="제목을 입력해주세요"
-                  className={`w-full p-2 border rounded ${errorMessages.title ? 'border-red-500' : ''}`}
+                  className={`w-full p-3 border rounded-xl border-gray placeholder-black ${
+                    errorMessages.title ? 'border-red-500' : ''
+                  }`}
                   value={formData.title}
                   onChange={handleChange}
                 />
@@ -121,7 +128,9 @@ function RegisterVolunteer() {
                 <label className="block text-xl font-medium mb-1">동물유형 선택</label>
                 <select
                   name="animalType"
-                  className={`w-full p-2 border rounded ${errorMessages.animalType ? 'border-red-500' : ''}`}
+                  className={`w-full p-3 border rounded-xl border-gray placeholder-black ${
+                    errorMessages.animalType ? 'border-red-500' : ''
+                  }`}
                   value={formData.animalType}
                   onChange={handleChange}
                 >
@@ -144,7 +153,9 @@ function RegisterVolunteer() {
                   type="text"
                   name="startDate"
                   placeholder="YYYY-MM-DD"
-                  className={`w-full p-2 border rounded ${errorMessages.startDate ? 'border-red-500' : ''}`}
+                  className={`w-full p-3 border rounded-xl border-gray placeholder-black ${
+                    errorMessages.startDate ? 'border-red-500' : ''
+                  }`}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -161,7 +172,9 @@ function RegisterVolunteer() {
                   type="text"
                   name="endDate"
                   placeholder="YYYY-MM-DD"
-                  className={`w-full p-2 border rounded ${errorMessages.endDate ? 'border-red-500' : ''}`}
+                  className={`w-full p-3 border rounded-xl border-gray placeholder-black ${
+                    errorMessages.endDate ? 'border-red-500' : ''
+                  }`}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -171,43 +184,39 @@ function RegisterVolunteer() {
                 )}
               </div>
 
-              {/* 출발지 주소 */}
-              <div>
-                {/* <label className="block text-xl font-medium mb-1">출발지역</label> */}
-                <div className="flex gap-2">
-                  <DaumPost setAddress={handleAddressSelect('departureArea')} />
-                  <input
-                    type="text"
-                    name="departureArea"
-                    placeholder="출발지역를 검색해주세요"
-                    className={`flex-1 p-2 border rounded ${errorMessages.departureArea ? 'border-red-500' : ''}`}
-                    value={formData.departureArea}
-                    readOnly
-                  />
+              {/* 주소 검색 */}
+              <section className="col-span-2 flex gap-6">
+                <input
+                  type="button"
+                  name="departureArea"
+                  className={`flex-1 border-2 rounded-xl p-3 border-gray text-center placeholder-black ${
+                    errorMessages.departureArea ? 'border-red-500' : ''
+                  }`}
+                  value={formData.departureArea || '출발지역'}
+                  onClick={handleClick}
+                  required
+                />
+                <input
+                  type="button"
+                  name="arrivalArea"
+                  className={`flex-1 border-2 rounded-xl p-3 border-gray text-center placeholder-black ${
+                    errorMessages.arrivalArea ? 'border-red-500' : ''
+                  }`}
+                  value={formData.arrivalArea || '도착지역'}
+                  onClick={handleClick}
+                  required
+                />
+              </section>
+              {errorMessages.departureArea && (
+                <div className="text-red-500 text-xs mt-1 col-span-2">
+                  {errorMessages.departureArea}
                 </div>
-                {errorMessages.departureArea && (
-                  <div className="text-red-500 text-xs mt-1">{errorMessages.departureArea}</div>
-                )}
-              </div>
-
-              {/* 도착지 주소 */}
-              <div>
-                {/* <label className="block text-xl font-medium mb-1">도착지역</label> */}
-                <div className="flex gap-2">
-                  <DaumPost setAddress={handleAddressSelect('arrivalArea')} />
-                  <input
-                    type="text"
-                    name="arrivalArea"
-                    placeholder="도착지역을 검색해주세요"
-                    className={`flex-1 p-2 border rounded ${errorMessages.arrivalArea ? 'border-red-500' : ''}`}
-                    value={formData.arrivalArea}
-                    readOnly
-                  />
+              )}
+              {errorMessages.arrivalArea && (
+                <div className="text-red-500 text-xs mt-1 col-span-2">
+                  {errorMessages.arrivalArea}
                 </div>
-                {errorMessages.arrivalArea && (
-                  <div className="text-red-500 text-xs mt-1">{errorMessages.arrivalArea}</div>
-                )}
-              </div>
+              )}
             </div>
 
             {/* 요청사항 */}
@@ -216,7 +225,7 @@ function RegisterVolunteer() {
               <textarea
                 name="notice"
                 placeholder="요청자에게 전하고 싶은 말을 입력해주세요"
-                className="w-full p-2 border rounded h-40"
+                className="w-full p-3 border-2 rounded-xl border-gray h-40 placeholder-black"
                 value={formData.notice}
                 onChange={handleChange}
               />
@@ -225,28 +234,31 @@ function RegisterVolunteer() {
 
           {/* 등록 버튼 */}
           <div className="flex justify-end mt-8">
-            <button type="submit" className="bg-orange-500 text-white px-8 py-2 rounded w-32">
+            <button
+              type="submit"
+              className="bg-primary text-white px-8 py-3 rounded-xl hover:bg-hover w-32"
+            >
               등록
             </button>
           </div>
         </form>
-      </div>
+      </section>
 
       {/* 확인 모달 */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full z-10">
-            <div className="text-lg font-medium mb-4 text-center">이대로 등록하시겠습니까?</div>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+          <div className="bg-white p-6 rounded-xl border border-gray-300 shadow-lg max-w-md w-full z-10">
+            <div className="text-lg font-medium mb-6 text-center">이대로 등록하시겠습니까?</div>
             <div className="flex justify-center space-x-4">
               <button
                 onClick={handleConfirm}
-                className="bg-orange-500 text-white px-4 py-2 rounded"
+                className="bg-primary text-white px-4 py-2 rounded-xl hover:bg-hover"
               >
                 확인
               </button>
               <button
                 onClick={handleCancel}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                className="bg-gray-300 text-black px-4 py-2 rounded-xl hover:bg-gray-400"
               >
                 취소
               </button>

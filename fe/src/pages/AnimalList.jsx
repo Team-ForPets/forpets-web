@@ -22,7 +22,8 @@ function AnimalList() {
 
   return (
     <>
-      <ul className="flex flex-wrap justify-evenly gap-[18px] mt-10 mb-30">
+      <h2 className="text-xl font-bold mb-4">등록된 이동봉사 요청글 목록</h2>
+      <ul className="flex flex-wrap justify-evenly gap-[18px]">
         {animals.length > 0 ? (
           animals.map((animal) => <AnimalCard key={animal.id} animal={animal} />)
         ) : (

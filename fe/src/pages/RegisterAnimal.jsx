@@ -106,11 +106,6 @@ function RegisterAnimal() {
 
   return (
     <>
-      <nav className="flex justify-end gap-3 text-[#847D7D] mb-3">
-        <Link to="/">홈</Link>
-        <section>&gt;</section>
-        <nav>이동 봉사요청 글 등록</nav>
-      </nav>
       <form>
         <section className="flex flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
           <section className="flex gap-10">

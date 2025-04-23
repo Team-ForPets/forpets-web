@@ -104,56 +104,59 @@ function VolunteerDetail() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md w-[100%] p-4 m-2 flex flex-col">
-      <img
-        src={volunteer.user.imageUrl || '/assets/person.jpeg'}
-        alt="회원 이미지"
-        className="rounded-xl w-full max-h-[80vh] mb-4"
-      />
-      <div className="space-y-4">
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">제목</span>
-          <span>{volunteer.title}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">닉네임</span>
-          <span>{volunteer.user.nickName}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">시작일</span>
-          <span>{volunteer.startDate}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">종료일</span>
-          <span>{volunteer.endDate}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">출발 지역</span>
-          <span>{volunteer.departureArea}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">도착 지역</span>
-          <span>{volunteer.arrivalArea}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold w-24 mr-2">봉사 가능 동물</span>
-          <span>{translateAnimalType(volunteer.animalType)}</span>
-        </div>
-      </div>
-      <div className="mt-4">
-        <div className="flex flex-col">
-          <span className="font-semibold w-24 mb-2">전할 말</span>
-          <div className="rounded-lg p-3 text-sm text-gray-700">{volunteer.notice}</div>
-        </div>
-      </div>
-      <div className="flex justify-end mt-4 space-x-2">
-        <button onClick={handleEditClick} className="bg-orange-500 text-white py-2 px-4 rounded-lg">
-          수정하기
-        </button>
-        <button onClick={handleChatStart} className="bg-orange-500 text-white py-2 px-4 rounded-lg">
-          채팅하기
-        </button>
-      </div>
+    <div>
+      <section className="flex justify-between flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
+        <section className="flex gap-10">
+          <section className="flex items-center justify-center border border-gray rounded-xl w-[25vw] h-[35vh]">
+            <img
+              src={volunteer.user.imageUrl || '/assets/logo.png'}
+              alt="봉사자 이미지"
+              className="rounded-xl w-full h-full"
+            />
+          </section>
+
+          <section className="flex flex-col w-[52%] h-[35vh] gap-2.5">
+            <p className="text-2xl text-center">봉사 정보</p>
+            <p className="font-medium">
+              닉네임 : <span className="font-normal">{volunteer.user.nickName}</span>
+            </p>
+            <p className="font-medium">
+              시작일 : <span className="font-normal">{volunteer.startDate}</span>
+            </p>
+            <p className="font-medium">
+              종료일 : <span className="font-normal">{volunteer.endDate}</span>
+            </p>
+            <p className="font-medium">
+              출발지역 : <span className="font-normal">{volunteer.departureArea}</span>
+            </p>
+            <p className="font-medium">
+              도착지역 : <span className="font-normal">{volunteer.arrivalArea}</span>
+            </p>
+            <p className="font-medium">
+              동물 유형 :{' '}
+              <span className="font-normal">{translateAnimalType(volunteer.animalType)}</span>
+            </p>
+          </section>
+        </section>
+
+        <p className="font-medium">봉사 상세내용</p>
+        <p className=""> {volunteer.notice}</p>
+
+        <section className="flex justify-end gap-5 mt-5">
+          <button
+            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover cursor-pointer"
+            onClick={handleEditClick}
+          >
+            수정하기
+          </button>
+          <button
+            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover cursor-pointer"
+            onClick={handleChatStart}
+          >
+            채팅하기
+          </button>
+        </section>
+      </section>
 
       {/* 수정 모달 */}
       {modalType === 'edit' && (

@@ -98,24 +98,19 @@ function AnimalDetail() {
   };
   return (
     <div>
-      <nav className="flex justify-end gap-3 text-[#847D7D] mb-3">
-        <Link to="/animal-list">이동봉사 요청글 리스트</Link>
-        <section>&gt;</section>
-        <nav>이동 봉사요청 글 등록</nav>
-      </nav>
-      <section className="flex flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
+      <section className="flex justify-between flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
         <section className="flex gap-10">
           <section className="flex items-center justify-center cursor-pointer border border-gray rounded-xl w-[25vw] h-[35vh]">
             <img
               src={detailData.imageUrl}
               alt="업로드된 이미지"
-              className={`object-cover rounded-xl ${detailData.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
+              className={`rounded-xl ${detailData.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
             />
             {/* 동물정보 이름 나이 품종 체중 시작날짜 출발지역 도착지역 */}
           </section>
           <section className="flex flex-col w-[52%] h-[35vh] gap-2.5 ">
-            <p className="text-2xl text-center">동물정보</p>
-            <p className="mt-4 font-medium">
+            <p className="text-2xl text-center">동물 정보</p>
+            <p className=" font-medium">
               이름 : <span className="font-normal">{detailData.animalName}</span>
             </p>
             <p className="font-medium">
@@ -139,10 +134,10 @@ function AnimalDetail() {
           </section>
         </section>
 
-        <p className="mt-5 font-medium">특징 및 주의사항</p>
-        <p className="my-2">: {detailData.notice}</p>
-        <p className="mt-3 font-medium">봉사자에게 전하고 싶은 말</p>
-        <p className="my-2">: {detailData.memo}</p>
+        <p className="font-medium">특징 및 주의사항</p>
+        <p className=""> {detailData.notice}</p>
+        <p className="font-medium">봉사자에게 전하고 싶은 말</p>
+        <p className=""> {detailData.memo}</p>
 
         <section className="flex justify-end gap-5 mt-5">
           <button
@@ -169,7 +164,7 @@ function AnimalDetail() {
     bg-gray-100 text-black p-6 rounded-xl shadow-gray-300 shadow-lg z-10 w-[60vw] h-[75vh]"
       >
         <form>
-          <section className="flex flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
+          <section className="flex justify-between flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
             <section className="flex gap-10">
               <label
                 htmlFor="imageInput"
@@ -278,7 +273,7 @@ function AnimalDetail() {
             <textarea
               type="text"
               name="notice"
-              className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
+              className="border-1 rounded-xl p-3 border-gray placeholder-black"
               placeholder="특징 및 주의사항"
               value={modalData.notice}
               onChange={handleInput}
@@ -286,13 +281,13 @@ function AnimalDetail() {
             <textarea
               type="text"
               name="memo"
-              className="border-1 rounded-xl p-3 mt-3 border-gray placeholder-black"
+              className="border-1 rounded-xl p-3 border-gray placeholder-black"
               placeholder="봉사자에게 전하고 싶은 말"
               value={modalData.memo}
               onChange={handleInput}
             />
 
-            <section className="flex justify-between mt-5">
+            <section className="flex justify-between">
               <button
                 name="isOpen"
                 type="button"
