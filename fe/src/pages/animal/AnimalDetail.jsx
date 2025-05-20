@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import logo from '../assets/forpetsLogo.png';
+import logo from '../../assets/forpetsLogo.png';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import Modal from 'react-modal';
-import animalsApi from '../api/animalsApi';
-import chatApi from '../api/chatApi';
+import animalsApi from '../../api/animalsApi';
+import chatApi from '../../api/chatApi';
 Modal.setAppElement('#root');
 
 function AnimalDetail() {
@@ -96,66 +96,67 @@ function AnimalDetail() {
       console.error(e);
     }
   };
+
+  const InfoItem = ({ label, value }) => (
+    <p className="text-gray-600 text-sm md:text-base">
+      <span className="font-medium">{label} :</span> <span className="ml-1">{value}</span>
+    </p>
+  );
+
   return (
     <div>
-      <section className="flex justify-between flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
-        <section className="flex gap-10">
-          <section className="flex items-center justify-center cursor-pointer border border-gray rounded-xl w-[25vw] h-[35vh]">
+      <section className="flex flex-col gap-6 border border-gray-200 rounded-2xl p-6 shadow-md bg-white max-w-6xl mx-auto">
+        {/* 상단 정보 영역 */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* 이미지 */}
+          <div className="flex-shrink-0 w-full md:w-[25vw] h-[35vh] border border-gray-300 rounded-xl overflow-hidden flex items-center justify-center">
             <img
               src={detailData.imageUrl}
               alt="업로드된 이미지"
-              className={`rounded-xl ${detailData.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
+              className={`${detailData.imageUrl === '/src/assets/forpetsLogo.png' ? 'h-[50%]' : 'w-full h-full'}`}
             />
-            {/* 동물정보 이름 나이 품종 체중 시작날짜 출발지역 도착지역 */}
-          </section>
-          <section className="flex flex-col w-[52%] h-[35vh] gap-2.5 ">
-            <p className="text-2xl text-center">동물 정보</p>
-            <p className=" font-medium">
-              이름 : <span className="font-normal">{detailData.animalName}</span>
-            </p>
-            <p className="font-medium">
-              나이 : <span className="font-normal">{detailData.age}</span>
-            </p>
-            <p className="font-medium">
-              품종 : <span className="font-normal">{detailData.breed}</span>
-            </p>
-            <p className="font-medium">
-              체중 : <span className="font-normal">{detailData.weight}</span>
-            </p>
-            <p className="font-medium">
-              시작날짜 : <span className="font-normal">{detailData.selectedDate}</span>
-            </p>
-            <p className="font-medium">
-              출발지역 : <span className="font-normal">{detailData.departureArea}</span>
-            </p>
-            <p className="font-medium">
-              도착지역 : <span className="font-normal">{detailData.arrivalArea}</span>
-            </p>
-          </section>
-        </section>
+          </div>
 
-        <p className="font-medium">특징 및 주의사항</p>
-        <p className=""> {detailData.notice}</p>
-        <p className="font-medium">봉사자에게 전하고 싶은 말</p>
-        <p className=""> {detailData.memo}</p>
+          {/* 텍스트 정보 */}
+          <div className="flex flex-col justify-center gap-2 w-full">
+            <h2 className="text-xl font-semibold text-center md:text-left">동물 정보</h2>
 
-        <section className="flex justify-end gap-5 mt-5">
+            <InfoItem label="이름" value={detailData.animalName} />
+            <InfoItem label="나이" value={detailData.age} />
+            <InfoItem label="품종" value={detailData.breed} />
+            <InfoItem label="체중" value={detailData.weight} />
+            <InfoItem label="시작날짜" value={detailData.selectedDate} />
+            <InfoItem label="출발지역" value={detailData.departureArea} />
+            <InfoItem label="도착지역" value={detailData.arrivalArea} />
+          </div>
+        </div>
+
+        {/* 상세 내용 */}
+        <div>
+          <p className="text-lg font-semibold text-gray-700 mb-2">특징 및 주의사항</p>
+          <p className="text-gray-600 whitespace-pre-wrap">{detailData.notice}</p>
+        </div>
+
+        <div>
+          <p className="text-lg font-semibold text-gray-700 mb-2">봉사자에게 전하고 싶은 말</p>
+          <p className="text-gray-600 whitespace-pre-wrap">{detailData.memo}</p>
+        </div>
+
+        {/* 버튼 영역 */}
+        <div className="flex justify-end gap-4 mt-4">
           <button
-            name="modify"
-            type="button"
-            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
+            className="px-5 py-2 rounded-lg bg-primary text-white hover:bg-hover transition-colors"
             onClick={openModal}
           >
             수정하기
           </button>
           <button
-            type="button"
-            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover"
+            className="px-5 py-2 rounded-lg bg-primary text-white hover:bg-hover transition-colors"
             onClick={handleCreateChatRoom}
           >
             채팅하기
           </button>
-        </section>
+        </div>
       </section>
       <Modal
         isOpen={modalIsOpen}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import VolunteerWorkStatusApi from '../api/volunteerWorkStatusApi';
-import VolunteerWorkStatusCard from '../components/VolunteerWorkStatusCard';
+import VolunteerWorkStatusApi from '../../api/volunteerWorkStatusApi';
+import VolunteerWorkStatusCard from '../../components/volunteerworkstatus/VolunteerWorkStatusCard';
 
 function VolunteerWorkStatus() {
   const [services, setServices] = useState([]);

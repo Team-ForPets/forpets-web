@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/forpetsLogo.png';
+import logo from '../../assets/forpetsLogo.png';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-import animalsApi from '../api/animalsApi';
+import animalsApi from '../../api/animalsApi';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');

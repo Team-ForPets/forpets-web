@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import volunteerApi from '../api/volunteerApi';
-import DaumPost from '../components/DaumPost';
+import volunteerApi from '../../api/volunteerApi';
+import DaumPost from '../../components/main/DaumPost';
 
 function RegisterVolunteer() {
   const [formData, setFormData] = useState({

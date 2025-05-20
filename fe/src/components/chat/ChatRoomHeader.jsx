@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PromiseModal from './PromiseModal';
-import PromiseStatusModal from '../PromiseStatusModal';
+import PromiseStatusModal from './PromiseStatusModal';
 import VolunteerWorkStatusApi from '../../api/volunteerWorkStatusApi';
 function ChatRoomHeader({ chatRoomStatus, chatRoomData, myAnimal, handleAnimalModal }) {
   const [modalOpen, setModalOpen] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import RescueAnimalCard from '../components/RescueAnimalCard';
+import RescueAnimalCard from '../../components/rescueanimal/RescueAnimalCard';
 
 function RescueAnimalList() {
   const [animals, setAnimals] = useState([]);
@@ -66,11 +66,13 @@ function RescueAnimalList() {
       </div>
 
       {/* 동물 카드 렌더링 */}
-      <ul className="flex flex-wrap w-[100%] justify-start gap-6">
+      <ul className="flex flex-wrap w-full justify-start gap-6">
         {animals.length > 0 ? (
           animals.map((animal) => <RescueAnimalCard key={animal.desertionNo} animal={animal} />)
         ) : (
-          <li>유기동물 정보가 없습니다.</li>
+          <li className="font-bold w-full text-center py-10 text-lg">
+            유기동물 정보를 불러오는 중입니다...
+          </li>
         )}
       </ul>
     </div>

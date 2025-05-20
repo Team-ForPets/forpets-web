@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import authApi from '../api/authApi';
+import authApi from '../../api/authApi';
 
 const Signup = () => {
   const navigate = useNavigate();

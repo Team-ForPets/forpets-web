@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import VolunteerCard from '../components/volunteer/VolunteerCard';
-import volunteerApi from '../api/volunteerApi';
 import { useNavigate } from 'react-router-dom';
+import VolunteerCard from '../../components/volunteer/VolunteerCard';
+import volunteerApi from '../../api/volunteerApi';
 
 function VolunteerList() {
   const [volunteers, setVolunteers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getVolunteers = async () => {
+    const fetchVolunteers = async () => {
       try {
-        const response = await volunteerApi.getVolunteers(); // API 호출
-        const data = response.data;
-        setVolunteers(data); // API 응답의 data 필드 사용
+        const response = await volunteerApi.getVolunteers();
+        setVolunteers(response.data);
       } catch (error) {
-        console.error('Error fetching volunteers:', error);
+        console.error('봉사자 데이터를 불러오는 중 오류 발생:', error);
       }
     };
-    getVolunteers();
+    fetchVolunteers();
   }, []);
 
   const handleVolunteerDetail = (volunteer) => {
@@ -25,24 +24,25 @@ function VolunteerList() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">등록된 봉사자 목록</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">등록된 봉사자 목록</h2>
       {volunteers.length === 0 ? (
-        <p className="text-gray-500">봉사자 목록이 없습니다.</p>
+        <p className="text-gray-600 text-center py-10">봉사자 목록이 없습니다.</p>
       ) : (
-        <ul className="flex flex-wrap justify-evenly gap-[18px]">
+        <ul className="flex flex-wrap justify-between gap-4">
           {volunteers.map((volunteer) => (
-            <div
+            <li
               key={volunteer.id}
               onClick={() => handleVolunteerDetail(volunteer)}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
+              className="cursor-pointer hover:opacity-90 transition-opacity"
             >
               <VolunteerCard volunteer={volunteer} />
-            </div>
+            </li>
           ))}
         </ul>
       )}
     </div>
   );
 }
+
 export default VolunteerList;
