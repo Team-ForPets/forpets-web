@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import authApi from '../api/authApi';
+import authApi from '../../api/authApi';
 import { useDispatch } from 'react-redux';
-import { login } from '../store/slices/authSlice';
+import { login } from '../../store/slices/authSlice';
 function Login() {
   const VITE_SOCIAL_LOGIN_DOMAIN = import.meta.env.VITE_SOCIAL_LOGIN_DOMAIN;
 

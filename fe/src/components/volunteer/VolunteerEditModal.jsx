@@ -1,5 +1,5 @@
 import React from 'react';
-import DaumPost from '../DaumPost';
+import DaumPost from '../main/DaumPost';
 
 function VolunteerEditModal({
   modalRef,

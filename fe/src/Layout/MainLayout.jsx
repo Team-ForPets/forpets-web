@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
-import Banner from '../components/Banner';
+import Banner from '../components/main/Banner';
 import Footer from '../components/Footer';
 
 export default function MainLayout() {
@@ -10,7 +10,7 @@ export default function MainLayout() {
       <Header />
       <Banner />
 
-      <div className="flex-1 w-[60vw] m-auto">
+      <div className="flex-1 w-[70vw] m-auto">
         <Outlet />
       </div>
 

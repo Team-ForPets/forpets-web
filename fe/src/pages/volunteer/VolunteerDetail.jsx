@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import volunteerApi from '../api/volunteerApi';
-import DaumPost from '../components/DaumPost';
-import VolunteerEditModal from '../components/volunteer/VolunteerEditModal';
-import VolunteerChatModal from '../components/volunteer/VolunteerChatModal';
+import volunteerApi from '../../api/volunteerApi';
+import DaumPost from '../../components/main/DaumPost';
+import VolunteerEditModal from '../../components/volunteer/VolunteerEditModal';
+import VolunteerChatModal from '../../components/volunteer/VolunteerChatModal';
 
 function VolunteerDetail() {
   const [volunteer, setVolunteer] = useState(null);
@@ -103,59 +103,63 @@ function VolunteerDetail() {
     return <p>봉사 정보가 없습니다.</p>;
   }
 
+  function InfoItem({ label, value }) {
+    return (
+      <div className="flex text-sm md:text-base text-gray-700">
+        <span className="w-28 font-medium">{label}:</span>
+        <span>{value}</span>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <section className="flex justify-between flex-col border-2 rounded-xl border-gray p-7 h-[70vh]">
-        <section className="flex gap-10">
-          <section className="flex items-center justify-center border border-gray rounded-xl w-[25vw] h-[35vh]">
+      <section className="flex flex-col gap-6 border border-gray-200 rounded-2xl p-6 shadow-md bg-white max-w-6xl mx-auto">
+        {/* 상단 정보 영역 */}
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* 이미지 */}
+          <div className="flex-shrink-0 w-full md:w-[25vw] h-[35vh] border border-gray-300 rounded-xl overflow-hidden">
             <img
               src={volunteer.user.imageUrl || '/assets/logo.png'}
               alt="봉사자 이미지"
-              className="rounded-xl w-full h-full"
+              className="w-full h-full "
             />
-          </section>
+          </div>
 
-          <section className="flex flex-col w-[52%] h-[35vh] gap-2.5">
-            <p className="text-2xl text-center">봉사 정보</p>
-            <p className="font-medium">
-              닉네임 : <span className="font-normal">{volunteer.user.nickName}</span>
-            </p>
-            <p className="font-medium">
-              시작일 : <span className="font-normal">{volunteer.startDate}</span>
-            </p>
-            <p className="font-medium">
-              종료일 : <span className="font-normal">{volunteer.endDate}</span>
-            </p>
-            <p className="font-medium">
-              출발지역 : <span className="font-normal">{volunteer.departureArea}</span>
-            </p>
-            <p className="font-medium">
-              도착지역 : <span className="font-normal">{volunteer.arrivalArea}</span>
-            </p>
-            <p className="font-medium">
-              동물 유형 :{' '}
-              <span className="font-normal">{translateAnimalType(volunteer.animalType)}</span>
-            </p>
-          </section>
-        </section>
+          {/* 텍스트 정보 */}
+          <div className="flex flex-col justify-center gap-2 w-full">
+            <h2 className="text-xl font-semibold text-center md:text-left">봉사 정보</h2>
 
-        <p className="font-medium">봉사 상세내용</p>
-        <p className=""> {volunteer.notice}</p>
+            <InfoItem label="닉네임" value={volunteer.user.nickName} />
+            <InfoItem label="시작일" value={volunteer.startDate} />
+            <InfoItem label="종료일" value={volunteer.endDate} />
+            <InfoItem label="출발지역" value={volunteer.departureArea} />
+            <InfoItem label="도착지역" value={volunteer.arrivalArea} />
+            <InfoItem label="동물 유형" value={translateAnimalType(volunteer.animalType)} />
+          </div>
+        </div>
 
-        <section className="flex justify-end gap-5 mt-5">
+        {/* 상세 내용 */}
+        <div>
+          <p className="text-lg font-semibold text-gray-700 mb-2">봉사 상세내용</p>
+          <p className="text-gray-600 whitespace-pre-wrap">{volunteer.notice}</p>
+        </div>
+
+        {/* 버튼 영역 */}
+        <div className="flex justify-end gap-4 mt-4">
           <button
-            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover cursor-pointer"
+            className="px-5 py-2 rounded-lg bg-primary text-white hover:bg-hover transition-colors"
             onClick={handleEditClick}
           >
             수정하기
           </button>
           <button
-            className="border-1 rounded-xl w-30 p-3 border-gray bg-primary text-white hover:bg-hover cursor-pointer"
+            className="px-5 py-2 rounded-lg bg-primary text-white hover:bg-hover transition-colors"
             onClick={handleChatStart}
           >
             채팅하기
           </button>
-        </section>
+        </div>
       </section>
 
       {/* 수정 모달 */}
@@ -171,7 +175,7 @@ function VolunteerDetail() {
           handleAddressButtonClick={handleAddressButtonClick}
           handleCloseModal={handleCloseModal}
           volunteer
-        ></VolunteerEditModal>
+        />
       )}
 
       {/* 채팅 모달 */}

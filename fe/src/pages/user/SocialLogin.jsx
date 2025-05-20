@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { login } from '../store/slices/authSlice';
+import { login } from '../../store/slices/authSlice';
 
 function SocialLogin() {
   const dispatch = useDispatch();

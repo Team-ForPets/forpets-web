@@ -1,8 +1,8 @@
 import React, { use, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import MainAnimalCard from '../components/MainAnimalCard';
-import MainVolunteerCard from '../components/MainVolunteerCard';
-import KakaoMap from '../components/KakaoMap';
+import MainAnimalCard from '../components/main/MainAnimalCard';
+import MainVolunteerCard from '../components/main/MainVolunteerCard';
+import KakaoMap from '../components/main/KakaoMap';
 import animalsApi from '../api/animalsApi';
 import volunteersApi from '../api/volunteerApi';
 

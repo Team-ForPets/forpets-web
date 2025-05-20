@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ChatUserCard from '../components/chat/ChatUserCard';
-import animalsApi from '../api/animalsApi';
-import volunteerApi from '../api/volunteerApi';
-import chatApi from '../api/chatApi';
-import ChatAnimalInfoModal from '../components/chat/ChatAnimalInfoModal';
-import ChatRoomList from '../components/chat/ChatRoomList';
-import ChatRoomHeader from '../components/chat/ChatRoomHeader';
-import ChatMessages from '../components/chat/ChatMessages';
-import PromiseStatusModal from '../components/PromiseStatusModal';
+import ChatUserCard from '../../components/chat/ChatUserCard';
+import animalsApi from '../../api/animalsApi';
+import volunteerApi from '../../api/volunteerApi';
+import chatApi from '../../api/chatApi';
+import ChatAnimalInfoModal from '../../components/chat/ChatAnimalInfoModal';
+import ChatRoomList from '../../components/chat/ChatRoomList';
+import ChatRoomHeader from '../../components/chat/ChatRoomHeader';
+import ChatMessages from '../../components/chat/ChatMessages';
+import PromiseStatusModal from '../../components/chat/PromiseStatusModal';
 
 function Chat() {
   const requestorId = parseInt(useSelector((state) => state.auth.user.id)); // userId 가져오기

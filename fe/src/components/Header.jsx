@@ -16,7 +16,7 @@ function Header() {
   };
 
   return (
-    <header className="w-[60vw] max-w-[60vw] h-[80px] flex justify-between items-center bg-white m-auto z-10 relative">
+    <header className="w-[70vw] max-w-[70vw] h-[80px] flex justify-between items-center bg-white m-auto z-10 relative">
       <h1>
         <Link to="/">
           <img className="h-[50px]" src="/assets/forpets-logo.png" alt="로고" />
